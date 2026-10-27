@@ -112,7 +112,7 @@ public partial class Main : Control
         var help = Label(UiText.Get("HomeHelp"), 18, _muted);
         help.AutowrapMode = TextServer.AutowrapMode.WordSmart;
         center.AddChild(help);
-        var start = Button("NewGame", () => { _exploring = true; if (_queries is null) LoadWorld(); else ShowClubs(); });
+        var start = Button("NewGame", BeginNewCareer);
         center.AddChild(start);
         center.AddChild(new Button { Name = "LoadGame", Text = UiText.Get("LoadGame"), Disabled = true, CustomMinimumSize = new Vector2(0,44) });
         center.AddChild(Button("Options", () => ShowDisplayOptions()));
@@ -122,7 +122,9 @@ public partial class Main : Control
     }
 
     /// <summary>Lee en segundo plano; la caché contiene los bytes originales del SQLite embebido y no es una partida.</summary>
-    private async void LoadWorld()
+    private void LoadWorld() => LoadWorldThen(()=>{if(_careerFlow?.Profile is not null)ShowClubs();else ShowCoachProfiles();});
+
+    private async void LoadWorldThen(Action next)
     {
         _exploring = true;
         var request = ++_loadRequest;
@@ -136,11 +138,11 @@ public partial class Main : Control
                 using var source = typeof(Main).Assembly.GetManifestResourceStream("Furvo.World.Initial2026")
                     ?? throw new InvalidDataException("Falta el recurso de la publicación inicial.");
                 var database = PublishedWorldQueries.Materialize(source, cacheDirectory);
-                return PublishedWorldQueries.Open(database);
+                return (Queries: PublishedWorldQueries.Open(database), Path: database);
             });
             if (request != _loadRequest || !IsInsideTree()) return;
-            _queries = queries;
-            ShowClubs();
+            _queries = queries.Queries; _initialWorldPath=queries.Path;
+            next();
         }
         catch (Exception error)
         {
@@ -171,7 +173,8 @@ public partial class Main : Control
             body.AddChild(table);
             var bar = new HBoxContainer();
             body.AddChild(bar);
-            bar.AddChild(Button("Home", ShowHome));
+            bar.AddChild(Button("BackCoachProfiles", ()=>ShowCoachProfiles(false)));
+            bar.AddChild(Button("StartUnemployed", ()=>ShowCareerConfirmation(Furvo.Core.Careers.CareerStartMode.Unemployed)));
             string? selected = null;
             void OpenClub(string id)
             {
@@ -214,7 +217,7 @@ public partial class Main : Control
             body.AddChild(tabs);
             tabs.AddChild(new ClubInformationPage(details, history));
             var squadPage = new VBoxContainer { Name = "ClubSquadPage" }; squadPage.SetMeta("club_id", _club.Id.ToString()); tabs.AddChild(squadPage);
-            tabs.AddChild(new ClubHistoryPage(history)); tabs.AddChild(new ClubEconomyPage(_club.Id.ToString(), _queries.GetSeasons(), _queries.ReferenceDate));
+            tabs.AddChild(new ClubHistoryPage(history)); tabs.AddChild(new ClubEconomyPage(_club.Id.ToString(), _queries.GetSeasons(), _queries.ReferenceDate, _queries.GetFinancialResources(_club.Id,_queries.GetSeasons().Single(s=>s.StartDate<=_queries.ReferenceDate && _queries.ReferenceDate<=s.EndDate).Id)));
             var keys = new[] { "ClubInformationTab", "ClubSquadTab", "ClubHistoryTab", "ClubEconomyTab" };
             for (var i = 0; i < keys.Length; i++) tabs.SetTabTitle(i, UiText.Get(keys[i]));
             // FlowContainer conserva el pie fuera de las pestañas y envuelve los botones si falta ancho.
@@ -233,7 +236,7 @@ public partial class Main : Control
             squadPage.AddChild(table);
             var open = Button("ViewPlayer", () => { if (_selectedPlayer is not null) ShowPlayer(new PlayerId(Guid.Parse(_selectedPlayer))); });
             open.Disabled = _selectedPlayer is null; bar.AddChild(open);
-            var choose = Button("ChooseClub", ShowClubChoiceNotice);
+            var choose = Button("ChooseClub", ShowManagerOffer);
             choose.AddThemeColorOverride("font_color", _accent); bar.AddChild(choose);
             table.RowSelected += id => { _selectedPlayer = id; open.Disabled = false; };
             table.RowActivated += id => ShowPlayer(new PlayerId(Guid.Parse(id)));
@@ -256,7 +259,6 @@ public partial class Main : Control
     public override void _UnhandledKeyInput(InputEvent input)
     {
         if (!_exploring || !WindowUi.IsEscape(input)) return;
-        if (GetNodeOrNull<AcceptDialog>("ClubChoiceNotice") is { Visible: true }) return;
         if (GetNodeOrNull<DisplayOptionsWindow>("DisplayOptions") is { Visible: true }) return;
         GetViewport().SetInputAsHandled();
         var menu = GetNodeOrNull<ExplorationMenu>("ExplorationMenu");
@@ -278,20 +280,6 @@ public partial class Main : Control
     private void ExitGame()
     {
         _loadRequest++; GetTree().Quit();
-    }
-
-    /// <summary>Aviso provisional: no selecciona club, asigna entrenador ni llama a servicios de escritura.</summary>
-    private void ShowClubChoiceNotice()
-    {
-        var notice = GetNodeOrNull<AcceptDialog>("ClubChoiceNotice");
-        if (notice is null)
-        {
-            notice = new AcceptDialog { Name = "ClubChoiceNotice", Title = UiText.Get("ChooseClub"),
-                DialogText = UiText.Get("ClubChoiceNotAvailable"), DialogAutowrap = true };
-            notice.GetOkButton().Text = UiText.Get("CloseNotice");
-            AddChild(notice);
-        }
-        notice.PopupCentered(new Vector2I(Math.Min(600, (int)GetViewportRect().Size.X - 80), 160));
     }
 
     /// <summary>Solo recibe la proyección pública: cuatro categorías, sin diccionarios internos ni categorías ocultas.</summary>

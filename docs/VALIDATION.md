@@ -1,4 +1,24 @@
-# Validación — ficha institucional de club, Entrega 4
+## Estado vigente — simplificación del contrato inicial (27/10/2026)
+
+La oferta inicial incorpora fechas 01/07/2026–30/06/2027 y EUR por país del club. Sin filas de duración ni fichajes restante en la oferta. El salario depende de un margen anual aún pendiente de aprobación sobre el suelo legal configurado; es el único bloqueo actual de las veinte ofertas reales. Nuevos perfiles: debutante o exfutbolista; experiencia histórica conservada sin reescritura. No cambian esquemas ni contratos existentes. Compilación Debug/Release sin errores ni advertencias; 222 pruebas superadas por configuración y prueba de escena Godot superada. Los apartados anteriores de entrega que siguen se conservan como historial y quedan subordinados a esta corrección.
+
+[Reglas económicas, compatibilidad, archivos y validación](INITIAL_CONTRACT_SIMPLIFICATION.md).
+
+## Corrección contractual vigente — 27/10/2026
+
+La validación actual sustituye las reglas de bloqueo descritas en los apartados históricos: solo exige identidad válida, fechas válidas, salario positivo, moneda admitida y contenido/prioridad de obligaciones expresamente exigibles. Las preferencias orientativas pendientes no bloquean ni se guardan como compromisos aceptados. La duración se calcula en meses desde las fechas. Extensión de carrera 2 para nuevas carreras; carga de extensión 1 en solo lectura. Las veinte ofertas reales siguen pendientes de fecha final, salario anual y moneda.
+
+Validación: Debug y Release, 209 pruebas superadas; compilación de cuatro proyectos sin errores ni advertencias. Prueba de escena Godot sin ventana superada; no equivale a revisión visual manual. Véase [informe de corrección](CONTRACT_TERMS_CORRECTION.md).
+
+# Validación vigente — perfiles y carreras
+
+27/10/2026: Debug y Release, **179 superadas, 0 fallidas, 0 omitidas**, cuatro proyectos sin errores/advertencias. Se mantienen las 155 anteriores. GodotUiSmoke.gd final código 0 con FURVO_CAREER_UI_OK y FURVO_UI_SMOKE_OK; cinco pantallas y dos carreras persistentes verificadas de forma aislada. GodotApplicationSmoke.gd pasa con OpenGL real tanto en ventana como en fullscreen. No se declara por ello inspección manual de apariencia. Cuatro publicaciones idénticas por SHA-256. Firma real bloqueada; operación contractual probada con fixtures sintéticos aprobados.
+
+[Archivos, pruebas, riesgos, almacenamiento y comandos](CAREER_CREATION.md).
+
+## Historial de validaciones anteriores
+
+### Validación — ficha institucional de club, Entrega 4
 
 Fecha: **27/10/2026**. Estado actual; las revisiones previas se conservan como histórico.
 
@@ -292,3 +312,5 @@ Observación adicional: Plantilla comprobada visualmente a pantalla completa de 
 ## Posiciones, menús y coherencia económica — 27/10/2026
 
 Estado vigente: **155 pruebas Debug superadas**, cero fallidas/omitidas, compilación sin errores/advertencias. Smoke headless de escena correcto, incluyendo menús, Esc, continuidad, posiciones y Economía. GodotApplicationSmoke.gd pasa con renderizado OpenGL real tanto en ventana como en pantalla completa: Cancelar no aplica cambios, Aplicar cambia resolución y Salir finaliza con código 0 desde menú principal y Esc. No se afirma inspección visual exhaustiva por esos resultados. Release no repetido. Cuatro bases intactas y ningún cambio persistente de posiciones. [Informe, archivos y comandos](NAVIGATION_POSITIONS_FINANCE.md).
+
+Ejecución final confirmada y revisión visual parcial del formulario de entrenador en ventana ampliada, con avatar, campos y pie visibles. Queda la revisión manual completa del resto de pantallas y resoluciones exactas.

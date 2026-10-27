@@ -56,9 +56,23 @@ func press_escape() -> void:
     Input.parse_input_event(release)
     await process_frame
 
+func check_career_layout(screen: Node, footer_key: String) -> bool:
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await process_frame
+        await process_frame
+        var footer = find_named(screen,footer_key) as Control
+        if not require(footer != null and footer.get_global_rect().position.x >= 0 and footer.get_global_rect().end.x <= root.size.x and footer.get_global_rect().end.y <= root.size.y,"Control inferior de carrera fuera de pantalla"):
+            return false
+    root.size = Vector2i(1280,720)
+    await process_frame
+    return true
+
 func run_test() -> void:
     root.size = Vector2i(1280, 720)
     var screen = load("res://Scenes/Main.tscn").instantiate()
+    var test_root = ProjectSettings.globalize_path("res://../../artifacts/career-ui-" + str(Time.get_ticks_usec()))
+    screen.ConfigureCareerStorage(test_root)
     root.add_child(screen)
     await process_frame
     if not require(find_named(screen, "NewGame") != null, "Falta pantalla inicial"):
@@ -72,6 +86,38 @@ func run_test() -> void:
     find_named(screen, "CancelOptions").emit_signal("pressed")
     await process_frame
     find_named(screen, "NewGame").emit_signal("pressed")
+    for attempt in range(200):
+        if find_named(screen,"CoachProfileForm") != null:
+            break
+        await create_timer(0.05).timeout
+    if not require(find_named(screen,"CoachProfileForm") != null,"No ofrece crear el primer entrenador"):
+        return
+    var backgrounds = find_named(screen,"CoachExperience")
+    if not require(backgrounds.item_count == 2 and backgrounds.get_item_id(0) == 1 and backgrounds.get_item_id(1) == 2,"Antecedentes no permitidos para nuevas altas"):
+        return
+    if not await check_career_layout(screen,"SaveCoachProfile"):
+        return
+    find_named(screen,"SaveCoachProfile").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"CoachFormError").text != "" and not FileAccess.file_exists(test_root.path_join("coach-profiles/profiles.db")),"Se guardó un perfil incompleto"):
+        return
+    find_named(screen,"CoachFirstName").text = "Prueba"
+    find_named(screen,"CoachLastName").text = "Interfaz"
+    find_named(screen,"CoachBirthDate").text = "01/01/1980"
+    find_named(screen,"CoachBirthCity").text = "Ciudad de prueba"
+    find_named(screen,"CoachNationality").select(1)
+    find_named(screen,"SaveCoachProfile").emit_signal("pressed")
+    find_named(screen,"SaveCoachProfile").emit_signal("pressed")
+    for attempt in range(200):
+        if find_named(screen,"SelectCoachProfile") != null:
+            break
+        await create_timer(0.05).timeout
+    if not require(find_marked_nodes(screen,"profile_id").size() == 1,"La creación por doble pulsación duplicó o perdió el perfil"):
+        return
+    if not await check_career_layout(screen,"CreateCoachProfile"):
+        return
+    find_named(screen,"SelectCoachProfile").emit_signal("pressed")
+    await process_frame
     # La lectura SQLite es asíncrona. Se espera por condición con límite temporal, no por una pausa fija.
     for attempt in range(200):
         if find_named(screen, "ViewClub") != null:
@@ -240,16 +286,6 @@ func run_test() -> void:
                             return
                     if not require(club_footer.get_global_rect().end.y <= root.size.y + 1 and club_tabs.get_global_rect().end.y <= club_footer.get_global_rect().position.y + 1, "La ficha de club oculta o solapa la navegación al redimensionar"):
                         return
-            if sample_index == 0:
-                find_named(screen, "ChooseClub").emit_signal("pressed")
-                await process_frame
-                var notice = find_named(screen, "ClubChoiceNotice") as AcceptDialog
-                if not require(notice != null and notice.visible and notice.dialog_text == "La selección de club estará disponible cuando se implemente el inicio de partida", "El botón no muestra el aviso provisional exacto"):
-                    return
-                notice.get_ok_button().emit_signal("pressed")
-                await process_frame
-                if not require(not notice.visible and club_tabs.current_tab == tab_index and club_tabs.get_meta("club_id") == expected_club_id, "El aviso altera la navegación del club"):
-                    return
             if tab_index == 2:
                 var historic_table = find_trees(find_named(screen, "HistoryStandingsTable"))[0]
                 if not require(historic_table.get_root().get_child_count() == 0 and find_named(screen, "ClubHistoryChart").get_meta("result_count") == 0, "Se inventaron clasificaciones históricas"):
@@ -270,7 +306,7 @@ func run_test() -> void:
                     if not require(find_named(economy, section) != null, "Falta un bloque económico"):
                         return
                 var economic_fields = find_marked_nodes(economy, "economic_unavailable")
-                if not require(economic_fields.size() == 32, "Faltan campos financieros no disponibles"):
+                if not require(economic_fields.size() == 34, "Faltan campos financieros no disponibles"):
                     return
                 for field in economic_fields:
                     if not require(field.text == "No disponible", "Se inventó un importe financiero"):
@@ -466,8 +502,93 @@ func run_test() -> void:
         await process_frame
     if not require(opened_ids.size() == 4 and opened_ids[0] != opened_ids[1] and opened_ids[1] != opened_ids[2] and opened_ids[2] != opened_ids[3], "No se probaron cuatro futbolistas distintos"):
         return
+    # Elegir y volver no publica carreras; la firma real permanece bloqueada por reglas pendientes.
+    var selection = find_trees(screen)[0]
+    selection.get_root().get_first_child().select(0)
+    selection.emit_signal("item_selected")
+    find_named(screen,"ViewClub").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"ChooseClub").emit_signal("pressed")
+    await process_frame
+    if not await check_career_layout(screen,"BackChooseClub"):
+        return
+    if not require(find_named(screen,"ManagerOfferDocument") != null and find_named(screen,"SignManagerContract").disabled,"La oferta no existe o permite firmar condiciones incompletas"):
+        return
+    if not require(find_named(screen,"OfferDurationLabel") == null and find_named(screen,"OfferDurationMonthsLabel") == null and find_named(screen,"OfferCurrencyLabel") != null,"La oferta conserva duración en temporadas o no muestra moneda"):
+        return
+    if not require(find_named(screen,"OfferEndValue").text == "30/06/2027 (1 año)" and find_named(screen,"OfferCurrencyValue").text == "EUR","Fechas o moneda inicial incorrectas"):
+        return
+    if not require(find_named(screen,"OfferHiringClubLabel").text == "Club" and find_named(screen,"OfferIncorporationSeasonLabel").text == "Temporada de incorporación","Literales de club o temporada incorrectos"):
+        return
+    if not require(find_named(screen,"ManagerOfferDocument").get_meta("signing_block_count") == 1,"Se bloquea por apartados opcionales pendientes"):
+        return
+    for reason in ["OfferSalaryMissing"]:
+        if not require(find_named(screen,reason) != null,"Falta un motivo de bloqueo específico"):
+            return
+    for old_reason in ["OfferTermsPending","OfferCommitmentsPending","OfferTacticalPending","OfferEndMissing","OfferCurrencyMissing","EconomyRemainingBudgetLabel"]:
+        if not require(find_named(screen,old_reason) == null,"Se muestra un bloqueo genérico u opcional obsoleto"):
+            return
+    if not require(find_marked_nodes(screen,"principle_code").size() == 4 and find_marked_nodes(screen,"objective_code").size() == 3,"La oferta no conserva compromisos del explorador"):
+        return
+    if not require(not DirAccess.dir_exists_absolute(test_root.path_join("careers")),"Elegir club creó una partida anticipada"):
+        return
+    find_named(screen,"BackChooseClub").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"StartUnemployed").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"CancelCareerCreation").emit_signal("pressed")
+    await process_frame
+    if not require(not DirAccess.dir_exists_absolute(test_root.path_join("careers")),"Cancelar confirmación creó una partida"):
+        return
+    find_named(screen,"StartUnemployed").emit_signal("pressed")
+    await process_frame
+    if not await check_career_layout(screen,"ConfirmCareerCreation"):
+        return
+    find_named(screen,"ConfirmCareerCreation").emit_signal("pressed")
+    find_named(screen,"ConfirmCareerCreation").emit_signal("pressed")
+    for attempt in range(200):
+        if find_named(screen,"CareerWelcomeSummary") != null:
+            break
+        await create_timer(0.05).timeout
+    var welcome = find_named(screen,"CareerWelcomeSummary")
+    if not require(welcome != null and find_named(screen,"CareerEmploymentValue").text == "En paro" and find_named(screen,"CareerClubValue").text == "Ninguno","No comienza carrera válida en paro"):
+        return
+    if not await check_career_layout(screen,"Home"):
+        return
+    var first_career = welcome.get_meta("career_id")
+    var first_coach = welcome.get_meta("coach_id")
+    if not require(DirAccess.get_files_at(test_root.path_join("careers")).size() == 1,"La doble confirmación creó carreras duplicadas"):
+        return
+    find_named(screen,"Home").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NewGame").emit_signal("pressed")
+    await process_frame
+    if not require(find_marked_nodes(screen,"profile_id").size() == 1,"No se recupera el perfil existente"):
+        return
+    find_named(screen,"SelectCoachProfile").emit_signal("pressed")
+    await process_frame
+    selection = find_trees(screen)[0]
+    selection.get_root().get_first_child().select(0)
+    selection.emit_signal("item_selected")
+    find_named(screen,"ViewClub").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"ChooseClub").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"RejectAndStartUnemployed").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"ConfirmCareerCreation").emit_signal("pressed")
+    for attempt in range(200):
+        if find_named(screen,"CareerWelcomeSummary") != null:
+            break
+        await create_timer(0.05).timeout
+    welcome = find_named(screen,"CareerWelcomeSummary")
+    if not require(welcome != null and welcome.get_meta("career_id") != first_career and welcome.get_meta("coach_id") != first_coach,"Las dos carreras comparten identidad"):
+        return
+    if not require(DirAccess.get_files_at(test_root.path_join("careers")).size() == 2,"No se publicaron dos carreras independientes"):
+        return
+    print("FURVO_CAREER_UI_OK: perfil reutilizado, firma bloqueada, volver/cancelar sin partida, paro directo/rechazo y dos carreras persistentes")
     await press_escape()
-    if not require(find_named(screen,"ExplorationMenu").visible, "Esc no está disponible en el listado de clubes"):
+    if not require(find_named(screen,"ExplorationMenu").visible, "Esc no está disponible en el resumen de carrera"):
         return
     find_named(find_named(screen,"ExplorationMenu"), "ReturnMainMenu").emit_signal("pressed")
     await process_frame

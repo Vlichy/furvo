@@ -62,3 +62,7 @@ Plantilla usa columnas 35/30/10/25 y descripción con salto de línea. Palmarés
 Inicio presenta Nueva partida (abre solo el explorador), Cargar partida deshabilitado, Opciones y Salir del juego. Esc en exploración abre un único menú; Continuar conserva club, pestaña, orden y selección. Opciones aplica modo/resolución solo durante la sesión. Plantilla abre inicialmente ordenada por grupos y posiciones; RightMidfielder/LeftMidfielder se muestran como Centrocampista derecho/izquierdo, sin convertirlos en extremos.
 
 Economía incorpora temporadas reales, cuatro indicadores superiores y No evaluado para situación financiera. Intereses devengados aparecen solo en Gastos financieros; amortización del principal figura como obligación, no gasto. Abonos, ventas/compras de jugadores y márgenes restantes se distinguen expresamente. Ver [criterios y validación](NAVIGATION_POSITIONS_FINANCE.md).
+
+## Integración con perfiles y ofertas
+
+El explorador se abre después de seleccionar o crear un entrenador. Conserva las cuatro pestañas, plantillas y fichas. El listado permite volver a perfiles y comenzar directamente en paro. Elegir este club ya abre una oferta documental; volver no registra rechazo ni crea partida. Firma deshabilitada por condiciones pendientes, rechazo confirmado inicia carrera en paro. Filosofía/objetivos y recursos conservan exactamente las fuentes del explorador. No se rediseñan las pestañas. Ver [flujo actual](CAREER_CREATION.md).

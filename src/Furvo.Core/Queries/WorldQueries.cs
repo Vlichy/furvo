@@ -27,6 +27,7 @@ public interface IWorldQueries
     DateOnly ReferenceDate { get; }
     IReadOnlyList<ClubSummary> GetClubs();
     IReadOnlyList<SeasonSummary> GetSeasons();
+    ClubFinancialResources GetFinancialResources(ClubId clubId, SeasonId seasonId);
     ClubDetails GetClubDetails(ClubId clubId);
     ClubHistoryDetails GetClubHistory(ClubId clubId);
     IReadOnlyList<PlayerSummary> GetSquad(ClubId clubId, SquadSort sort = SquadSort.Name, bool descending = false);
@@ -57,6 +58,14 @@ public sealed class WorldQueries : IWorldQueries
     public IReadOnlyList<SeasonSummary> GetSeasons() => Array.AsReadOnly(_world.Seasons.OrderBy(s => s.StartDate)
         .ThenBy(s => s.Id.ToString(), StringComparer.Ordinal)
         .Select(s => new SeasonSummary(s.Id, s.Name, s.StartDate, s.EndDate)).ToArray());
+
+    /// <summary>La temporada existe, pero no hay importes aprobados: oferta y Economía comparten estos mismos desconocidos.</summary>
+    public ClubFinancialResources GetFinancialResources(ClubId clubId, SeasonId seasonId)
+    {
+        _ = RequireClub(clubId);
+        if (!_world.Seasons.Any(s=>s.Id==seasonId)) throw new KeyNotFoundException("Temporada desconocida.");
+        return new ClubFinancialResources(clubId,seasonId);
+    }
 
     /// <summary>Proyecta los datos ya almacenados; campos nuevos permanecen desconocidos hasta autoría y persistencia aprobadas.</summary>
     public ClubDetails GetClubDetails(ClubId clubId)

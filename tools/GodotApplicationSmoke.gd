@@ -31,6 +31,7 @@ func run_test() -> void:
     var args = OS.get_cmdline_user_args()
     var full = args.size() > 0 and args[0] == "fullscreen"
     var screen = load("res://Scenes/Main.tscn").instantiate()
+    screen.ConfigureCareerStorage(ProjectSettings.globalize_path("res://../../artifacts/application-career-"+str(Time.get_ticks_usec())))
     root.add_child(screen)
     await process_frame
     if not check(find_named(screen,"NewGame") != null and find_named(screen,"LoadGame").disabled,"Menú principal incorrecto"):
@@ -77,9 +78,27 @@ func run_test() -> void:
         return
     find_named(screen,"NewGame").emit_signal("pressed")
     for i in range(200):
-        if find_named(screen,"ViewClub") != null:
+        if find_named(screen,"CoachProfileForm") != null:
             break
         await create_timer(0.05).timeout
+    if not check(find_named(screen,"CoachProfileForm") != null,"No abre el flujo de entrenador"):
+        return
+    find_named(screen,"CoachFirstName").text = "Prueba"
+    find_named(screen,"CoachLastName").text = "Aplicación"
+    find_named(screen,"CoachBirthDate").text = "01/01/1980"
+    find_named(screen,"CoachBirthCity").text = "Ciudad de prueba"
+    find_named(screen,"CoachNationality").select(1)
+    find_named(screen,"SaveCoachProfile").emit_signal("pressed")
+    for i in range(200):
+        if find_named(screen,"SelectCoachProfile") != null:
+            break
+        await create_timer(0.05).timeout
+    if not check(find_named(screen,"SelectCoachProfile") != null,"No se guarda el perfil aislado de pruebas"):
+        return
+    find_named(screen,"SelectCoachProfile").emit_signal("pressed")
+    await process_frame
+    if not check(find_named(screen,"ViewClub") != null,"No llega al explorador desde el perfil"):
+        return
     await escape()
     var menu = find_named(screen,"ExplorationMenu")
     if not check(menu != null and menu.visible,"Esc no abre el menú en pantalla completa"):

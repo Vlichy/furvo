@@ -1,4 +1,60 @@
-# Inventario — ficha institucional e historia propuesta, Entrega 4
+## Estado vigente — simplificación del contrato inicial (27/10/2026)
+
+La oferta inicial incorpora fechas 01/07/2026–30/06/2027 y EUR por país del club. Sin filas de duración ni fichajes restante en la oferta. El salario depende de un margen anual aún pendiente de aprobación sobre el suelo legal configurado; es el único bloqueo actual de las veinte ofertas reales. Nuevos perfiles: debutante o exfutbolista; experiencia histórica conservada sin reescritura. No cambian esquemas ni contratos existentes. Compilación Debug/Release sin errores ni advertencias; 222 pruebas superadas por configuración y prueba de escena Godot superada. Los apartados anteriores de entrega que siguen se conservan como historial y quedan subordinados a esta corrección.
+
+[Reglas económicas, compatibilidad, archivos y validación](INITIAL_CONTRACT_SIMPLIFICATION.md).
+
+## Corrección contractual vigente — 27/10/2026
+
+La validación actual sustituye las reglas de bloqueo descritas en los apartados históricos: solo exige identidad válida, fechas válidas, salario positivo, moneda admitida y contenido/prioridad de obligaciones expresamente exigibles. Las preferencias orientativas pendientes no bloquean ni se guardan como compromisos aceptados. La duración se calcula en meses desde las fechas. Extensión de carrera 2 para nuevas carreras; carga de extensión 1 en solo lectura. Las veinte ofertas reales siguen pendientes de fecha final, salario anual y moneda.
+
+Validación: Debug y Release, 209 pruebas superadas; compilación de cuatro proyectos sin errores ni advertencias. Prueba de escena Godot sin ventana superada; no equivale a revisión visual manual. Véase [informe de corrección](CONTRACT_TERMS_CORRECTION.md).
+
+# Inventario — perfiles y creación de carreras
+
+## Archivos de esta entrega
+
+**18 archivos creados y 13 modificados.** No se añaden proyectos, herramientas ni paquetes NuGet.
+
+| Archivo | Estado | Función |
+| --- | --- | --- |
+| docs/COACH_PROFILES.md | Creado | Validaciones, catálogo estable, almacenamiento e instantáneas de perfil. |
+| docs/CAREER_CREATION.md | Creado | Flujo, extensión versionada, atomicidad, idempotencia y validación. |
+| docs/MANAGER_CONTRACTS.md | Creado | Modelo contractual, compromisos, recursos y bloqueo por reglas pendientes. |
+| src/Furvo.Core/Careers/CoachProfiles.cs | Creado | CoachProfileId, perfil validado, experiencia descriptiva y puerto de perfiles. |
+| src/Furvo.Core/Careers/ManagerOffers.cs | Creado | Oferta, condiciones, compromisos/táctica y bloqueo de firma. |
+| src/Furvo.Core/Careers/CareerCreation.cs | Creado | Identidad de entrenador de carrera, estados, contrato, puerto y flujo temporal. |
+| src/Furvo.Core/Queries/ClubFinancialResources.cs | Creado | Única proyección de recursos de club/temporada para Economía y contrato. |
+| src/Furvo.Persistence/CareerJson.cs | Creado | Serialización de instantáneas y GUID tipados, y carga de migraciones separadas. |
+| src/Furvo.Persistence/SqliteCoachProfileStore.cs | Creado | Altas y lectura de perfiles sin sobrescritura ni duplicación de solicitud. |
+| src/Furvo.Persistence/SqliteCareerStore.cs | Creado | Copia SQLite independiente, transacción de inicio, publicación atómica y reapertura. |
+| src/Furvo.Persistence/Migrations/Profiles001_Initial.sql | Creado | Esquema de perfiles 1, nacionalidades, nulabilidad, longitud y edad. |
+| src/Furvo.Persistence/Migrations/Career001_Initial.sql | Creado | Extensión de carrera 1 con FKs, estados y congelación de instantáneas. |
+| src/Furvo.Godot/Scripts/Main.Careers.cs | Creado | Composición de selección/creación de entrenador, oferta, confirmación y bienvenida. |
+| src/Furvo.Godot/Scripts/Components/CoachAvatar.cs | Creado | Avatar genérico seguro reutilizable sin PlayerId ni rutas del perfil. |
+| src/Furvo.Godot/Scripts/Components/CoachProfileForm.cs | Creado | Formulario con validación, reintento y protección de doble pulsación. |
+| src/Furvo.Godot/Scripts/Components/InitialManagerOfferSource.cs | Creado | Adapta los mismos borradores y proyección financiera del explorador. |
+| src/Furvo.Godot/Scripts/Components/ManagerOfferDocument.cs | Creado | Documento desplazable de condiciones, compromisos, táctica y recursos pendientes. |
+| tests/Furvo.Tests/CareerCreationTests.cs | Creado | 24 casos de perfiles, carreras, firma sintética, rechazo, aislamiento, snapshots y fallos. |
+| src/Furvo.Core/Queries/WorldQueries.cs | Modificado | GetFinancialResources valida club/temporada y devuelve recursos desconocidos sin inventarlos. |
+| src/Furvo.Persistence/SqliteWorldFiles.cs | Modificado | Publicación existente accesible internamente para reutilizar el mecanismo atómico. |
+| src/Furvo.Godot/Scripts/Main.cs | Modificado | Nueva partida abre perfiles, conserva ruta de catálogo e integra las nuevas acciones. |
+| src/Furvo.Godot/Scripts/Components/ClubEconomyPage.cs | Modificado | Recibe recursos desde la misma consulta del contrato; staff/jugadores separados. |
+| src/Furvo.Godot/Resources/UiStrings.resx | Modificado | Textos españoles de perfiles, nacionalidades, oferta y carrera; aviso de inicio actualizado. |
+| tests/Furvo.Tests/Furvo.Tests.csproj | Modificado | Enlace del adaptador puro real de ofertas para pruebas sin cargar Godot. |
+| tools/GodotUiSmoke.gd | Modificado | Recorrido aislado completo, formularios, firma bloqueada, paro directo y rechazo. |
+| tools/GodotApplicationSmoke.gd | Modificado | Nuevo paso por perfiles en la prueba nativa, almacenamiento aislado en artifacts. |
+| docs/ARCHITECTURE.md | Modificado | Separación de perfil/carrera, extensión, fuentes compartidas y compatibilidad. |
+| docs/INVENTORY.md | Modificado | Inventario actual y conservación de inventarios históricos. |
+| docs/VALIDATION.md | Modificado | Resultados Debug/Release y límites de pruebas de Godot. |
+| docs/CLUB_SCREEN.md | Modificado | Integración del explorador cerrado con perfiles y ofertas. |
+| README.md | Modificado | Estado actual, recorridos, almacenamiento local y bloqueo de firma. |
+
+Estado: 179 pruebas Debug/Release, smokes de Godot correctos; firma real bloqueada por reglas pendientes. [Informe](CAREER_CREATION.md).
+
+## Inventarios de fases anteriores
+
+### Inventario — ficha institucional e historia propuesta, Entrega 4
 
 **15 archivos creados y 9 modificados**. Se amplía lectura/presentación, sin paquetes, proyectos, tablas, migraciones, publicaciones nuevas ni mecánicas deportivas. Persistence, entidades previas y v1–v4 mantienen sus hashes. DataTable y PlayerSheet permanecen intactos.
 

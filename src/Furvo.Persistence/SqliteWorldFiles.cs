@@ -90,7 +90,7 @@ public static class SqliteWorldFiles
     }
 
     /// <summary>Escribe en un temporal exclusivo y lo renombra sin sobrescribir; el finally limpia solo el temporal propio.</summary>
-    private static SqliteWorldStore Publish(string destination, Action<SqliteConnection> create)
+    internal static SqliteWorldStore Publish(string destination, Action<SqliteConnection> create)
     {
         var path = WorldDatabase.PathFor(destination);
         if (File.Exists(path)) throw new IOException("El destino ya existe; no se sobrescriben archivos.");

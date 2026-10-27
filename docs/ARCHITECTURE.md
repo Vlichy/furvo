@@ -1,3 +1,15 @@
+## Estado vigente — simplificación del contrato inicial (27/10/2026)
+
+La oferta inicial incorpora fechas 01/07/2026–30/06/2027 y EUR por país del club. Sin filas de duración ni fichajes restante en la oferta. El salario depende de un margen anual aún pendiente de aprobación sobre el suelo legal configurado; es el único bloqueo actual de las veinte ofertas reales. Nuevos perfiles: debutante o exfutbolista; experiencia histórica conservada sin reescritura. No cambian esquemas ni contratos existentes. Compilación Debug/Release sin errores ni advertencias; 222 pruebas superadas por configuración y prueba de escena Godot superada. Los apartados anteriores de entrega que siguen se conservan como historial y quedan subordinados a esta corrección.
+
+[Reglas económicas, compatibilidad, archivos y validación](INITIAL_CONTRACT_SIMPLIFICATION.md).
+
+## Corrección contractual vigente — 27/10/2026
+
+La validación actual sustituye las reglas de bloqueo descritas en los apartados históricos: solo exige identidad válida, fechas válidas, salario positivo, moneda admitida y contenido/prioridad de obligaciones expresamente exigibles. Las preferencias orientativas pendientes no bloquean ni se guardan como compromisos aceptados. La duración se calcula en meses desde las fechas. Extensión de carrera 2 para nuevas carreras; carga de extensión 1 en solo lectura. Las veinte ofertas reales siguen pendientes de fecha final, salario anual y moneda.
+
+Validación: Debug y Release, 209 pruebas superadas; compilación de cuatro proyectos sin errores ni advertencias. Prueba de escena Godot sin ventana superada; no equivale a revisión visual manual. Véase [informe de corrección](CONTRACT_TERMS_CORRECTION.md).
+
 # Arquitectura — V0.1, entrega 4
 
 ## Separación conservada
@@ -77,3 +89,11 @@ El listado abre Información mediante ShowClub, con cabecera común y pestañas 
 IWorldQueries incorpora GetClubDetails (proyección del perfil e inscripciones vigentes) y GetClubHistory (sin datos aprobados en el esquema actual). Nuevos DTO opcionales distinguen campos desconocidos; no crean entidades o tablas. ClubHistoryOrigin distingue autoría previa al inicio de 2026/27 de historia de partida. La historia propuesta se limita a documentos externos al juego y no se embebe en recursos comerciales.
 
 ClubHistoryPlot/Chart ordenan una colección y no convierten huecos en puestos: bandas de división separadas, primero arriba, sin unión de años desconocidos. ClubEconomyPage solo presenta estados no disponibles; no añade lógica financiera. El esquema propuesto y sus criterios deben aprobarse antes de otra migración/publicación. Véanse [CLUB_SCREEN.md](CLUB_SCREEN.md) y [CLUB_HISTORY_SCHEMA_PROPOSAL.md](CLUB_HISTORY_SCHEMA_PROPOSAL.md).
+
+## Nueva fase: perfiles, ofertas y creación de carrera
+
+Core incorpora Careers: CoachProfileId, perfil/experiencia descriptiva, CareerCreationFlow, CoachId propio por carrera, oferta/contrato de entrenador y puertos ICoachProfileStore/ICareerStore. No depende de Godot ni SQLite. La selección es temporal; la confirmación tiene SaveId estable para idempotencia y reintento.
+
+Persistence implementa perfiles separados y carreras como copia del mundo aprobado. Reutiliza SqliteWorldFiles.Publish con visibilidad internal; conserva world user_version=4 y scripts 001–004. Profiles001 crea esquema propio 1; Career001 añade una extensión 1 solo a carreras nuevas. FK/estado, transacción y rename sin sobrescritura protegen atomicidad. Perfil y condiciones aceptadas quedan congelados; perfil no sustituye CoachId. Ninguna partida anterior se migra automáticamente.
+
+Main.Careers compone pantallas con servicios; CoachProfileForm/CoachAvatar/ManagerOfferDocument reutilizan estilos y recursos. InitialManagerOfferSource adapta ClubDirectionProposalCatalog y GetFinancialResources, la misma proyección que Economía. La firma se bloquea por datos no aprobados; paro directo/rechazo sí crean carreras válidas. ConfigureCareerStorage permite aislar pruebas antes de entrar al árbol; no es una preferencia del juego. Cargar desde menú y mecánicas de empleo siguen futuras. Véanse COACH_PROFILES.md, CAREER_CREATION.md y MANAGER_CONTRACTS.md.
