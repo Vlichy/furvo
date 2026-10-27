@@ -46,3 +46,19 @@ La prueba sin ventana valida comportamiento y geometría, no la apariencia. Qued
 La composición anterior se amplía conforme a la captura recibida: tres equipaciones y emblemas provisionales por ClubId, identidad institucional completa, estadio con campo horizontal corregido y dos ilustraciones originales, síntesis histórica inferior y cinco bloques económicos. Los campos ausentes permanecen pendientes o no disponibles. La categoría del estadio es opcional 1–5, independiente de reputación; veinte candidatos se documentan sin cargar.
 
 [Composición, validación, diferencias y componentes actuales](CLUB_PRESENTATION_REDESIGN.md). Estado: 138 pruebas Debug/Release y smoke Godot correcto, incluida geometría a 1920×1080; inspección visual real parcial a 1280×720. Las publicaciones no cambian.
+
+## Filosofía y expectativas (vista previa de borradores)
+
+Debajo de identidad y estadio se añaden Filosofía del club a izquierda y Expectativas de la directiva a derecha. Comparten scroll con Información, se apilan al reducir ancho y conservan la navegación. Cada club tiene cuatro principios y tres objetivos (temporada, medio y largo plazo) con prioridades y fechas. Ambos paneles muestran «Borrador pendiente de aprobación · No son exigencias definitivas». No hay controles de edición/negociación ni evaluación o consecuencias.
+
+El recurso editorial de presentación no se mezcla con datos aprobados de SQLite. La propuesta completa y sus referencias están en [CLUB_DIRECTION_PROPOSAL.md](CLUB_DIRECTION_PROPOSAL.md); su revisión es requisito previo a una futura persistencia autorizada.
+
+## Distribución vigente y elección provisional
+
+Plantilla usa columnas 35/30/10/25 y descripción con salto de línea. Palmarés queda solo en Historia, Leyendas solo en Información. Ambos campos finales de Récords se contienen dentro de su tarjeta. Historia se distribuye en dos columnas independientes adaptables y ajusta los bloques vacíos. El pie fijo fuera del scroll usa HFlowContainer con Volver, Ver futbolista cuando procede y Elegir este club. Este último abre un aviso informativo; todavía no inicia partida ni asigna entrenador. Ver [informe](UI_LAYOUT_FIX.md).
+
+## Menú principal y exploración vigentes
+
+Inicio presenta Nueva partida (abre solo el explorador), Cargar partida deshabilitado, Opciones y Salir del juego. Esc en exploración abre un único menú; Continuar conserva club, pestaña, orden y selección. Opciones aplica modo/resolución solo durante la sesión. Plantilla abre inicialmente ordenada por grupos y posiciones; RightMidfielder/LeftMidfielder se muestran como Centrocampista derecho/izquierdo, sin convertirlos en extremos.
+
+Economía incorpora temporadas reales, cuatro indicadores superiores y No evaluado para situación financiera. Intereses devengados aparecen solo en Gastos financieros; amortización del principal figura como obligación, no gasto. Abonos, ventas/compras de jugadores y márgenes restantes se distinguen expresamente. Ver [criterios y validación](NAVIGATION_POSITIONS_FINANCE.md).

@@ -274,3 +274,21 @@ La implementación está compilada, cubierta por 90 casos y **lista para validac
 Estado actual posterior a las secciones anteriores: **138 pruebas superadas** (129 anteriores + 9 casos nuevos), tanto Debug como Release, sin errores ni advertencias de compilación. Prueba de escena Godot final con código 0. Se amplía la geometría a 1920×1080 y se protegen identidades provisionales, campo horizontal, categorías independientes y campos desconocidos. Se inspeccionó Información de Mosaico en ventana real a 1280×720; queda revisión visual completa de pestañas y resoluciones, además de exportación Windows.
 
 [Informe detallado, límites y comandos](CLUB_PRESENTATION_REDESIGN.md). [Categorías propuestas, no publicadas](STADIUM_CATEGORY_PROPOSAL.md). Cuatro bases originales idénticas por SHA-256; ningún cambio en Persistence/migraciones ni datos de jugadores, contratos o reputación.
+
+## Filosofía y expectativas — 27/10/2026
+
+Estado posterior: **150 pruebas Debug superadas**, cero fallidas/omitidas, compilación sin errores ni advertencias. Se conservan las 138 anteriores. Smoke Godot final correcto, con paneles de borradores y geometría a 960×640, 1280×720, 1600×900 y 1920×1080; no implica aprobación visual humana. Release no ejecutado para esta ampliación. Cuatro SQLite intactos por SHA-256; sin migración/publicación nueva ni mecánicas de directiva.
+
+[Veinte propuestas, criterios editoriales, fuentes, archivos y comandos](CLUB_DIRECTION_PROPOSAL.md). Los textos mostrados son borradores expresamente identificados, no objetivos vigentes.
+
+Ejecución final confirmada en una nueva ventana de Godot. Inspección visual de ambos paneles de Mosaico en ventana ampliada: principios, tres horizontes, prioridades, plazos y avisos legibles; botón de regreso visible. Pendiente revisión visual exhaustiva de los veinte clubes/tamaños.
+
+## Corrección de maquetación y elección provisional — 27/10/2026
+
+Compilación Debug final sin errores/advertencias; 150 pruebas conservadas y superadas. Smoke final correcto con proporciones 35/30/10/25, doce récords contenidos, exclusividad de Palmarés/Leyendas y aviso exacto desde las cuatro pestañas. Geometría comprobada a 960×640, 1280×720, 1600×900 y 1920×1080. La inspección visual real fue parcial en ventanas ampliadas; no se declara validación visual completa de los tres tamaños exactos. Cuatro SQLite intactos. [Diagnóstico, archivos, límites y comandos](UI_LAYOUT_FIX.md).
+
+Observación adicional: Plantilla comprobada visualmente a pantalla completa de 1920×1080, con cabecera y pie visibles. Permanecen pendientes la inspección visual exacta de 1280×720 y 1600×900 y la revisión final visual de Récords/aviso.
+
+## Posiciones, menús y coherencia económica — 27/10/2026
+
+Estado vigente: **155 pruebas Debug superadas**, cero fallidas/omitidas, compilación sin errores/advertencias. Smoke headless de escena correcto, incluyendo menús, Esc, continuidad, posiciones y Economía. GodotApplicationSmoke.gd pasa con renderizado OpenGL real tanto en ventana como en pantalla completa: Cancelar no aplica cambios, Aplicar cambia resolución y Salir finaliza con código 0 desde menú principal y Esc. No se afirma inspección visual exhaustiva por esos resultados. Release no repetido. Cuatro bases intactas y ningún cambio persistente de posiciones. [Informe, archivos y comandos](NAVIGATION_POSITIONS_FINANCE.md).

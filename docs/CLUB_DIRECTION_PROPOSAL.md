@@ -413,3 +413,33 @@ Las fuentes siguientes sirven únicamente como contexto de identidad, no acredit
 ## Aprobación futura
 
 Revisar por club la filosofía, el nivel de exigencia, las prioridades y los plazos; concretar criterios de logro para las aspiraciones cualitativas cuando se autorice evaluarlas. Después se diseñará la persistencia versionada y una publicación nueva, sin sobrescribir v1–v4 ni actualizar partidas automáticamente. No hay SQL ni migraciones en este encargo.
+
+## Validación de esta ampliación — 27/10/2026
+
+- dotnet build Furvo.sln: cuatro proyectos, cero errores y cero advertencias (Debug).
+- dotnet test Furvo.sln --no-build --no-restore: **150 superadas, cero fallidas y cero omitidas**; se conservan las 138 anteriores y se añaden 12 casos. No se ha ejecutado Release para esta ampliación.
+- Godot 4.7.2 .NET sin ventana, tools/GodotUiSmoke.gd: salida 0 y FURVO_UI_SMOKE_OK después de corregir un conflicto de nombre en el propio script. Verifica posición entre identidad/estadio e historia, dos paneles horizontales o apilados, ClubId constante, cuatro principios/tres objetivos, avisos de borrador y navegación de plantilla/futbolista sin regresión.
+- Geometría comprobada a 960×640, 1280×720, 1600×900 y 1920×1080; se conserva desplazamiento vertical y botón de regreso. Esto no sustituye una inspección visual humana.
+- Recursos de propuesta: veinte ClubId exactos de v4, 80 principios, 60 objetivos, horizontes y plazos reproducibles, listas de lectura, rechazo de borradores malformados y de Status=Approved.
+- Se contrastan los cuatro SQLite por SHA-256 antes/después, sin cambios. Se recorren los 480 futbolistas y sus 51 atributos visibles mediante servicios; sin cambios en Persistence, contratos, reputaciones o datos del mundo.
+
+### Archivos de esta ampliación
+
+Creados: docs/CLUB_DIRECTION_PROPOSAL.md; src/Furvo.Core/Queries/ClubDirectionProposal.cs; src/Furvo.Godot/Resources/ClubDirectionProposals.json; src/Furvo.Godot/Scripts/Components/ClubDirectionProposalCatalog.cs; src/Furvo.Godot/Scripts/Components/ClubDirectionPanels.cs; tests/Furvo.Tests/ClubDirectionProposalTests.cs.
+
+Modificados: Furvo.Godot.csproj para empaquetar el recurso editorial; ClubInformationPage.cs para componer los paneles; UiStrings.resx para etiquetas; Furvo.Tests.csproj y GodotUiSmoke.gd para validación; README.md, CLUB_SCREEN.md, INVENTORY.md y VALIDATION.md para estado/documentación. Se conservan los cambios locales del rediseño anterior; no se hace commit ni push. No se añaden paquetes NuGet, migraciones ni publicaciones.
+
+### Comprobación local y revisión editorial
+
+~~~powershell
+dotnet build Furvo.sln
+dotnet test Furvo.sln --no-build --no-restore
+& $env:GODOT4 --headless --path .\src\Furvo.Godot --script "$PWD\tools\GodotUiSmoke.gd"
+& $env:GODOT4 --path .\src\Furvo.Godot --resolution 1280x720
+~~~
+
+GODOT4 apunta al ejecutable Godot 4.7.2 .NET instalado. Recorrido: Inicio → Clubes → Ver club → Información → bajar por debajo de identidad/estadio. Revisar ambos avisos, prioridades y fechas; alternar clubes y volver desde Plantilla y Futbolista. Confirmar manualmente legibilidad y scroll en las tres resoluciones solicitadas. Todavía no hay elección de entrenador/equipo ni evaluación de objetivos.
+
+### Ejecución e inspección final
+
+Se abrió una nueva instancia de Godot 4.7.2 .NET con la compilación actual y se identificó su ventana separadamente de la instancia anterior. Se observó Información de Atlético Mosaico en ventana ampliada: cuatro principios a izquierda, tres objetivos a derecha con prioridades/plazos, avisos de borrador en ambos paneles, síntesis histórica debajo y botón de regreso visible, sin solapamiento en esa observación. Queda la revisión visual exhaustiva de los otros clubes y tamaños; las cuatro resoluciones citadas arriba corresponden a la prueba automática de geometría. La aplicación queda ejecutándose.

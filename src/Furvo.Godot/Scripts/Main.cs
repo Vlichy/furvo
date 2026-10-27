@@ -12,7 +12,8 @@ public partial class Main : Control
 {
     private IWorldQueries? _queries;
     private ClubSummary? _club;
-    private SquadSort _sort = SquadSort.Name;
+    private SquadSort _sort = SquadSort.Position;
+    private bool _exploring;
     private bool _descending;
     private string? _selectedPlayer;
     private int _loadRequest;
@@ -62,11 +63,11 @@ public partial class Main : Control
         var background = new ColorRect { Color = new Color("0d192b"), MouseFilter = MouseFilterEnum.Ignore };
         background.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         AddChild(background);
-        var margin = new MarginContainer();
+        var margin = new MarginContainer { Name = "ScreenMargins" };
         margin.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         foreach (var side in new[] { "left", "right", "top", "bottom" }) margin.AddThemeConstantOverride("margin_" + side, showHeading ? 28 : 20);
         AddChild(margin);
-        var body = new VBoxContainer();
+        var body = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
         body.AddThemeConstantOverride("separation", showHeading ? 12 : 6);
         margin.AddChild(body);
         var header = new HBoxContainer();
@@ -103,7 +104,7 @@ public partial class Main : Control
 
     private void ShowHome()
     {
-        _loadRequest++;
+        _loadRequest++; _exploring = false;
         var body = Frame("Version", UiText.Get("HomeTitle"), UiText.Get("HomeDescription"));
         var center = new VBoxContainer { SizeFlagsVertical = SizeFlags.ExpandFill, Alignment = BoxContainer.AlignmentMode.Center };
         body.AddChild(center);
@@ -111,8 +112,11 @@ public partial class Main : Control
         var help = Label(UiText.Get("HomeHelp"), 18, _muted);
         help.AutowrapMode = TextServer.AutowrapMode.WordSmart;
         center.AddChild(help);
-        var start = Button("BrowseClubs", () => { if (_queries is null) LoadWorld(); else ShowClubs(); });
+        var start = Button("NewGame", () => { _exploring = true; if (_queries is null) LoadWorld(); else ShowClubs(); });
         center.AddChild(start);
+        center.AddChild(new Button { Name = "LoadGame", Text = UiText.Get("LoadGame"), Disabled = true, CustomMinimumSize = new Vector2(0,44) });
+        center.AddChild(Button("Options", () => ShowDisplayOptions()));
+        center.AddChild(Button("ExitGame", ExitGame));
         body.AddChild(Label(UiText.Get("ReadOnlyNotice"), 15, _muted));
         start.GrabFocus();
     }
@@ -120,6 +124,7 @@ public partial class Main : Control
     /// <summary>Lee en segundo plano; la caché contiene los bytes originales del SQLite embebido y no es una partida.</summary>
     private async void LoadWorld()
     {
+        _exploring = true;
         var request = ++_loadRequest;
         var body = Frame("Version", UiText.Get("LoadingTitle"), UiText.Get("LoadingDescription"));
         body.AddChild(Button("Home", ShowHome));
@@ -171,7 +176,7 @@ public partial class Main : Control
             void OpenClub(string id)
             {
                 _club = clubs.Single(x => x.Id.ToString() == id);
-                _sort = SquadSort.Name; _descending = false; _selectedPlayer = null;
+                _sort = SquadSort.Position; _descending = false; _selectedPlayer = null;
                 _clubTab = 0;
                 ShowClub();
             }
@@ -209,18 +214,27 @@ public partial class Main : Control
             body.AddChild(tabs);
             tabs.AddChild(new ClubInformationPage(details, history));
             var squadPage = new VBoxContainer { Name = "ClubSquadPage" }; squadPage.SetMeta("club_id", _club.Id.ToString()); tabs.AddChild(squadPage);
-            tabs.AddChild(new ClubHistoryPage(history)); tabs.AddChild(new ClubEconomyPage(_club.Id.ToString()));
+            tabs.AddChild(new ClubHistoryPage(history)); tabs.AddChild(new ClubEconomyPage(_club.Id.ToString(), _queries.GetSeasons(), _queries.ReferenceDate));
             var keys = new[] { "ClubInformationTab", "ClubSquadTab", "ClubHistoryTab", "ClubEconomyTab" };
             for (var i = 0; i < keys.Length; i++) tabs.SetTabTitle(i, UiText.Get(keys[i]));
-            var bar = new HBoxContainer(); body.AddChild(bar); bar.AddChild(Button("BackClubs", ShowClubs));
+            // FlowContainer conserva el pie fuera de las pestañas y envuelve los botones si falta ancho.
+            var bar = new HFlowContainer { Name = "ClubFooter", SizeFlagsHorizontal = SizeFlags.ExpandFill };
+            bar.AddThemeConstantOverride("h_separation", 14); bar.AddThemeConstantOverride("v_separation", 6);
+            body.AddChild(bar); bar.AddChild(Button("BackClubs", ShowClubs));
             var squad = _queries.GetSquad(_club.Id, _sort, _descending);
-            squadPage.AddChild(Label(UiText.Format("SquadDescription", squad.Count, _queries.ReferenceDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)), 15, _muted));
+            var description = Label(UiText.Format("SquadDescription", squad.Count, _queries.ReferenceDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)), 15, _muted);
+            description.Name = "SquadDescription"; description.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+            description.SizeFlagsHorizontal = SizeFlags.ExpandFill; squadPage.AddChild(description);
             var table = new DataTable([
-                new(UiText.Get("Name"), 280, 4, true), new(UiText.Get("Position"), 190, 2, true),
-                new(UiText.Get("Age"), 70, 1, true), new(UiText.Get("Nationality"), 130, 2)]);
+                new(UiText.Get("Name"), 245, 35, true, HeaderAlignment: HorizontalAlignment.Left),
+                new(UiText.Get("Position"), 210, 30, true, HeaderAlignment: HorizontalAlignment.Left),
+                new(UiText.Get("Age"), 70, 10, true, CellAlignment: HorizontalAlignment.Center),
+                new(UiText.Get("Nationality"), 175, 25, HeaderAlignment: HorizontalAlignment.Left)]) { Name = "SquadTable" };
             squadPage.AddChild(table);
             var open = Button("ViewPlayer", () => { if (_selectedPlayer is not null) ShowPlayer(new PlayerId(Guid.Parse(_selectedPlayer))); });
             open.Disabled = _selectedPlayer is null; bar.AddChild(open);
+            var choose = Button("ChooseClub", ShowClubChoiceNotice);
+            choose.AddThemeColorOverride("font_color", _accent); bar.AddChild(choose);
             table.RowSelected += id => { _selectedPlayer = id; open.Disabled = false; };
             table.RowActivated += id => ShowPlayer(new PlayerId(Guid.Parse(id)));
             table.SortRequested += column =>
@@ -236,6 +250,48 @@ public partial class Main : Control
             if (_clubTab == 1) table.FocusTable();
         }
         catch (Exception error) { GD.PushError(error.ToString()); ShowError("ClubDetailsError", ShowClub, ShowClubs); }
+    }
+
+    /// <summary>Esc nunca termina el juego. El menú no reconstruye la pantalla al continuar.</summary>
+    public override void _UnhandledKeyInput(InputEvent input)
+    {
+        if (!_exploring || !WindowUi.IsEscape(input)) return;
+        if (GetNodeOrNull<AcceptDialog>("ClubChoiceNotice") is { Visible: true }) return;
+        if (GetNodeOrNull<DisplayOptionsWindow>("DisplayOptions") is { Visible: true }) return;
+        GetViewport().SetInputAsHandled();
+        var menu = GetNodeOrNull<ExplorationMenu>("ExplorationMenu");
+        if (menu is null)
+        {
+            menu = new ExplorationMenu(Theme, ShowHome, () => ShowDisplayOptions(() =>
+            {
+                if (GetNodeOrNull<ExplorationMenu>("ExplorationMenu") is { } existing) existing.Open();
+            }), ExitGame);
+            AddChild(menu);
+        }
+        if (menu.Visible) menu.Hide(); else menu.Open();
+    }
+    private void ShowDisplayOptions(Action? closed = null)
+    {
+        if (GetNodeOrNull<DisplayOptionsWindow>("DisplayOptions") is { Visible: true }) return;
+        var options = new DisplayOptionsWindow(Theme, closed ?? (() => { })); AddChild(options); options.Open();
+    }
+    private void ExitGame()
+    {
+        _loadRequest++; GetTree().Quit();
+    }
+
+    /// <summary>Aviso provisional: no selecciona club, asigna entrenador ni llama a servicios de escritura.</summary>
+    private void ShowClubChoiceNotice()
+    {
+        var notice = GetNodeOrNull<AcceptDialog>("ClubChoiceNotice");
+        if (notice is null)
+        {
+            notice = new AcceptDialog { Name = "ClubChoiceNotice", Title = UiText.Get("ChooseClub"),
+                DialogText = UiText.Get("ClubChoiceNotAvailable"), DialogAutowrap = true };
+            notice.GetOkButton().Text = UiText.Get("CloseNotice");
+            AddChild(notice);
+        }
+        notice.PopupCentered(new Vector2I(Math.Min(600, (int)GetViewportRect().Size.X - 80), 160));
     }
 
     /// <summary>Solo recibe la proyección pública: cuatro categorías, sin diccionarios internos ni categorías ocultas.</summary>

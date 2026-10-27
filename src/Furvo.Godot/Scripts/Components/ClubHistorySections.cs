@@ -56,7 +56,8 @@ internal static class ClubHistorySections
         foreach (var field in new[] { ("HistoryTopScorer",h.TopScorer), ("HistoryMostAppearances",h.MostAppearances),
             ("HistoryBiggestWin",h.BiggestWin), ("HistoryBiggestLoss",h.BiggestLoss), ("HistoryWinningStreak",h.WinningStreak),
             ("HistoryUnbeatenStreak",h.UnbeatenStreak), ("HistoryMostGoalsSeason",h.MostGoalsSeason), ("HistoryFewestGoalsSeason",h.FewestGoalsSeason),
-            ("HistoryFewestConcededSeason",h.FewestConcededSeason), ("HistoryCleanSheetStreak",h.CleanSheetStreak) })
+            ("HistoryFewestConcededSeason",h.FewestConcededSeason), ("HistoryCleanSheetStreak",h.CleanSheetStreak),
+            ("HistoryCoachAppearances",h.LongestServingCoach), ("HistoryAdditionalRecords",h.Records) })
             ClubUi.Field(panel, field.Item1, h.IsApprovedDataAvailable ? field.Item2 : null);
     }
 }

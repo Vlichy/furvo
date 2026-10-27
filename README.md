@@ -66,7 +66,7 @@ La [propuesta histórica de los veinte clubes](docs/CLUB_HISTORY_PROPOSAL.md) es
 
 ## Estado de validación
 
-El 27/10/2026: **138 pruebas aprobadas, 0 fallidas y 0 omitidas**, incluidas las 129 anteriores. Debug y Release compilan sin errores ni advertencias. La prueba de escena Godot 4.7.2 .NET pasa para las cuatro pestañas, datos pendientes, navegación y regresión de futbolistas. Comprueba geometría a 960×640, 1280×720, 1600×900 y 1920×1080.
+El 27/10/2026: **155 pruebas aprobadas, 0 fallidas y 0 omitidas**, incluidas las 150 anteriores. Los cambios actuales de navegación, posiciones y Economía compilan en Debug sin errores ni advertencias; no se ha repetido Release para este encargo. La prueba de escena Godot 4.7.2 .NET pasa para las cuatro pestañas, datos pendientes, navegación y regresión de futbolistas. Comprueba geometría a 960×640, 1280×720, 1600×900 y 1920×1080.
 
 No se modifica ninguna publicación v1–v4, reputación, jugador, contrato ni atributo; no hay migraciones ni dependencias nuevas. La versión actual se abre al finalizar el encargo. Queda inspección visual manual de las nuevas pestañas y sus dibujos; no se prueba exportación Windows.
 
@@ -77,3 +77,9 @@ No se modifica ninguna publicación v1–v4, reputación, jugador, contrato ni a
 Detalle de comprobaciones y pasos manuales: [VALIDATION.md](docs/VALIDATION.md). Inventario y responsabilidades: [INVENTORY.md](docs/INVENTORY.md). Arquitectura: [ARCHITECTURE.md](docs/ARCHITECTURE.md). Catálogo: [WORLD_MODEL.md](docs/WORLD_MODEL.md). Plantillas y algoritmo de generación: [SQUADS_2026_27.md](docs/SQUADS_2026_27.md).
 
 No se implementan entrenador, nueva partida, guardado desde UI, valoración interna, motor, fichajes, economía funcional, IA, calendarios o Segunda. Las decisiones futuras y el plan de probadores se registran sin implementar ni iniciar otra entrega. Los nombres ficticios y el equilibrio deportivo requieren revisión antes de la publicación comercial.
+
+La pestaña Información permite revisar [filosofía y expectativas propuestas para los veinte clubes](docs/CLUB_DIRECTION_PROPOSAL.md), con avisos de borrador. Los objetivos no están aprobados ni incorporados a SQLite; no existe evaluación de directiva.
+
+La exploración incluye «Elegir este club» como botón provisional de aviso, sin crear partidas. La [corrección de maquetación](docs/UI_LAYOUT_FIX.md) ajusta Plantilla, Récords y navegación; Palmarés se consulta solo en Historia y Leyendas solo en Información.
+
+El inicio actual ofrece Nueva partida (solo explorador), Cargar partida deshabilitado, Opciones de pantalla de sesión y Salir. Esc permite continuar, volver al menú principal, abrir opciones y salir sin iniciar partidas. La plantilla abre por grupos deportivos; Economía muestra temporadas reales y estado No evaluado. [Guía y pruebas de aplicación con ventana](docs/NAVIGATION_POSITIONS_FINANCE.md).

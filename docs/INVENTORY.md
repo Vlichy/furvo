@@ -203,3 +203,35 @@ Al finalizar se ejecuta la versión actual, según la instrucción del usuario. 
 | tools/GodotUiSmoke.gd | Modificado | Comprueba vistas, categorías pendientes, cinco bloques, treinta campos y cuatro resoluciones. |
 
 Sin cambios en Persistence, migraciones, bases SQLite, datos JSON de mundo/plantillas/reputación, DataTable, PlayerSheet ni PositionPitch. Los nuevos recursos son exclusivamente presentación provisional, no una publicación nueva. Pruebas: 138 Debug/Release; smoke Godot correcto. Ver [informe](CLUB_PRESENTATION_REDESIGN.md).
+
+## Filosofía y expectativas — ampliación vigente
+
+6 archivos creados y 9 modificados en este encargo; se conservan los cambios locales previos del rediseño.
+
+| Archivo | Estado | Función |
+| --- | --- | --- |
+| docs/CLUB_DIRECTION_PROPOSAL.md | Creado | Veinte propuestas, fuentes de contexto, aprobación pendiente y validación. |
+| src/Furvo.Core/Queries/ClubDirectionProposal.cs | Creado | Contratos de borrador, prioridades y horizontes explícitos; sin evaluadores. |
+| src/Furvo.Godot/Resources/ClubDirectionProposals.json | Creado | Fuente editorial española de vista previa: 80 principios y 60 objetivos por ClubId. |
+| src/Furvo.Godot/Scripts/Components/ClubDirectionProposalCatalog.cs | Creado | Carga de lectura con validación y rechazo de supuesta aprobación. |
+| src/Furvo.Godot/Scripts/Components/ClubDirectionPanels.cs | Creado | Dos paneles adaptables con avisos, prioridades y vencimientos. |
+| tests/Furvo.Tests/ClubDirectionProposalTests.cs | Creado | Doce casos: cobertura, reproducción, aislamiento y rechazo de documentos no válidos. |
+| src/Furvo.Godot/Furvo.Godot.csproj | Modificado | Empaqueta el recurso editorial, sin dependencias nuevas. |
+| src/Furvo.Godot/Scripts/Components/ClubInformationPage.cs | Modificado | Inserta los dos paneles entre estadio/identidad e historia. |
+| src/Furvo.Godot/Resources/UiStrings.resx | Modificado | Avisos, encabezados, prioridades, horizontes y formatos españoles. |
+| tests/Furvo.Tests/Furvo.Tests.csproj | Modificado | Enlace del cargador real y recurso para pruebas. |
+| tools/GodotUiSmoke.gd | Modificado | Cobertura de paneles, ClubId, borradores, distribución y regresión. |
+| README.md | Modificado | Estado actual y acceso al documento de propuestas. |
+| docs/CLUB_SCREEN.md | Modificado | Recorrido y separación entre borrador y datos aprobados. |
+| docs/VALIDATION.md | Modificado | 150 pruebas Debug y resultado de escena. |
+| docs/INVENTORY.md | Modificado | Inventario de esta ampliación. |
+
+150 pruebas Debug, smoke correcto y cuatro bases intactas. Sin migraciones ni datos definitivos de directiva. Ver [propuestas y validación](CLUB_DIRECTION_PROPOSAL.md).
+
+## Corrección de maquetación y botón Elegir este club
+
+Creado docs/UI_LAYOUT_FIX.md con el inventario de este encargo. Modificados Main.cs, ClubUi.cs, ClubHistorySections.cs, ClubHistoryPage.cs, ClubInformationPage.cs, UiStrings.resx y GodotUiSmoke.gd; actualizados README.md, CLUB_SCREEN.md, VALIDATION.md y este inventario. DataTable se reutiliza sin cambios. Los bancos visuales locales de artifacts están excluidos. No se modifican datos, esquemas ni mecánicas. Estado y límites visuales: [informe](UI_LAYOUT_FIX.md).
+
+## Posiciones, menús y economía — estado vigente
+
+7 archivos nuevos y 9 modificados en este encargo. El [informe](NAVIGATION_POSITIONS_FINANCE.md) enumera cada archivo y función. Nuevos componentes: SeasonSelector, WindowUi, ExplorationMenu y DisplayOptionsWindow; nueva prueba NavigationFinanceQueryTests y smoke GodotApplicationSmoke.gd. WorldQueries incorpora GetSeasons y agrupación estable de posiciones; Main integra los menús. Sin cambios de datos SQLite, entidades, esquemas o dependencias. 155 pruebas Debug; smoke headless y dos smokes con ventana correctos.

@@ -54,8 +54,8 @@
   <data name="Position_DefensiveMidfielder" xml:space="preserve"><value>Mediocentro defensivo</value></data>
   <data name="Position_CentralMidfielder" xml:space="preserve"><value>Centrocampista central</value></data>
   <data name="Position_AttackingMidfielder" xml:space="preserve"><value>Mediapunta</value></data>
-  <data name="Position_RightMidfielder" xml:space="preserve"><value>Banda derecha</value></data>
-  <data name="Position_LeftMidfielder" xml:space="preserve"><value>Banda izquierda</value></data>
+  <data name="Position_RightMidfielder" xml:space="preserve"><value>Centrocampista derecho</value></data>
+  <data name="Position_LeftMidfielder" xml:space="preserve"><value>Centrocampista izquierdo</value></data>
   <data name="Position_Striker" xml:space="preserve"><value>Delantero centro</value></data>
   <data name="Position_RightWinger" xml:space="preserve"><value>Extremo derecho</value></data>
   <data name="Position_LeftWinger" xml:space="preserve"><value>Extremo izquierdo</value></data>
@@ -233,9 +233,9 @@
   <data name="EconomyIncome" xml:space="preserve"><value>Ingresos</value></data>
   <data name="EconomyExpenses" xml:space="preserve"><value>Gastos</value></data>
   <data name="EconomyBalance" xml:space="preserve"><value>Balance económico</value></data>
-  <data name="EconomyDebt" xml:space="preserve"><value>Deuda</value></data>
+  <data name="EconomyDebt" xml:space="preserve"><value>Deuda total</value></data>
   <data name="EconomySituation" xml:space="preserve"><value>Situación financiera</value></data>
-  <data name="EconomyDefinitions" xml:space="preserve"><value>Tesorería: dinero disponible. Presupuesto: límites planificados. Balance: ingresos menos gastos del período. Son conceptos distintos; todavía no hay importes calculados.</value></data>
+  <data name="EconomyDefinitions" xml:space="preserve"><value>Abonos: ingresos monetarios, distintos del número de abonados. Tesorería y presupuestos son conceptos distintos. Los intereses devengados son gastos financieros; devolver el principal de una deuda no es un gasto de resultados. Compras y ventas deberán separar pagos/cobros de reconocimiento contable. No hay importes ni cálculos implementados.</value></data>
   <data name="ClubDetailsError" xml:space="preserve"><value>No se puede recuperar la ficha del club. Vuelve al listado y selecciona un club de nuevo.</value></data>
   <data name="ClubKit0" xml:space="preserve"><value>Primera</value></data>
   <data name="ClubKit1" xml:space="preserve"><value>Segunda</value></data>
@@ -281,27 +281,72 @@
   <data name="HistoryFewestConcededSeason" xml:space="preserve"><value>Temporada con menos goles encajados</value></data>
   <data name="HistoryCleanSheetStreak" xml:space="preserve"><value>Mayor racha de imbatibilidad</value></data>
   <data name="HistoryAdditionalRecords" xml:space="preserve"><value>Otros récords aprobados</value></data>
-  <data name="EconomyRemainingBudget" xml:space="preserve"><value>Presupuesto restante</value></data>
+  <data name="EconomyRemainingBudget" xml:space="preserve"><value>Fichajes restante</value></data>
   <data name="EconomyTelevision" xml:space="preserve"><value>Derechos de televisión</value></data>
-  <data name="EconomySubscribers" xml:space="preserve"><value>Abonados</value></data>
+  <data name="EconomySubscribers" xml:space="preserve"><value>Abonos</value></data>
   <data name="EconomyTickets" xml:space="preserve"><value>Taquilla</value></data>
   <data name="EconomySponsors" xml:space="preserve"><value>Patrocinios</value></data>
   <data name="EconomyMerchandising" xml:space="preserve"><value>Merchandising</value></data>
-  <data name="EconomyTransferIncome" xml:space="preserve"><value>Traspasos</value></data>
+  <data name="EconomyTransferIncome" xml:space="preserve"><value>Ventas de jugadores</value></data>
   <data name="EconomyOtherIncome" xml:space="preserve"><value>Otros ingresos</value></data>
-  <data name="EconomySalaries" xml:space="preserve"><value>Salarios</value></data>
-  <data name="EconomySignings" xml:space="preserve"><value>Fichajes</value></data>
+  <data name="EconomySalaries" xml:space="preserve"><value>Salarios de jugadores</value></data>
+  <data name="EconomySignings" xml:space="preserve"><value>Compras de jugadores</value></data>
   <data name="EconomyStadiumMaintenance" xml:space="preserve"><value>Mantenimiento del estadio</value></data>
   <data name="EconomyFacilities" xml:space="preserve"><value>Instalaciones</value></data>
-  <data name="EconomyStaff" xml:space="preserve"><value>Personal</value></data>
+  <data name="EconomyStaff" xml:space="preserve"><value>Salarios del personal</value></data>
   <data name="EconomyOtherExpenses" xml:space="preserve"><value>Otros gastos</value></data>
   <data name="EconomyObligations" xml:space="preserve"><value>Deuda y obligaciones</value></data>
   <data name="EconomyShortDebt" xml:space="preserve"><value>Deuda a corto plazo</value></data>
   <data name="EconomyLongDebt" xml:space="preserve"><value>Deuda a largo plazo</value></data>
-  <data name="EconomyInterest" xml:space="preserve"><value>Intereses</value></data>
+  <data name="EconomyInterest" xml:space="preserve"><value>Intereses de la deuda</value></data>
   <data name="EconomyDueDates" xml:space="preserve"><value>Próximos vencimientos</value></data>
   <data name="EconomyPendingPayments" xml:space="preserve"><value>Pagos pendientes</value></data>
   <data name="EconomyFinancialStatus" xml:space="preserve"><value>Situación financiera</value></data>
   <data name="EconomyOperatingResult" xml:space="preserve"><value>Resultado de explotación</value></data>
   <data name="EconomyEvolution" xml:space="preserve"><value>Evolución de ingresos y gastos</value></data>
+  <data name="ClubPhilosophy" xml:space="preserve"><value>Filosofía del club</value></data>
+  <data name="ClubBoardExpectations" xml:space="preserve"><value>Expectativas de la directiva</value></data>
+  <data name="DirectionDraftNotice" xml:space="preserve"><value>Borrador pendiente de aprobación · No son exigencias definitivas</value></data>
+  <data name="DirectionUnavailable" xml:space="preserve"><value>No se ha podido cargar la propuesta. La consulta del club continúa disponible.</value></data>
+  <data name="DirectionHorizon_Season" xml:space="preserve"><value>Temporada</value></data>
+  <data name="DirectionHorizon_MediumTerm" xml:space="preserve"><value>Medio plazo</value></data>
+  <data name="DirectionHorizon_LongTerm" xml:space="preserve"><value>Largo plazo</value></data>
+  <data name="DirectionPriority_Critical" xml:space="preserve"><value>Crítica</value></data>
+  <data name="DirectionPriority_High" xml:space="preserve"><value>Alta</value></data>
+  <data name="DirectionPriority_Medium" xml:space="preserve"><value>Media</value></data>
+  <data name="DirectionPriority_Low" xml:space="preserve"><value>Baja</value></data>
+  <data name="DirectionObjectiveTitle" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="DirectionObjectiveDeadline" xml:space="preserve"><value>Prioridad: {0} · Cierre {1}/{2} · Hasta {3}</value></data>
+  <data name="ChooseClub" xml:space="preserve"><value>Elegir este club</value></data>
+  <data name="ClubChoiceNotAvailable" xml:space="preserve"><value>La selección de club estará disponible cuando se implemente el inicio de partida</value></data>
+  <data name="CloseNotice" xml:space="preserve"><value>Cerrar</value></data>
+  <data name="NewGame" xml:space="preserve"><value>Nueva partida</value></data>
+  <data name="LoadGame" xml:space="preserve"><value>Cargar partida</value></data>
+  <data name="Options" xml:space="preserve"><value>Opciones</value></data>
+  <data name="ExitGame" xml:space="preserve"><value>Salir del juego</value></data>
+  <data name="ExplorationMenuTitle" xml:space="preserve"><value>Menú de exploración</value></data>
+  <data name="ContinueExploration" xml:space="preserve"><value>Continuar</value></data>
+  <data name="ReturnMainMenu" xml:space="preserve"><value>Volver al menú principal</value></data>
+  <data name="DisplayMode" xml:space="preserve"><value>Modo de visualización</value></data>
+  <data name="WindowedMode" xml:space="preserve"><value>Modo ventana</value></data>
+  <data name="FullscreenMode" xml:space="preserve"><value>Pantalla completa</value></data>
+  <data name="Resolution" xml:space="preserve"><value>Resolución de ventana</value></data>
+  <data name="ResolutionFormat" xml:space="preserve"><value>{0} × {1}</value></data>
+  <data name="ResolutionUnavailable" xml:space="preserve"><value>No hay resoluciones compatibles disponibles</value></data>
+  <data name="OptionsSessionNotice" xml:space="preserve"><value>Los cambios se aplican solo al pulsar Aplicar y durante esta sesión. En pantalla completa se utiliza la resolución del monitor.</value></data>
+  <data name="ApplyOptions" xml:space="preserve"><value>Aplicar</value></data>
+  <data name="CancelOptions" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="DisplayChangeUnavailable" xml:space="preserve"><value>No se puede cambiar el modo de visualización en esta ejecución.</value></data>
+  <data name="EconomySeason" xml:space="preserve"><value>Temporada</value></data>
+  <data name="SeasonDateRange" xml:space="preserve"><value>{0} – {1}</value></data>
+  <data name="NoSeasonsAvailable" xml:space="preserve"><value>Sin temporadas disponibles</value></data>
+  <data name="NotEvaluated" xml:space="preserve"><value>No evaluado</value></data>
+  <data name="EconomyRemainingWages" xml:space="preserve"><value>Margen salarial restante</value></data>
+  <data name="EconomyFinancialExpenses" xml:space="preserve"><value>Gastos financieros</value></data>
+  <data name="EconomyInterestRate" xml:space="preserve"><value>Tipo de interés (informativo)</value></data>
+  <data name="EconomyPrincipalRepayment" xml:space="preserve"><value>Amortización del principal (no es gasto)</value></data>
+  <data name="EconomyFinancialEvolution" xml:space="preserve"><value>Evolución financiera</value></data>
+  <data name="FinancialState_Healthy" xml:space="preserve"><value>Saneada</value></data>
+  <data name="FinancialState_Tight" xml:space="preserve"><value>Ajustada</value></data>
+  <data name="FinancialState_AtRisk" xml:space="preserve"><value>En riesgo</value></data>
 </root>

@@ -17,7 +17,8 @@ internal static class ClubUi
     }
     internal static VBoxContainer Card(Control parent, string title)
     {
-        var panel = new PanelContainer { Name = title + "Panel", SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+        var panel = new PanelContainer { Name = title + "Panel", SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+            SizeFlagsVertical = Control.SizeFlags.ShrinkBegin };
         var style = new StyleBoxFlat { BgColor = new Color("14243a"), BorderColor = new Color("2c4058"),
             ContentMarginLeft = 12, ContentMarginRight = 12, ContentMarginTop = 10, ContentMarginBottom = 10 };
         style.SetBorderWidthAll(1); style.SetCornerRadiusAll(5); panel.AddThemeStyleboxOverride("panel", style);
@@ -27,7 +28,10 @@ internal static class ClubUi
     internal static void Field(Control parent, string key, object? value, bool unavailable = false)
     {
         var row = new HBoxContainer(); row.AddThemeConstantOverride("separation", 12); parent.AddChild(row);
-        row.AddChild(Text(key + "Label", UiText.Get(key), 12, "a6b6ca"));
+        var label = Text(key + "Label", UiText.Get(key), 12, "a6b6ca");
+        label.SizeFlagsHorizontal = Control.SizeFlags.Fill; row.AddChild(label);
+        // El ancho se calcula respecto a esta fila, con límite: no se separa el valor media ventana.
+        row.Resized += () => label.CustomMinimumSize = new Vector2(Mathf.Floor(Mathf.Min(240, row.Size.X * .48f)), 0);
         var display = Text(key + "Value", unavailable ? UiText.Get("NotAvailable") : Value(value), 12);
         if (unavailable) display.SetMeta("economic_unavailable", true);
         row.AddChild(display);

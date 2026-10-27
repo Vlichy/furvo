@@ -29,5 +29,7 @@
     <Compile Include="../../src/Furvo.Godot/Scripts/Components/FootballPitchGeometry.cs" Link="Presentation/FootballPitchGeometry.cs" />
     <Compile Include="../../src/Furvo.Godot/Scripts/Components/ClubVisualCatalog.cs" Link="Presentation/ClubVisualCatalog.cs" />
     <EmbeddedResource Include="../../src/Furvo.Godot/Resources/ClubVisuals.json" LogicalName="Furvo.ClubVisuals" />
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/ClubDirectionProposalCatalog.cs" Link="Presentation/ClubDirectionProposalCatalog.cs" />
+    <EmbeddedResource Include="../../src/Furvo.Godot/Resources/ClubDirectionProposals.json" LogicalName="Furvo.ClubDirectionProposals" />
   </ItemGroup>
 </Project>

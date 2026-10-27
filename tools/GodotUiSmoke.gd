@@ -44,14 +44,34 @@ func require(condition: bool, message: String) -> bool:
 func _initialize() -> void:
     call_deferred("run_test")
 
+func press_escape() -> void:
+    var input = InputEventKey.new()
+    input.keycode = KEY_ESCAPE
+    input.pressed = true
+    Input.parse_input_event(input)
+    await process_frame
+    var release = InputEventKey.new()
+    release.keycode = KEY_ESCAPE
+    release.pressed = false
+    Input.parse_input_event(release)
+    await process_frame
+
 func run_test() -> void:
     root.size = Vector2i(1280, 720)
     var screen = load("res://Scenes/Main.tscn").instantiate()
     root.add_child(screen)
     await process_frame
-    if not require(find_named(screen, "BrowseClubs") != null, "Falta pantalla inicial"):
+    if not require(find_named(screen, "NewGame") != null, "Falta pantalla inicial"):
         return
-    find_named(screen, "BrowseClubs").emit_signal("pressed")
+    if not require(find_named(screen, "LoadGame").disabled and find_named(screen, "Options") != null and find_named(screen, "ExitGame") != null, "Faltan opciones del menú principal"):
+        return
+    find_named(screen, "Options").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen, "DisplayOptions") != null, "No abren las opciones del menú principal"):
+        return
+    find_named(screen, "CancelOptions").emit_signal("pressed")
+    await process_frame
+    find_named(screen, "NewGame").emit_signal("pressed")
     # La lectura SQLite es asíncrona. Se espera por condición con límite temporal, no por una pausa fija.
     for attempt in range(200):
         if find_named(screen, "ViewClub") != null:
@@ -125,8 +145,18 @@ func run_test() -> void:
         for pending in ["ClubAssociationsValue", "ClubOwnershipValue", "ClubPresidentValue", "ClubOwnerValue", "ClubGroupValue", "StadiumCategoryValue", "StadiumDimensionsValue", "StadiumOpeningValue"]:
             if not require(find_named(info_page, pending).text == "Pendiente de definir", "Se inventaron datos institucionales o de estadio"):
                 return
-        for section in ["HistoryTrajectoryPanel", "HistoryHonoursPanel", "HistoryEvolutionPanel", "HistoryLegendsPanel", "HistoryRecordsPanel"]:
+        for section in ["HistoryTrajectoryPanel", "HistoryLegendsPanel", "HistoryRecordsPanel"]:
             if not require(find_named(info_page, section) != null, "Falta una sección de síntesis histórica"):
+                return
+        if not require(find_named(info_page, "HistoryHonoursPanel") == null and find_named(find_named(screen, "ClubHistoryPage"), "HistoryLegendsPanel") == null, "Palmarés o Leyendas aparecen en la pestaña equivocada"):
+            return
+        var direction_panels = find_named(info_page, "ClubDirectionPanels")
+        if not require(direction_panels != null and direction_panels.get_meta("club_id") == expected_club_id and direction_panels.get_meta("proposal_status") == "draft", "Faltan paneles de borrador para el club seleccionado"):
+            return
+        if not require(find_marked_nodes(direction_panels, "principle_code").size() == 4 and find_marked_nodes(direction_panels, "objective_code").size() == 3, "Faltan principios u objetivos de la propuesta"):
+            return
+        for panel in ["ClubPhilosophyPanel", "ClubBoardExpectationsPanel"]:
+            if not require(find_named(direction_panels, panel) != null and "Borrador" in find_named(find_named(direction_panels, panel), "DirectionDraftNotice").text, "La propuesta no se identifica como borrador"):
                 return
         for tab_index in [2, 3, 0, 1]:
             club_tabs.current_tab = tab_index
@@ -140,6 +170,12 @@ func run_test() -> void:
                     await process_frame
                     if tab_index == 0:
                         var overview = find_named(info_page, "ClubOverviewColumns")
+                        if not require(direction_panels.vertical == (resolution.x < 1040), "Los paneles de filosofía no se adaptan al ancho"):
+                            return
+                        if not require(direction_panels.get_global_rect().position.y >= overview.get_global_rect().end.y - 1 and direction_panels.get_global_rect().end.y <= find_named(info_page, "ClubHistorySummary").get_global_rect().position.y + 1, "Los paneles de filosofía no están entre identidad e historia"):
+                            return
+                        if not direction_panels.vertical and not require(direction_panels.get_child(0).get_global_rect().end.x <= direction_panels.get_child(1).get_global_rect().position.x + 1, "Los paneles de filosofía se solapan"):
+                            return
                         if not require(overview.vertical == (resolution.x < 1040), "La composición institucional no se adapta al ancho"):
                             return
                         if not overview.vertical:
@@ -161,24 +197,85 @@ func run_test() -> void:
                             return
                         print("FURVO_CLUB_REDESIGN_LAYOUT: ", resolution, " footer visible; stadium views=3")
                     var club_footer = find_named(screen, "BackClubs") as Control
+                    var choose = find_named(screen, "ChooseClub") as Button
+                    var footer = find_named(screen, "ClubFooter") as Control
+                    if not require(choose.is_visible_in_tree() and footer.get_global_rect().has_point(choose.get_global_rect().get_center()) and choose.get_global_rect().end.y <= root.size.y - 1, "Elegir este club queda fuera de la navegación"):
+                        return
+                    if not require(club_footer.get_global_rect().end.x <= choose.get_global_rect().position.x or club_footer.get_global_rect().end.y <= choose.get_global_rect().position.y, "Los botones se solapan"):
+                        return
+                    var active_page = club_tabs.get_child(tab_index)
+                    if tab_index in [0, 2]:
+                        var record_panel = find_named(active_page, "HistoryRecordsPanel") as Control
+                        for field_key in ["HistoryCoachAppearances", "HistoryAdditionalRecords"]:
+                            var value = find_named(active_page, field_key + "Value") as Control
+                            var label = find_named(active_page, field_key + "Label") as Control
+                            if not require(record_panel.is_ancestor_of(value) and record_panel.get_global_rect().encloses(value.get_global_rect()) and record_panel.get_global_rect().encloses(label.get_global_rect()), "Un récord queda fuera de su tarjeta"):
+                                return
+                            if not require(value.get_global_rect().position.x - label.get_global_rect().end.x <= 13, "Separación excesiva entre etiqueta y valor de récord"):
+                                return
+                    if tab_index == 1:
+                        var squad_tree = find_trees(find_named(screen, "SquadTable"))[0]
+                        var width_sum = 0.0
+                        for column in range(4):
+                            width_sum += squad_tree.get_column_width(column)
+                        for column in range(4):
+                            if not require(absf(squad_tree.get_column_width(column)/width_sum - [0.35,0.30,0.10,0.25][column]) < 0.006, "Proporción incorrecta de Plantilla"):
+                                return
+                        if not require(squad_tree.get_column_title_alignment(0) == HORIZONTAL_ALIGNMENT_LEFT and squad_tree.get_column_title_alignment(1) == HORIZONTAL_ALIGNMENT_LEFT and squad_tree.get_column_title_alignment(2) == HORIZONTAL_ALIGNMENT_CENTER, "Encabezados de Plantilla desalineados"):
+                            return
+                        var description = find_named(screen, "SquadDescription") as Label
+                        if not require(description.get_global_rect().position.x >= 20 and description.get_global_rect().end.x <= root.size.x - 20 and description.text.begins_with("24 futbolistas"), "Cabecera de Plantilla cortada o incorrecta"):
+                            return
+                        var expected_height = -1.0
+                        for item in squad_tree.get_root().get_children():
+                            if not require(item.get_text_alignment(0) == HORIZONTAL_ALIGNMENT_LEFT and item.get_text_alignment(1) == HORIZONTAL_ALIGNMENT_LEFT and item.get_text_alignment(2) == HORIZONTAL_ALIGNMENT_CENTER, "Celdas de Plantilla desalineadas"):
+                                return
+                            var row_height = squad_tree.get_item_area_rect(item).size.y
+                            if expected_height < 0:
+                                expected_height = row_height
+                            if not require(absf(row_height - expected_height) < 1, "Las filas de Plantilla no son uniformes"):
+                                return
+                        var view_player = find_named(screen, "ViewPlayer") as Control
+                        if not require(view_player.is_visible_in_tree() and footer.get_global_rect().encloses(view_player.get_global_rect()), "Ver futbolista queda fuera del pie"):
+                            return
                     if not require(club_footer.get_global_rect().end.y <= root.size.y + 1 and club_tabs.get_global_rect().end.y <= club_footer.get_global_rect().position.y + 1, "La ficha de club oculta o solapa la navegación al redimensionar"):
                         return
+            if sample_index == 0:
+                find_named(screen, "ChooseClub").emit_signal("pressed")
+                await process_frame
+                var notice = find_named(screen, "ClubChoiceNotice") as AcceptDialog
+                if not require(notice != null and notice.visible and notice.dialog_text == "La selección de club estará disponible cuando se implemente el inicio de partida", "El botón no muestra el aviso provisional exacto"):
+                    return
+                notice.get_ok_button().emit_signal("pressed")
+                await process_frame
+                if not require(not notice.visible and club_tabs.current_tab == tab_index and club_tabs.get_meta("club_id") == expected_club_id, "El aviso altera la navegación del club"):
+                    return
             if tab_index == 2:
                 var historic_table = find_trees(find_named(screen, "HistoryStandingsTable"))[0]
                 if not require(historic_table.get_root().get_child_count() == 0 and find_named(screen, "ClubHistoryChart").get_meta("result_count") == 0, "Se inventaron clasificaciones históricas"):
                     return
             if tab_index == 3:
                 var economy = find_named(screen, "ClubEconomyPage")
-                for section in ["EconomyBudgetsPanel", "EconomyIncomePanel", "EconomyExpensesPanel", "EconomyObligationsPanel", "EconomyFinancialStatusPanel"]:
+                var season_selector = find_named(economy,"EconomySeasonSelection") as OptionButton
+                if not require(season_selector.item_count == 1 and season_selector.get_item_text(0) == "2026/27" and season_selector.disabled, "El selector inventa temporadas o permite cambiar una temporada única"):
+                    return
+                var indicators = find_named(economy,"EconomyIndicators")
+                if not require(find_marked_nodes(indicators,"economic_indicator").size() == 4 and find_named(indicators,"EconomySituationIndicatorValue").text == "No evaluado", "Indicadores financieros incompletos o estado inventado"):
+                    return
+                if not require(find_named(find_named(economy,"EconomyObligationsPanel"),"EconomyInterestValue") == null and find_named(find_named(economy,"EconomyFinancialExpensesPanel"),"EconomyInterestValue") != null, "Los intereses se duplican o están fuera de Gastos financieros"):
+                    return
+                if not require(find_named(economy,"EconomyRemainingBudgetLabel").text == "Fichajes restante" and find_named(economy,"EconomyRemainingWagesLabel").text == "Margen salarial restante" and find_named(economy,"EconomySubscribersLabel").text == "Abonos", "Terminología presupuestaria incorrecta"):
+                    return
+                for section in ["EconomyBudgetsPanel", "EconomyIncomePanel", "EconomyExpensesPanel", "EconomyObligationsPanel", "EconomyFinancialEvolutionPanel"]:
                     if not require(find_named(economy, section) != null, "Falta un bloque económico"):
                         return
                 var economic_fields = find_marked_nodes(economy, "economic_unavailable")
-                if not require(economic_fields.size() == 30, "Faltan campos financieros no disponibles"):
+                if not require(economic_fields.size() == 32, "Faltan campos financieros no disponibles"):
                     return
                 for field in economic_fields:
                     if not require(field.text == "No disponible", "Se inventó un importe financiero"):
                         return
-                for amount in ["EconomyCashValue", "EconomyTransferBudgetValue", "EconomyWageBudgetValue", "EconomyCommittedWagesValue", "EconomyIncomeValue", "EconomyExpensesValue", "EconomyBalanceValue", "EconomyDebtValue", "EconomySituationValue"]:
+                for amount in ["EconomyCashValue", "EconomyTransferBudgetValue", "EconomyWageBudgetValue", "EconomyCommittedWagesValue", "EconomyIncomeValue", "EconomyExpensesValue", "EconomyBalanceValue", "EconomyDebtValue"]:
                     if not require(find_named(screen, amount).text == "No disponible", "Se inventó una cifra económica"):
                         return
         if not require(find_named(screen, "ViewPlayer").visible, "No se puede abrir un futbolista desde Plantilla"):
@@ -186,7 +283,35 @@ func run_test() -> void:
         var squad = find_trees(screen)[0]
         if not require(squad.get_root().get_child_count() == 24, "Se esperaban veinticuatro jugadores"):
             return
+        var initial_roles = ["Portero", "Defensa central", "Lateral derecho", "Lateral izquierdo", "Mediocentro defensivo", "Centrocampista central", "Mediapunta", "Centrocampista derecho", "Centrocampista izquierdo", "Delantero centro", "Extremo derecho", "Extremo izquierdo", "Segundo delantero"]
+        var prior_role = -1
+        for row in squad.get_root().get_children():
+            var role_index = initial_roles.find(row.get_text(1))
+            if not require(role_index >= prior_role and role_index >= 0, "Plantilla no abre por grupos/posiciones o muestra Banda"):
+                return
+            prior_role = role_index
         if sample_index == 0:
+            # Esc se inyecta como entrada real del árbol; no se llama directamente a métodos C# de menú.
+            await press_escape()
+            var pause = find_named(screen,"ExplorationMenu")
+            if not require(pause != null and pause.visible, "Esc no abre el menú de exploración"):
+                return
+            await press_escape()
+            if not require(not pause.visible, "Esc apila menús o no permite continuar"):
+                return
+            await press_escape()
+            find_named(pause,"Options").emit_signal("pressed")
+            await process_frame
+            if not require(find_named(screen,"DisplayOptions") != null and not pause.visible, "Opciones se superpone a otro menú exclusivo"):
+                return
+            find_named(screen,"CancelOptions").emit_signal("pressed")
+            await process_frame
+            if not require(pause.visible, "Cancelar opciones no vuelve al menú Esc"):
+                return
+            find_named(pause,"ContinueExploration").emit_signal("pressed")
+            await process_frame
+            if not require(not pause.visible and find_named(screen,"ClubTabs") == club_tabs and club_tabs.current_tab == 1, "Continuar pierde club o pestaña"):
+                return
             for column in [0, 1, 2]:
                 for direction in range(2):
                     squad.emit_signal("column_title_clicked", column, MOUSE_BUTTON_LEFT)
@@ -341,9 +466,12 @@ func run_test() -> void:
         await process_frame
     if not require(opened_ids.size() == 4 and opened_ids[0] != opened_ids[1] and opened_ids[1] != opened_ids[2] and opened_ids[2] != opened_ids[3], "No se probaron cuatro futbolistas distintos"):
         return
-    find_named(screen, "Home").emit_signal("pressed")
+    await press_escape()
+    if not require(find_named(screen,"ExplorationMenu").visible, "Esc no está disponible en el listado de clubes"):
+        return
+    find_named(find_named(screen,"ExplorationMenu"), "ReturnMainMenu").emit_signal("pressed")
     await process_frame
-    if not require(find_named(screen, "BrowseClubs") != null, "No regresó al inicio"):
+    if not require(find_named(screen, "NewGame") != null, "No regresó al inicio"):
         return
     screen.queue_free()
     await process_frame

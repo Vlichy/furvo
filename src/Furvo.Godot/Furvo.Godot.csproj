@@ -4,6 +4,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources/ClubDirectionProposals.json" LogicalName="Furvo.ClubDirectionProposals" />
     <EmbeddedResource Include="Resources/ClubVisuals.json" LogicalName="Furvo.ClubVisuals" />
     <ProjectReference Include="../Furvo.Core/Furvo.Core.csproj" />
     <ProjectReference Include="../Furvo.Persistence/Furvo.Persistence.csproj" />

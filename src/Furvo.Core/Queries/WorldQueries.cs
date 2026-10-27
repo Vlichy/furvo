@@ -7,6 +7,8 @@ namespace Furvo.Core.Queries;
 public enum SquadSort { Name, Position, Age }
 
 /// <summary>Proyección de club para presentación, sin acceso de escritura al dominio.</summary>
+public sealed record SeasonSummary(SeasonId Id, string? Name, DateOnly StartDate, DateOnly EndDate);
+
 public sealed record ClubSummary(ClubId Id, string Name, string? City, int? VisibleReputation);
 /// <summary>Datos visibles de una fila de plantilla; no contiene atributos ni referencias a Player.</summary>
 public sealed record PlayerSummary(PlayerId Id, string Name, string? Nationality, int? Age,
@@ -24,6 +26,7 @@ public interface IWorldQueries
 {
     DateOnly ReferenceDate { get; }
     IReadOnlyList<ClubSummary> GetClubs();
+    IReadOnlyList<SeasonSummary> GetSeasons();
     ClubDetails GetClubDetails(ClubId clubId);
     ClubHistoryDetails GetClubHistory(ClubId clubId);
     IReadOnlyList<PlayerSummary> GetSquad(ClubId clubId, SquadSort sort = SquadSort.Name, bool descending = false);
@@ -49,6 +52,11 @@ public sealed class WorldQueries : IWorldQueries
     }
 
     public IReadOnlyList<ClubSummary> GetClubs() => _clubs;
+
+    /// <summary>Solo temporadas presentes en la instantánea, sin generar ejercicios financieros.</summary>
+    public IReadOnlyList<SeasonSummary> GetSeasons() => Array.AsReadOnly(_world.Seasons.OrderBy(s => s.StartDate)
+        .ThenBy(s => s.Id.ToString(), StringComparer.Ordinal)
+        .Select(s => new SeasonSummary(s.Id, s.Name, s.StartDate, s.EndDate)).ToArray());
 
     /// <summary>Proyecta los datos ya almacenados; campos nuevos permanecen desconocidos hasta autoría y persistencia aprobadas.</summary>
     public ClubDetails GetClubDetails(ClubId clubId)
@@ -120,6 +128,10 @@ public sealed class WorldQueries : IWorldQueries
         x.StartDate is { } start && start <= ReferenceDate && x.EndDate is { } end && end >= ReferenceDate);
     private PlayerSummary Summary(Player p) => new(p.Id, p.Name, p.Nationality,
         p.BirthDate is { } birth && birth <= ReferenceDate ? p.AgeOn(ReferenceDate) : null, p.MainPosition, p.Positions?.Primary);
-    private static int PositionOrder(PlayerSummary p) => p.Position is { } position ? (int)position :
-        p.Group is { } group ? (int)group * 100 : int.MaxValue;
+    private static int PositionOrder(PlayerSummary p)
+    {
+        // Primero el grupo deportivo; una posición genérica también permanece dentro de su grupo.
+        var group = p.Position is { } role ? PlayerPositions.GroupOf(role) : p.Group;
+        return group is { } value ? (int)value * 100 + (p.Position is { } position ? (int)position : 99) : int.MaxValue;
+    }
 }

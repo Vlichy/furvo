@@ -45,14 +45,10 @@ public partial class ClubInformationPage : VBoxContainer
         ClubUi.Field(right, "StadiumAverageAttendance", details.Stadium.AverageAttendance); ClubUi.Field(right, "StadiumRecordAttendance", details.Stadium.RecordAttendance);
         ClubUi.Field(right, "StadiumOccupancy", details.Stadium.OccupancyPercent); ClubUi.Field(right, "StadiumTraining", details.Stadium.TrainingFacilities);
         ClubUi.Field(right, "StadiumYouth", details.Stadium.YouthFacilities); ClubUi.Field(right, "StadiumTrainingGround", details.Stadium.TrainingGround);
+        body.AddChild(new ClubDirectionPanels(details.Club.Id.ToString()));
         var bottom = ClubUi.ResponsiveRow(body, "ClubHistorySummary");
         ClubHistorySections.Trajectory(bottom, history);
-        var honours = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, SizeFlagsStretchRatio = 1.1f }; bottom.AddChild(honours);
-        ClubHistorySections.Honours(honours, history);
-        var evolution = ClubUi.Card(honours, "HistoryEvolution"); evolution.AddChild(new ClubHistoryChart(history.IsApprovedDataAvailable ? history.Standings : Array.Empty<ClubSeasonStanding>()) { CustomMinimumSize = new Vector2(0, 170) });
-        evolution.AddChild(ClubUi.Text("HistorySummaryLegend", UiText.Get("HistoryChartLegend"), 11, "a6b6ca"));
-        var legends = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill }; bottom.AddChild(legends);
-        ClubHistorySections.Legends(legends, history, compact: true);
+        ClubHistorySections.Legends(bottom, history);
         ClubHistorySections.Records(bottom, history);
     }
     private static void AddView(Control parent, Control image, string caption)
