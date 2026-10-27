@@ -26,5 +26,8 @@
     <Compile Include="../../src/Furvo.Godot/Scripts/Components/PitchPositionLayout.cs" Link="Presentation/PitchPositionLayout.cs" />
     <Compile Include="../../src/Furvo.Godot/Scripts/Components/ClubHistoryPlot.cs" Link="Presentation/ClubHistoryPlot.cs" />
     <None Include="../../src/Furvo.Godot/Assets/Portraits/avatar.svg" Link="avatar.svg" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/FootballPitchGeometry.cs" Link="Presentation/FootballPitchGeometry.cs" />
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/ClubVisualCatalog.cs" Link="Presentation/ClubVisualCatalog.cs" />
+    <EmbeddedResource Include="../../src/Furvo.Godot/Resources/ClubVisuals.json" LogicalName="Furvo.ClubVisuals" />
   </ItemGroup>
 </Project>

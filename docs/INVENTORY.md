@@ -167,3 +167,39 @@
 Los documentos históricos anteriores siguen conservados; el estado actual está en [VALIDATION.md](VALIDATION.md). La propuesta de historia no es un catálogo aprobado ni se carga en el juego. El esquema propuesto requiere aprobación antes de persistirlo. Se excluyen bin/obj/.godot, logs de artifacts y la copia histórica src/furvo-(4.5). Los metadatos UID que Godot pueda generar al importar se refieren a recursos, no a IDs de clubes/jugadores.
 
 Al finalizar se ejecuta la versión actual, según la instrucción del usuario. La ejecución no sustituye la inspección visual manual pendiente ni acredita una exportación Windows.
+
+## Rediseño de ficha de club — 27/10/2026 (estado vigente)
+
+**9 archivos creados y 18 modificados.** Las secciones anteriores describen entregas previas; este bloque identifica exclusivamente el rediseño actual.
+
+| Archivo | Estado | Función |
+| --- | --- | --- |
+| docs/CLUB_PRESENTATION_REDESIGN.md | Creado | Contrato previo, implementación, diferencias, validación y límites. |
+| docs/STADIUM_CATEGORY_PROPOSAL.md | Creado | Veinte categorías editoriales propuestas por ClubId, sin cargar en el juego. |
+| src/Furvo.Godot/Resources/ClubVisuals.json | Creado | Tres equipaciones y motivo/monograma provisionales por ClubId. |
+| src/Furvo.Godot/Scripts/Components/ClubHistorySections.cs | Creado | Bloques compartidos de trayectoria, palmarés, leyendas y récords. |
+| src/Furvo.Godot/Scripts/Components/ClubShirt.cs | Creado | Componente de camiseta vectorial reutilizable sin marcas. |
+| src/Furvo.Godot/Scripts/Components/ClubVisualCatalog.cs | Creado | Carga y validación de identidades visuales por ID y fallback neutral. |
+| src/Furvo.Godot/Scripts/Components/FootballPitch.cs | Creado | Campo horizontal vectorial con áreas solo en los extremos. |
+| src/Furvo.Godot/Scripts/Components/FootballPitchGeometry.cs | Creado | Geometría pura de referencia para marcas y pruebas. |
+| tests/Furvo.Tests/ClubPresentationRedesignTests.cs | Creado | Nueve casos: recursos por club, fallback, áreas/arcos, categorías y ausencia de datos inventados. |
+| README.md | Modificado | Estado y validación vigentes. |
+| docs/CLUB_HISTORY_PROPOSAL.md | Modificado | Aclara separación entre propuesta editorial e interfaz. |
+| docs/CLUB_SCREEN.md | Modificado | Guía vigente de composición y estados pendientes. |
+| docs/VALIDATION.md | Modificado | 138 pruebas, smoke y límites de inspección visual. |
+| docs/INVENTORY.md | Modificado | Este inventario de entrega. |
+| src/Furvo.Core/Queries/ClubDetails.cs | Modificado | Contratos de lectura opcionales institucionales, estadio y archivo histórico; sin entidades persistidas nuevas. |
+| src/Furvo.Godot/Furvo.Godot.csproj | Modificado | Empaqueta el recurso visual sin paquetes nuevos. |
+| src/Furvo.Godot/Resources/UiStrings.resx | Modificado | Textos españoles, pies de imagen y etiquetas centralizadas. |
+| src/Furvo.Godot/Scripts/Components/ClubEconomyPage.cs | Modificado | Cinco bloques de consulta no disponible, sin mecánicas financieras. |
+| src/Furvo.Godot/Scripts/Components/ClubEmblem.cs | Modificado | Forma, colores y monograma diferenciados y provisionales. |
+| src/Furvo.Godot/Scripts/Components/ClubHeader.cs | Modificado | Integra identidades y tres camisetas por club. |
+| src/Furvo.Godot/Scripts/Components/ClubHistoryPage.cs | Modificado | Cronología, detalle y reutilización de secciones históricas. |
+| src/Furvo.Godot/Scripts/Components/ClubInformationPage.cs | Modificado | Composición 36/64, tres vistas de estadio y síntesis inferior. |
+| src/Furvo.Godot/Scripts/Components/ClubUi.cs | Modificado | Espaciado compacto y contenedores adaptables compartidos. |
+| src/Furvo.Godot/Scripts/Components/StadiumPreview.cs | Modificado | Dos ilustraciones geométricas originales provisionales. |
+| src/Furvo.Godot/Scripts/Main.cs | Modificado | Entrega los datos históricos ya consultados a Información. |
+| tests/Furvo.Tests/Furvo.Tests.csproj | Modificado | Enlaza políticas puras y recurso editorial para pruebas sin dependencias nuevas. |
+| tools/GodotUiSmoke.gd | Modificado | Comprueba vistas, categorías pendientes, cinco bloques, treinta campos y cuatro resoluciones. |
+
+Sin cambios en Persistence, migraciones, bases SQLite, datos JSON de mundo/plantillas/reputación, DataTable, PlayerSheet ni PositionPitch. Los nuevos recursos son exclusivamente presentación provisional, no una publicación nueva. Pruebas: 138 Debug/Release; smoke Godot correcto. Ver [informe](CLUB_PRESENTATION_REDESIGN.md).

@@ -60,13 +60,13 @@ La v3 se abre solo para lectura; v4 tiene otro WorldId y reutiliza exactamente s
 
 ## Ficha institucional e historia propuesta
 
-Información muestra datos existentes de SQLite y marca como pendientes apodos, afición, rivalidades, abonados y métricas de estadio sin datos. Historia prepara trayectoria, tabla, gráfico, palmarés y leyendas, sin resultados inventados. Economía distingue tesorería, presupuestos y balance, todos sin cifras. Guía: [CLUB_SCREEN.md](docs/CLUB_SCREEN.md).
+Información muestra datos existentes de SQLite y marca como pendientes apodos, afición, rivalidades, abonados y métricas de estadio sin datos. Historia prepara trayectoria, tabla, gráfico, palmarés y leyendas, sin resultados inventados. Economía distingue tesorería, presupuestos y balance, todos sin cifras. Guía: [CLUB_SCREEN.md](docs/CLUB_SCREEN.md). El [rediseño de club](docs/CLUB_PRESENTATION_REDESIGN.md) añade equipaciones/emblemas provisionales, tres vistas del estadio con campo horizontal corregido, síntesis histórica y cinco bloques financieros, sin modificar SQLite.
 
 La [propuesta histórica de los veinte clubes](docs/CLUB_HISTORY_PROPOSAL.md) es **BORRADOR NO APROBADO**, solo de desarrollo. No se incorpora a SQLite ni a la interfaz. El [esquema histórico propuesto](docs/CLUB_HISTORY_SCHEMA_PROPOSAL.md) requiere aprobación antes de cualquier migración. No se generan clubes de Segunda, personajes jugables ni sistemas deportivos/económicos.
 
 ## Estado de validación
 
-El 27/10/2026: **129 pruebas aprobadas, 0 fallidas y 0 omitidas**, incluidas las 120 anteriores. Debug y Release compilan sin errores ni advertencias. La prueba de escena Godot 4.7.2 .NET pasa para las cuatro pestañas, datos pendientes, navegación y regresión de futbolistas. Comprueba geometría a 960×640, 1280×720 y 1600×900.
+El 27/10/2026: **138 pruebas aprobadas, 0 fallidas y 0 omitidas**, incluidas las 129 anteriores. Debug y Release compilan sin errores ni advertencias. La prueba de escena Godot 4.7.2 .NET pasa para las cuatro pestañas, datos pendientes, navegación y regresión de futbolistas. Comprueba geometría a 960×640, 1280×720, 1600×900 y 1920×1080.
 
 No se modifica ninguna publicación v1–v4, reputación, jugador, contrato ni atributo; no hay migraciones ni dependencias nuevas. La versión actual se abre al finalizar el encargo. Queda inspección visual manual de las nuevas pestañas y sus dibujos; no se prueba exportación Windows.
 

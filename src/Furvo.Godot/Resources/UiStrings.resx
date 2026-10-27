@@ -30,7 +30,7 @@
   <data name="Position" xml:space="preserve"><value>Posición</value></data>
   <data name="Age" xml:space="preserve"><value>Edad</value></data>
   <data name="Nationality" xml:space="preserve"><value>Nacionalidad</value></data>
-  <data name="BackClubs" xml:space="preserve"><value>Volver a clubes</value></data>
+  <data name="BackClubs" xml:space="preserve"><value>Volver a lista de clubes</value></data>
   <data name="ViewPlayer" xml:space="preserve"><value>Ver futbolista</value></data>
   <data name="PlayerSection" xml:space="preserve"><value>Ficha de futbolista</value></data>
   <data name="PlayerDescription" xml:space="preserve"><value>{0} · {1} · {2} años · {3}</value></data>
@@ -216,7 +216,7 @@
   <data name="HistoryOrigin_SimulatedSave" xml:space="preserve"><value>Historia generada en la partida</value></data>
   <data name="HistoryHonours" xml:space="preserve"><value>Palmarés</value></data>
   <data name="HistoryHonourFormat" xml:space="preserve"><value>{0} · {1} títulos · {2}</value></data>
-  <data name="HistoryLegends" xml:space="preserve"><value>Leyendas y récords</value></data>
+  <data name="HistoryLegends" xml:space="preserve"><value>Leyendas del club</value></data>
   <data name="HistoryPlayers" xml:space="preserve"><value>Jugadores históricos</value></data>
   <data name="HistoryCoaches" xml:space="preserve"><value>Entrenadores históricos</value></data>
   <data name="HistoryTopScorer" xml:space="preserve"><value>Máximo goleador histórico</value></data>
@@ -237,4 +237,71 @@
   <data name="EconomySituation" xml:space="preserve"><value>Situación financiera</value></data>
   <data name="EconomyDefinitions" xml:space="preserve"><value>Tesorería: dinero disponible. Presupuesto: límites planificados. Balance: ingresos menos gastos del período. Son conceptos distintos; todavía no hay importes calculados.</value></data>
   <data name="ClubDetailsError" xml:space="preserve"><value>No se puede recuperar la ficha del club. Vuelve al listado y selecciona un club de nuevo.</value></data>
+  <data name="ClubKit0" xml:space="preserve"><value>Primera</value></data>
+  <data name="ClubKit1" xml:space="preserve"><value>Segunda</value></data>
+  <data name="ClubKit2" xml:space="preserve"><value>Tercera</value></data>
+  <data name="ClubVisualProvisional" xml:space="preserve"><value>Identidad gráfica original provisional; pendiente de aprobación definitiva</value></data>
+  <data name="ClubKitsProvisional" xml:space="preserve"><value>Diseños provisionales</value></data>
+  <data name="ClubIdentityName" xml:space="preserve"><value>Nombre completo</value></data>
+  <data name="ClubRegion" xml:space="preserve"><value>Región</value></data>
+  <data name="ClubCountry" xml:space="preserve"><value>País</value></data>
+  <data name="ClubAssociations" xml:space="preserve"><value>Peñas destacadas</value></data>
+  <data name="ClubOwnership" xml:space="preserve"><value>Tipo de propiedad</value></data>
+  <data name="ClubPresident" xml:space="preserve"><value>Presidente</value></data>
+  <data name="ClubOwner" xml:space="preserve"><value>Dueño o accionista</value></data>
+  <data name="ClubGroup" xml:space="preserve"><value>Grupo empresarial / multiclub</value></data>
+  <data name="ClubIndependent" xml:space="preserve"><value>Club independiente</value></data>
+  <data name="ClubOwnership_Members" xml:space="preserve"><value>Club de socios</value></data>
+  <data name="ClubOwnership_SportingPublicCompany" xml:space="preserve"><value>Sociedad anónima deportiva (SAD)</value></data>
+  <data name="ClubOwnership_Private" xml:space="preserve"><value>Propiedad privada</value></data>
+  <data name="StadiumPitchCaption" xml:space="preserve"><value>Plano del terreno de juego</value></data>
+  <data name="StadiumExteriorCaption" xml:space="preserve"><value>Exterior · ilustración provisional</value></data>
+  <data name="StadiumInteriorCaption" xml:space="preserve"><value>Gradas · ilustración provisional</value></data>
+  <data name="StadiumDimensions" xml:space="preserve"><value>Dimensiones del campo (m)</value></data>
+  <data name="StadiumSurface" xml:space="preserve"><value>Tipo de césped</value></data>
+  <data name="StadiumCategory" xml:space="preserve"><value>Categoría del estadio</value></data>
+  <data name="StadiumCategoryFormat" xml:space="preserve"><value>{0}/5</value></data>
+  <data name="StadiumOpening" xml:space="preserve"><value>Año de inauguración</value></data>
+  <data name="StadiumTraining" xml:space="preserve"><value>Instalaciones de entrenamiento</value></data>
+  <data name="StadiumYouth" xml:space="preserve"><value>Instalaciones juveniles</value></data>
+  <data name="StadiumTrainingGround" xml:space="preserve"><value>Ciudad deportiva</value></data>
+  <data name="HistoryHonourCompetition" xml:space="preserve"><value>Competición</value></data>
+  <data name="HistoryHonourCount" xml:space="preserve"><value>Títulos</value></data>
+  <data name="HistoryHonourSeasons" xml:space="preserve"><value>Temporadas</value></data>
+  <data name="HistoricalPersonFormat" xml:space="preserve"><value>{0} · {1} · {2}</value></data>
+  <data name="HistoryTimeline" xml:space="preserve"><value>Cronología del club</value></data>
+  <data name="HistoryTimelineEntry" xml:space="preserve"><value>Período y acontecimiento</value></data>
+  <data name="HistoryTimelineFormat" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="HistoryBiggestWin" xml:space="preserve"><value>Mayor victoria</value></data>
+  <data name="HistoryBiggestLoss" xml:space="preserve"><value>Mayor derrota</value></data>
+  <data name="HistoryWinningStreak" xml:space="preserve"><value>Mayor racha de victorias</value></data>
+  <data name="HistoryUnbeatenStreak" xml:space="preserve"><value>Mayor racha invicto</value></data>
+  <data name="HistoryMostGoalsSeason" xml:space="preserve"><value>Temporada con más goles</value></data>
+  <data name="HistoryFewestGoalsSeason" xml:space="preserve"><value>Temporada con menos goles</value></data>
+  <data name="HistoryFewestConcededSeason" xml:space="preserve"><value>Temporada con menos goles encajados</value></data>
+  <data name="HistoryCleanSheetStreak" xml:space="preserve"><value>Mayor racha de imbatibilidad</value></data>
+  <data name="HistoryAdditionalRecords" xml:space="preserve"><value>Otros récords aprobados</value></data>
+  <data name="EconomyRemainingBudget" xml:space="preserve"><value>Presupuesto restante</value></data>
+  <data name="EconomyTelevision" xml:space="preserve"><value>Derechos de televisión</value></data>
+  <data name="EconomySubscribers" xml:space="preserve"><value>Abonados</value></data>
+  <data name="EconomyTickets" xml:space="preserve"><value>Taquilla</value></data>
+  <data name="EconomySponsors" xml:space="preserve"><value>Patrocinios</value></data>
+  <data name="EconomyMerchandising" xml:space="preserve"><value>Merchandising</value></data>
+  <data name="EconomyTransferIncome" xml:space="preserve"><value>Traspasos</value></data>
+  <data name="EconomyOtherIncome" xml:space="preserve"><value>Otros ingresos</value></data>
+  <data name="EconomySalaries" xml:space="preserve"><value>Salarios</value></data>
+  <data name="EconomySignings" xml:space="preserve"><value>Fichajes</value></data>
+  <data name="EconomyStadiumMaintenance" xml:space="preserve"><value>Mantenimiento del estadio</value></data>
+  <data name="EconomyFacilities" xml:space="preserve"><value>Instalaciones</value></data>
+  <data name="EconomyStaff" xml:space="preserve"><value>Personal</value></data>
+  <data name="EconomyOtherExpenses" xml:space="preserve"><value>Otros gastos</value></data>
+  <data name="EconomyObligations" xml:space="preserve"><value>Deuda y obligaciones</value></data>
+  <data name="EconomyShortDebt" xml:space="preserve"><value>Deuda a corto plazo</value></data>
+  <data name="EconomyLongDebt" xml:space="preserve"><value>Deuda a largo plazo</value></data>
+  <data name="EconomyInterest" xml:space="preserve"><value>Intereses</value></data>
+  <data name="EconomyDueDates" xml:space="preserve"><value>Próximos vencimientos</value></data>
+  <data name="EconomyPendingPayments" xml:space="preserve"><value>Pagos pendientes</value></data>
+  <data name="EconomyFinancialStatus" xml:space="preserve"><value>Situación financiera</value></data>
+  <data name="EconomyOperatingResult" xml:space="preserve"><value>Resultado de explotación</value></data>
+  <data name="EconomyEvolution" xml:space="preserve"><value>Evolución de ingresos y gastos</value></data>
 </root>

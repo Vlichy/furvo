@@ -40,3 +40,9 @@ El 27/10/2026 pasan **129 pruebas**, incluidas las 120 anteriores. Debug y Relea
 Se contrastan por hash las publicaciones v1–v4, Persistence, entidades existentes, DataTable y PlayerSheet sin cambios. No se abren ni modifican partidas reales. La aritmética editorial de la propuesta se revisa por separado; no es validación de resultados deportivos reales.
 
 La prueba sin ventana valida comportamiento y geometría, no la apariencia. Queda inspeccionar manualmente escudo/estadio, espacios, textos largos y scroll en cada pestaña. La versión actual se ejecuta al finalizar el encargo para facilitar esa revisión. No se ha probado una exportación Windows.
+
+## Rediseño vigente — 27/10/2026
+
+La composición anterior se amplía conforme a la captura recibida: tres equipaciones y emblemas provisionales por ClubId, identidad institucional completa, estadio con campo horizontal corregido y dos ilustraciones originales, síntesis histórica inferior y cinco bloques económicos. Los campos ausentes permanecen pendientes o no disponibles. La categoría del estadio es opcional 1–5, independiente de reputación; veinte candidatos se documentan sin cargar.
+
+[Composición, validación, diferencias y componentes actuales](CLUB_PRESENTATION_REDESIGN.md). Estado: 138 pruebas Debug/Release y smoke Godot correcto, incluida geometría a 1920×1080; inspección visual real parcial a 1280×720. Las publicaciones no cambian.

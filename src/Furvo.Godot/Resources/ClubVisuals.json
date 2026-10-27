@@ -1,0 +1,442 @@
+[
+  {
+    "ClubId": "72026027-0001-4000-8000-000000000005",
+    "Monogram": "FE",
+    "EmblemMotif": 0,
+    "Kits": [
+      {
+        "Primary": "b67a50",
+        "Secondary": "303640",
+        "Pattern": 0
+      },
+      {
+        "Primary": "303640",
+        "Secondary": "b67a50",
+        "Pattern": 1
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "b67a50",
+        "Pattern": 2
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000001",
+    "Monogram": "PE",
+    "EmblemMotif": 1,
+    "Kits": [
+      {
+        "Primary": "47515b",
+        "Secondary": "a83f54",
+        "Pattern": 1
+      },
+      {
+        "Primary": "a83f54",
+        "Secondary": "47515b",
+        "Pattern": 2
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "47515b",
+        "Pattern": 0
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0001-4000-8000-000000000019",
+    "Monogram": "SE",
+    "EmblemMotif": 2,
+    "Kits": [
+      {
+        "Primary": "63734d",
+        "Secondary": "c5bda6",
+        "Pattern": 2
+      },
+      {
+        "Primary": "c5bda6",
+        "Secondary": "63734d",
+        "Pattern": 0
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "63734d",
+        "Pattern": 1
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000002",
+    "Monogram": "EN",
+    "EmblemMotif": 3,
+    "Kits": [
+      {
+        "Primary": "267c79",
+        "Secondary": "eee7d5",
+        "Pattern": 0
+      },
+      {
+        "Primary": "eee7d5",
+        "Secondary": "267c79",
+        "Pattern": 1
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "267c79",
+        "Pattern": 2
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000003",
+    "Monogram": "RO",
+    "EmblemMotif": 0,
+    "Kits": [
+      {
+        "Primary": "325d4b",
+        "Secondary": "b59c5a",
+        "Pattern": 1
+      },
+      {
+        "Primary": "b59c5a",
+        "Secondary": "325d4b",
+        "Pattern": 2
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "325d4b",
+        "Pattern": 0
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000004",
+    "Monogram": "PA",
+    "EmblemMotif": 1,
+    "Kits": [
+      {
+        "Primary": "c6a459",
+        "Secondary": "8ebfaf",
+        "Pattern": 2
+      },
+      {
+        "Primary": "8ebfaf",
+        "Secondary": "c6a459",
+        "Pattern": 0
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "c6a459",
+        "Pattern": 1
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0001-4000-8000-000000000002",
+    "Monogram": "BR",
+    "EmblemMotif": 2,
+    "Kits": [
+      {
+        "Primary": "713b50",
+        "Secondary": "eee7d5",
+        "Pattern": 0
+      },
+      {
+        "Primary": "eee7d5",
+        "Secondary": "713b50",
+        "Pattern": 1
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "713b50",
+        "Pattern": 2
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000005",
+    "Monogram": "FDS",
+    "EmblemMotif": 3,
+    "Kits": [
+      {
+        "Primary": "80639c",
+        "Secondary": "c5cbd3",
+        "Pattern": 1
+      },
+      {
+        "Primary": "c5cbd3",
+        "Secondary": "80639c",
+        "Pattern": 2
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "80639c",
+        "Pattern": 0
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000006",
+    "Monogram": "AC",
+    "EmblemMotif": 0,
+    "Kits": [
+      {
+        "Primary": "346b7a",
+        "Secondary": "d0a143",
+        "Pattern": 2
+      },
+      {
+        "Primary": "d0a143",
+        "Secondary": "346b7a",
+        "Pattern": 0
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "346b7a",
+        "Pattern": 1
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0001-4000-8000-000000000008",
+    "Monogram": "MO",
+    "EmblemMotif": 1,
+    "Kits": [
+      {
+        "Primary": "4d5884",
+        "Secondary": "d18070",
+        "Pattern": 0
+      },
+      {
+        "Primary": "d18070",
+        "Secondary": "4d5884",
+        "Pattern": 1
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "4d5884",
+        "Pattern": 2
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000007",
+    "Monogram": "AB",
+    "EmblemMotif": 2,
+    "Kits": [
+      {
+        "Primary": "488e7d",
+        "Secondary": "b67a50",
+        "Pattern": 1
+      },
+      {
+        "Primary": "b67a50",
+        "Secondary": "488e7d",
+        "Pattern": 2
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "488e7d",
+        "Pattern": 0
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000008",
+    "Monogram": "UM",
+    "EmblemMotif": 3,
+    "Kits": [
+      {
+        "Primary": "a83f54",
+        "Secondary": "47515b",
+        "Pattern": 2
+      },
+      {
+        "Primary": "47515b",
+        "Secondary": "a83f54",
+        "Pattern": 0
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "a83f54",
+        "Pattern": 1
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0001-4000-8000-000000000006",
+    "Monogram": "FA",
+    "EmblemMotif": 0,
+    "Kits": [
+      {
+        "Primary": "49a8b2",
+        "Secondary": "e9edef",
+        "Pattern": 0
+      },
+      {
+        "Primary": "e9edef",
+        "Secondary": "49a8b2",
+        "Pattern": 1
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "49a8b2",
+        "Pattern": 2
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000009",
+    "Monogram": "LI",
+    "EmblemMotif": 1,
+    "Kits": [
+      {
+        "Primary": "adb8c5",
+        "Secondary": "346b7a",
+        "Pattern": 1
+      },
+      {
+        "Primary": "346b7a",
+        "Secondary": "adb8c5",
+        "Pattern": 2
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "adb8c5",
+        "Pattern": 0
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0001-4000-8000-000000000003",
+    "Monogram": "AZ",
+    "EmblemMotif": 2,
+    "Kits": [
+      {
+        "Primary": "d18070",
+        "Secondary": "e9edef",
+        "Pattern": 2
+      },
+      {
+        "Primary": "e9edef",
+        "Secondary": "d18070",
+        "Pattern": 0
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "d18070",
+        "Pattern": 1
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0001-4000-8000-000000000001",
+    "Monogram": "HO",
+    "EmblemMotif": 3,
+    "Kits": [
+      {
+        "Primary": "243853",
+        "Secondary": "d1b46c",
+        "Pattern": 0
+      },
+      {
+        "Primary": "d1b46c",
+        "Secondary": "243853",
+        "Pattern": 1
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "243853",
+        "Pattern": 2
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000010",
+    "Monogram": "MA",
+    "EmblemMotif": 0,
+    "Kits": [
+      {
+        "Primary": "4096a7",
+        "Secondary": "b69857",
+        "Pattern": 1
+      },
+      {
+        "Primary": "b69857",
+        "Secondary": "4096a7",
+        "Pattern": 2
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "4096a7",
+        "Pattern": 0
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000011",
+    "Monogram": "AL",
+    "EmblemMotif": 1,
+    "Kits": [
+      {
+        "Primary": "713b50",
+        "Secondary": "adb8c5",
+        "Pattern": 2
+      },
+      {
+        "Primary": "adb8c5",
+        "Secondary": "713b50",
+        "Pattern": 0
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "713b50",
+        "Pattern": 1
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0001-4000-8000-000000000004",
+    "Monogram": "LU",
+    "EmblemMotif": 2,
+    "Kits": [
+      {
+        "Primary": "80639c",
+        "Secondary": "adb8c5",
+        "Pattern": 0
+      },
+      {
+        "Primary": "adb8c5",
+        "Secondary": "80639c",
+        "Pattern": 1
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "80639c",
+        "Pattern": 2
+      }
+    ]
+  },
+  {
+    "ClubId": "72026027-0003-4000-8000-000000000012",
+    "Monogram": "CE",
+    "EmblemMotif": 3,
+    "Kits": [
+      {
+        "Primary": "b6755b",
+        "Secondary": "243853",
+        "Pattern": 1
+      },
+      {
+        "Primary": "243853",
+        "Secondary": "b6755b",
+        "Pattern": 2
+      },
+      {
+        "Primary": "c6cdd5",
+        "Secondary": "b6755b",
+        "Pattern": 0
+      }
+    ]
+  }
+]

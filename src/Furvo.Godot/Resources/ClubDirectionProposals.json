@@ -1,0 +1,1087 @@
+{
+  "Version": "club-direction-2026-27-draft-1",
+  "Status": "Draft",
+  "Language": "es",
+  "Clubs": [
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000005",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Formación de proximidad",
+          "Description": "Dar continuidad al talento formado en el entorno del club."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Pertenencia compartida",
+          "Description": "Preservar el vínculo entre equipo, ciudad y afición."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Memoria industrial",
+          "Description": "Representar una cultura de trabajo constante y compromiso colectivo."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Relevo sin ruptura",
+          "Description": "Renovar el equipo sin diluir su identidad territorial."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Competir en la zona alta",
+          "Description": "Aspirar a terminar entre los ocho primeros sin abandonar la identidad formadora.",
+          "Priority": "High",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Consolidar relevos propios",
+          "Description": "Proponer un núcleo reconocible de jugadores desarrollados en el entorno.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Sostener presencia entre los mejores",
+          "Description": "Aspirar a competir habitualmente en el tercio superior de Primera.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000001",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Competir como bloque",
+          "Description": "Situar la colaboración por encima del protagonismo individual."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Exigencia diaria",
+          "Description": "Mantener hábitos de preparación acordes con un club de élite."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Resistencia competitiva",
+          "Description": "Responder con constancia a las etapas deportivas adversas."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Ambición sostenida",
+          "Description": "Buscar resultados altos sin renunciar al esfuerzo compartido."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Disputar los primeros puestos",
+          "Description": "Proponer un puesto entre los tres primeros al cierre de la temporada.",
+          "Priority": "High",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Mantener candidatura al título",
+          "Description": "Aspirar a sostener la presencia en la lucha por la liga durante el ciclo.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Conseguir una liga",
+          "Description": "Plantear al menos un campeonato de Primera dentro del horizonte largo.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000019",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Raíz navarra",
+          "Description": "Conservar una identidad ligada a su comunidad."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Talento cercano",
+          "Description": "Dar espacio a la progresión de futbolistas del entorno."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Equipo reconocible",
+          "Description": "Priorizar cooperación e implicación en cada etapa del proyecto."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Apoyo popular",
+          "Description": "Mantener cercanía con quienes sostienen al club."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Asegurar continuidad en Primera",
+          "Description": "Priorizar acabar fuera de los tres puestos de descenso.",
+          "Priority": "Critical",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Ganar estabilidad deportiva",
+          "Description": "Aspirar a una presencia continuada en la zona media de Primera.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Ampliar la aportación formativa",
+          "Description": "Desarrollar un relevo propio que pueda sostener al primer equipo.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000002",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Expresión técnica",
+          "Description": "Preservar una intención de juego elaborada y reconocible."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Raíz atlántica",
+          "Description": "Representar el vínculo del club con su ciudad y su entorno."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Puente formativo",
+          "Description": "Favorecer el paso del desarrollo local al primer equipo."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Paciencia con el talento",
+          "Description": "Acompañar la maduración sin cambios permanentes de rumbo."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Estabilizarse en la zona media",
+          "Description": "Proponer finalizar entre los doce primeros de Primera.",
+          "Priority": "High",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Acercarse al grupo alto",
+          "Description": "Aspirar a alcanzar la primera mitad de la tabla durante el ciclo.",
+          "Priority": "Medium",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Afirmar un núcleo formado en casa",
+          "Description": "Reforzar la continuidad del talento desarrollado por el club.",
+          "Priority": "High",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000003",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Organización compartida",
+          "Description": "Construir una identidad basada en la coordinación del grupo."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Arraigo alavés",
+          "Description": "Mantener un vínculo cercano con su territorio."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Recursos con propósito",
+          "Description": "Preferir decisiones coherentes con un proyecto de dimensión contenida."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Reacción ante la dificultad",
+          "Description": "Promover continuidad y respuesta colectiva en las rachas adversas."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Permanecer en Primera",
+          "Description": "Situar la salida de los puestos de descenso como objetivo central.",
+          "Priority": "Critical",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Reducir la fragilidad deportiva",
+          "Description": "Aspirar a una permanencia menos dependiente del tramo final.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Construir una base duradera",
+          "Description": "Dar continuidad a un núcleo capaz de estabilizar al club en Primera.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000004",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Vínculo comarcal",
+          "Description": "Conservar presencia e identificación con su entorno ilicitano."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Continuidad de categoría",
+          "Description": "Favorecer decisiones que reduzcan etapas deportivas de ruptura."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Esfuerzo coordinado",
+          "Description": "Valorar compromiso y cooperación del conjunto."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Progresión cercana",
+          "Description": "Ofrecer una vía gradual al talento formado en el entorno."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Conservar la categoría",
+          "Description": "Proponer acabar fuera de los tres últimos puestos.",
+          "Priority": "Critical",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Asentar un ciclo en Primera",
+          "Description": "Buscar continuidad en la categoría antes de elevar la exigencia clasificatoria.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Dar estabilidad al relevo",
+          "Description": "Preparar una renovación de plantilla compatible con un club asentado.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000002",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Lenguaje asociativo",
+          "Description": "Preservar una identidad que facilite conexiones y creatividad colectiva."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Formación con continuidad",
+          "Description": "Acercar el trabajo formativo a las necesidades del primer equipo."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Identidad catalana abierta",
+          "Description": "Mantener arraigo cultural y una comunidad acogedora."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Excelencia creativa",
+          "Description": "Combinar iniciativa técnica con disciplina de aprendizaje."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Competir por el campeonato",
+          "Description": "Plantear la conquista de Primera como aspiración principal de temporada.",
+          "Priority": "High",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Renovar el núcleo de élite",
+          "Description": "Acompañar el relevo del equipo con talento desarrollado en el club.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Sostener ciclos ganadores",
+          "Description": "Buscar títulos de liga sin perder continuidad de identidad y formación.",
+          "Priority": "High",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000005",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Disciplina de conjunto",
+          "Description": "Mantener una organización al servicio de todo el equipo."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Identidad metropolitana propia",
+          "Description": "Reforzar un vínculo local diferenciado en su área."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Pragmatismo deportivo",
+          "Description": "Elegir caminos de progreso acordes con la realidad del proyecto."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Continuidad del bloque",
+          "Description": "Valorar una base de jugadores que se conozcan y colaboren."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Mantenerse en Primera",
+          "Description": "Proponer terminar fuera de los tres puestos de descenso.",
+          "Priority": "Critical",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Asegurar un núcleo estable",
+          "Description": "Buscar una base de continuidad que reduzca la incertidumbre de cada campaña.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Afianzar reconocimiento local",
+          "Description": "Reforzar la identificación de la comunidad con un club estable en Primera.",
+          "Priority": "Low",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000006",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Raíz de barrio",
+          "Description": "Mantener cercanía con la comunidad que acompaña al club."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Perseverancia popular",
+          "Description": "Conservar capacidad de respuesta en etapas de dificultad."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Proyecto sin atajos",
+          "Description": "Priorizar continuidad frente a cambios de rumbo por resultados aislados."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Espacio para progresar",
+          "Description": "Facilitar el desarrollo de futbolistas con margen de crecimiento."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Asegurar la permanencia",
+          "Description": "Priorizar terminar fuera de los tres puestos de descenso.",
+          "Priority": "Critical",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Dar continuidad al proyecto",
+          "Description": "Aspirar a sostenerse en Primera durante el ciclo medio.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Ampliar el relevo formativo",
+          "Description": "Aumentar la conexión entre desarrollo de jugadores y primer equipo.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000008",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Recuperación con identidad",
+          "Description": "Reforzar el regreso a Primera sin borrar la memoria reciente."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Cantera malagueña",
+          "Description": "Acompañar a futbolistas del entorno en su progresión hacia el primer equipo."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Tradición técnica",
+          "Description": "Conservar una propuesta que valore el trato del balón."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Afición como vínculo",
+          "Description": "Mantener cercanía con la comunidad que sostuvo la recuperación."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Adaptarse y permanecer",
+          "Description": "Proponer finalizar fuera de los tres puestos de descenso en el año del retorno.",
+          "Priority": "Critical",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Consolidar el regreso",
+          "Description": "Buscar continuidad en Primera con un núcleo reconocible.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Recuperar presencia competitiva",
+          "Description": "Aspirar a una campaña en la primera mitad de la tabla tras consolidarse.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000007",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Memoria cántabra",
+          "Description": "Preservar la identificación del club con su territorio."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Regreso con paciencia",
+          "Description": "Entender la vuelta a Primera como inicio de una nueva etapa."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Relevo local",
+          "Description": "Facilitar una trayectoria de formación vinculada al primer equipo."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Continuidad del esfuerzo",
+          "Description": "Mantener el compromiso que sostiene una recuperación prolongada."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Sostener el regreso a Primera",
+          "Description": "Proponer terminar fuera de los tres últimos puestos.",
+          "Priority": "Critical",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Estabilizar el nuevo ciclo",
+          "Description": "Aspirar a continuar en Primera sin depender de una renovación completa anual.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Afianzar una identidad formadora",
+          "Description": "Consolidar un recorrido de desarrollo reconocible en el entorno cántabro.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000008",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Barrio presente",
+          "Description": "Reforzar el vínculo cotidiano con Vallecas."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Valentía reconocible",
+          "Description": "Preservar iniciativa deportiva sin convertirla en una táctica obligatoria."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Colectivo solidario",
+          "Description": "Valorar la ayuda entre compañeros y la cercanía con la afición."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Identidad independiente",
+          "Description": "Mantener personalidad propia frente a los grandes del entorno."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Continuar en Primera",
+          "Description": "Situar la permanencia como objetivo principal de temporada.",
+          "Priority": "Critical",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Estabilizar el rendimiento",
+          "Description": "Aspirar a competir con mayor regularidad en la zona media.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Preservar personalidad y arraigo",
+          "Description": "Consolidar un club reconocible sin diluir su identidad al crecer.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000006",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Memoria sin atajos",
+          "Description": "Respetar los éxitos del pasado sin exigir que se repitan inmediatamente."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Reconstrucción compartida",
+          "Description": "Dar continuidad al regreso con apoyo de la afición."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Talento del entorno",
+          "Description": "Abrir camino a futbolistas desarrollados cerca del club."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Ambición gradual",
+          "Description": "Elevar expectativas conforme se consolide el nuevo ciclo."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Asegurar el año del retorno",
+          "Description": "Priorizar terminar fuera de los puestos de descenso.",
+          "Priority": "Critical",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Recuperar estabilidad en Primera",
+          "Description": "Proponer continuidad con aspiración a la zona media.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Volver a la primera mitad",
+          "Description": "Aspirar a una clasificación entre los diez primeros tras consolidarse.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000009",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Identidad metropolitana propia",
+          "Description": "Mantener una personalidad diferenciada en su entorno futbolístico."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Formación como puente",
+          "Description": "Acompañar la transición de jóvenes al fútbol del primer equipo."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Comunidad intergeneracional",
+          "Description": "Preservar la transmisión de pertenencia entre generaciones."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Estabilidad con ambición",
+          "Description": "Crecer sin perder una base de continuidad."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Lograr una campaña estable",
+          "Description": "Proponer terminar entre los catorce primeros de Primera.",
+          "Priority": "High",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Acercarse a la primera mitad",
+          "Description": "Aspirar a una campaña entre los diez primeros durante el ciclo.",
+          "Priority": "Medium",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Reforzar el relevo propio",
+          "Description": "Consolidar futbolistas formados en el club como parte de su identidad competitiva.",
+          "Priority": "High",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000003",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Vínculo popular",
+          "Description": "Mantener la cercanía con una comunidad de apoyo amplio y persistente."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Creatividad compartida",
+          "Description": "Valorar la iniciativa técnica al servicio del equipo."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Vocación ofensiva",
+          "Description": "Conservar intención de proponer juego sin fijar una táctica concreta."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Continuidad emocional",
+          "Description": "Responder a la exigencia con un proyecto reconocible y paciente."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Competir en la zona alta",
+          "Description": "Proponer terminar entre los ocho primeros de Primera.",
+          "Priority": "High",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Sostener una base competitiva",
+          "Description": "Aspirar a presencia recurrente en la primera mitad de la tabla.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Acercarse a la lucha por la liga",
+          "Description": "Plantear una campaña en el grupo de aspirantes sin prometer un título.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000001",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Exigencia de élite",
+          "Description": "Aceptar un estándar deportivo alto en cada etapa del proyecto."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Iniciativa ofensiva",
+          "Description": "Valorar la búsqueda del resultado mediante intención de ataque."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Equipo por encima del nombre",
+          "Description": "Integrar el talento individual en una ambición compartida."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Renovación para competir",
+          "Description": "Preparar el relevo sin normalizar largos ciclos de renuncia competitiva."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Conquistar la liga",
+          "Description": "Proponer el campeonato de Primera como objetivo central de temporada.",
+          "Priority": "Critical",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Sostener la candidatura anual",
+          "Description": "Aspirar a mantenerse en la lucha por la liga a lo largo del ciclo.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Dar continuidad a los títulos",
+          "Description": "Construir un ciclo ganador con relevo de jugadores y continuidad competitiva.",
+          "Priority": "High",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000010",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Formación guipuzcoana",
+          "Description": "Conectar el desarrollo cercano con oportunidades en el primer equipo."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Juego asociado",
+          "Description": "Preservar una intención colectiva basada en colaboración y conexiones."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Proyecto paciente",
+          "Description": "Acompañar la maduración con continuidad de criterio."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Arraigo y apertura",
+          "Description": "Combinar vínculo territorial con aprendizaje de otras experiencias."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Competir en la primera mitad",
+          "Description": "Proponer una clasificación entre los diez primeros de Primera.",
+          "Priority": "High",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Afianzarse en el grupo alto",
+          "Description": "Aspirar a una campaña entre los seis primeros durante el ciclo.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Sostener un relevo competitivo",
+          "Description": "Consolidar una base formativa capaz de mantener aspiraciones altas.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000011",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Cultura competitiva",
+          "Description": "Mantener capacidad de responder a encuentros y etapas exigentes."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Esfuerzo colectivo",
+          "Description": "Valorar coordinación y responsabilidad de todo el grupo."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Renovación con criterio",
+          "Description": "Evitar que cada cambio borre el aprendizaje del proyecto."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Arraigo sevillano",
+          "Description": "Reforzar continuidad entre club, ciudad y afición."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Reafirmarse en la zona alta",
+          "Description": "Proponer una clasificación entre los seis primeros de Primera.",
+          "Priority": "High",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Recuperar continuidad competitiva",
+          "Description": "Buscar campañas regulares en el grupo alto sin depender de éxitos aislados.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Acercarse a una candidatura al título",
+          "Description": "Plantear un ciclo que permita disputar una liga, sin exigirla de inmediato.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000004",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Exigencia con memoria",
+          "Description": "Reconocer el peso histórico sin confundirlo con resultados garantizados."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Arraigo valenciano",
+          "Description": "Mantener la identificación del equipo con su ciudad."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Dinamismo propio",
+          "Description": "Conservar intención de juego activa y amplitud sin fijar instrucciones tácticas."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Relevo con continuidad",
+          "Description": "Acompañar la entrada de nuevos jugadores sin romper toda la base."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Recuperar regularidad",
+          "Description": "Proponer terminar entre los diez primeros de Primera.",
+          "Priority": "High",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Volver al grupo alto",
+          "Description": "Aspirar a una campaña entre los seis primeros durante el ciclo.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Reabrir una etapa de aspiraciones altas",
+          "Description": "Buscar continuidad entre los equipos capaces de disputar los primeros puestos.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000012",
+      "Principles": [
+        {
+          "Code": "principle-1",
+          "Title": "Proyecto de continuidad",
+          "Description": "Mantener criterios de desarrollo más allá de una temporada aislada."
+        },
+        {
+          "Code": "principle-2",
+          "Title": "Talento acompañado",
+          "Description": "Dar oportunidades de progresión dentro de un entorno de trabajo estable."
+        },
+        {
+          "Code": "principle-3",
+          "Title": "Competir desde la escala local",
+          "Description": "Conservar el vínculo con una ciudad pequeña sin renunciar a ambición deportiva."
+        },
+        {
+          "Code": "principle-4",
+          "Title": "Aprendizaje sostenido",
+          "Description": "Incorporar mejoras sin abandonar los fundamentos del proyecto."
+        }
+      ],
+      "Objectives": [
+        {
+          "Code": "season-objective",
+          "Title": "Sostener una campaña alta",
+          "Description": "Proponer terminar entre los ocho primeros de Primera.",
+          "Priority": "High",
+          "Horizon": "Season",
+          "StartSeason": 2026,
+          "DueSeason": 2026
+        },
+        {
+          "Code": "medium-objective",
+          "Title": "Afianzar la primera mitad",
+          "Description": "Buscar continuidad entre los diez primeros durante el ciclo.",
+          "Priority": "High",
+          "Horizon": "MediumTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2028
+        },
+        {
+          "Code": "long-objective",
+          "Title": "Ampliar la candidatura deportiva",
+          "Description": "Aspirar a una campaña entre los cuatro primeros en el horizonte largo.",
+          "Priority": "Medium",
+          "Horizon": "LongTerm",
+          "StartSeason": 2026,
+          "DueSeason": 2030
+        }
+      ]
+    }
+  ]
+}

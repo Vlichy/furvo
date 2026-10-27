@@ -207,7 +207,7 @@ public partial class Main : Control
             tabs.SetMeta("club_id", _club.Id.ToString());
             tabs.AddThemeStyleboxOverride("panel", new StyleBoxFlat { BgColor = new Color("0d192b"), ContentMarginTop = 8 });
             body.AddChild(tabs);
-            tabs.AddChild(new ClubInformationPage(details));
+            tabs.AddChild(new ClubInformationPage(details, history));
             var squadPage = new VBoxContainer { Name = "ClubSquadPage" }; squadPage.SetMeta("club_id", _club.Id.ToString()); tabs.AddChild(squadPage);
             tabs.AddChild(new ClubHistoryPage(history)); tabs.AddChild(new ClubEconomyPage(_club.Id.ToString()));
             var keys = new[] { "ClubInformationTab", "ClubSquadTab", "ClubHistoryTab", "ClubEconomyTab" };

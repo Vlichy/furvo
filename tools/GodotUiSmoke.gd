@@ -114,16 +114,52 @@ func run_test() -> void:
         for pending in ["ClubSubscribersValue", "ClubNicknameValue", "ClubRivalriesValue", "StadiumCityValue"]:
             if not require(find_named(screen, pending).text == "Pendiente de definir", "Se presentó un dato pendiente como real"):
                 return
+        var info_page = find_named(screen, "ClubInformationPage")
+        if not require(find_named(info_page, "FootballPitch") != null and find_named(info_page, "FootballPitch").get_meta("end_area_count") == 4, "Falta el campo horizontal corregido"):
+            return
+        for view in ["StadiumExterior", "StadiumInterior", "StadiumPitchCaption", "StadiumExteriorCaption", "StadiumInteriorCaption"]:
+            if not require(find_named(info_page, view) != null, "Falta una vista o descripción de estadio"):
+                return
+        if not require(find_named(screen, "ClubKits").get_child(0).get_child_count() == 3, "Se esperaban tres equipaciones"):
+            return
+        for pending in ["ClubAssociationsValue", "ClubOwnershipValue", "ClubPresidentValue", "ClubOwnerValue", "ClubGroupValue", "StadiumCategoryValue", "StadiumDimensionsValue", "StadiumOpeningValue"]:
+            if not require(find_named(info_page, pending).text == "Pendiente de definir", "Se inventaron datos institucionales o de estadio"):
+                return
+        for section in ["HistoryTrajectoryPanel", "HistoryHonoursPanel", "HistoryEvolutionPanel", "HistoryLegendsPanel", "HistoryRecordsPanel"]:
+            if not require(find_named(info_page, section) != null, "Falta una sección de síntesis histórica"):
+                return
         for tab_index in [2, 3, 0, 1]:
             club_tabs.current_tab = tab_index
             await process_frame
             if not require(club_tabs.get_child(tab_index).is_visible_in_tree() and club_tabs.get_child(tab_index).get_meta("club_id") == expected_club_id, "La pestaña no conserva el club seleccionado"):
                 return
             if sample_index == 0:
-                for resolution in [Vector2i(960, 640), Vector2i(1600, 900), Vector2i(1280, 720)]:
+                for resolution in [Vector2i(960, 640), Vector2i(1600, 900), Vector2i(1920, 1080), Vector2i(1280, 720)]:
                     root.size = resolution
                     await process_frame
                     await process_frame
+                    if tab_index == 0:
+                        var overview = find_named(info_page, "ClubOverviewColumns")
+                        if not require(overview.vertical == (resolution.x < 1040), "La composición institucional no se adapta al ancho"):
+                            return
+                        if not overview.vertical:
+                            var left_panel = find_named(info_page, "ClubInstitutionPanel") as Control
+                            var right_panel = find_named(info_page, "ClubStadiumPanel") as Control
+                            if not require(left_panel.get_global_rect().end.x <= right_panel.get_global_rect().position.x + 1, "Identidad y estadio se solapan"):
+                                return
+                        var view_row = find_named(info_page, "StadiumViews")
+                        var previous_view: Control = null
+                        for view_column in view_row.get_children():
+                            if previous_view != null and not require(previous_view.get_global_rect().end.x <= view_column.get_global_rect().position.x + 1, "Las vistas del estadio se solapan"):
+                                return
+                            previous_view = view_column
+                        var info_scroll = find_named(info_page, "ClubInfoScroll") as ScrollContainer
+                        info_scroll.scroll_vertical = int(info_scroll.get_v_scroll_bar().max_value)
+                        await process_frame
+                        await process_frame
+                        if not require(find_named(info_page, "ClubHistorySummary").get_global_rect().end.y <= info_scroll.get_global_rect().end.y + 1, "La síntesis inferior no es accesible con desplazamiento"):
+                            return
+                        print("FURVO_CLUB_REDESIGN_LAYOUT: ", resolution, " footer visible; stadium views=3")
                     var club_footer = find_named(screen, "BackClubs") as Control
                     if not require(club_footer.get_global_rect().end.y <= root.size.y + 1 and club_tabs.get_global_rect().end.y <= club_footer.get_global_rect().position.y + 1, "La ficha de club oculta o solapa la navegación al redimensionar"):
                         return
@@ -132,6 +168,16 @@ func run_test() -> void:
                 if not require(historic_table.get_root().get_child_count() == 0 and find_named(screen, "ClubHistoryChart").get_meta("result_count") == 0, "Se inventaron clasificaciones históricas"):
                     return
             if tab_index == 3:
+                var economy = find_named(screen, "ClubEconomyPage")
+                for section in ["EconomyBudgetsPanel", "EconomyIncomePanel", "EconomyExpensesPanel", "EconomyObligationsPanel", "EconomyFinancialStatusPanel"]:
+                    if not require(find_named(economy, section) != null, "Falta un bloque económico"):
+                        return
+                var economic_fields = find_marked_nodes(economy, "economic_unavailable")
+                if not require(economic_fields.size() == 30, "Faltan campos financieros no disponibles"):
+                    return
+                for field in economic_fields:
+                    if not require(field.text == "No disponible", "Se inventó un importe financiero"):
+                        return
                 for amount in ["EconomyCashValue", "EconomyTransferBudgetValue", "EconomyWageBudgetValue", "EconomyCommittedWagesValue", "EconomyIncomeValue", "EconomyExpensesValue", "EconomyBalanceValue", "EconomyDebtValue", "EconomySituationValue"]:
                     if not require(find_named(screen, amount).text == "No disponible", "Se inventó una cifra económica"):
                         return

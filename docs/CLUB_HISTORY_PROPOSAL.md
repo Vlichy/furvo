@@ -434,3 +434,7 @@ Esto acredita consistencia local de la propuesta, **no un calendario completo ni
 ## Decisiones que debe aprobar la revisión
 
 Aprobar o corregir hipótesis de cronología, conteos, temporadas concretas de títulos/puestos, apodos, rivalidades y personajes. Definir después las filas de clasificación y puntos necesarias para el archivo; revisar también épocas de los personajes antes de redactar biografías. No generar datos automáticamente para llenar los huecos. Este documento no autoriza su incorporación a SQLite ni cambia las publicaciones v1–v4.
+
+## Revisión de presentación — 27/10/2026
+
+Esta propuesta sigue pendiente y no se importa por el rediseño de la ficha. La síntesis de Información y el detalle de Historia comparten componentes que solo muestran datos con IsApprovedDataAvailable. Se preparan cronología, períodos/posición/logros de personajes y diez tipos de récord sin generar nuevos nombres, títulos ni clasificaciones. Los personajes no son futbolistas activos. Las temporadas posteriores a 2026/27 podrán ampliar el contrato de consulta por separado de la historia editorial; no se implementan simulación, nuevas tablas ni migraciones.

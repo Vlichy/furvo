@@ -268,3 +268,9 @@ Su salida esperada es FURVO_UI_SMOKE_OK y código 0. Automatiza inicio, carga, s
 ## Estado para cierre
 
 La implementación está compilada, cubierta por 90 casos y **lista para validación final local**. El cierre visual completo queda condicionado al listado anterior. No se comienza valoración interna, motor, mercado, economía, IA, calendarios, Segunda ni otra entrega. Los requisitos futuros se documentan en [DECISIONS.md](DECISIONS.md) y [V1_CONTRACT.md](V1_CONTRACT.md).
+
+## Rediseño definitivo de ficha de club — 27/10/2026
+
+Estado actual posterior a las secciones anteriores: **138 pruebas superadas** (129 anteriores + 9 casos nuevos), tanto Debug como Release, sin errores ni advertencias de compilación. Prueba de escena Godot final con código 0. Se amplía la geometría a 1920×1080 y se protegen identidades provisionales, campo horizontal, categorías independientes y campos desconocidos. Se inspeccionó Información de Mosaico en ventana real a 1280×720; queda revisión visual completa de pestañas y resoluciones, además de exportación Windows.
+
+[Informe detallado, límites y comandos](CLUB_PRESENTATION_REDESIGN.md). [Categorías propuestas, no publicadas](STADIUM_CATEGORY_PROPOSAL.md). Cuatro bases originales idénticas por SHA-256; ningún cambio en Persistence/migraciones ni datos de jugadores, contratos o reputación.
