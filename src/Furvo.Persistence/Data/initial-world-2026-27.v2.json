@@ -1,0 +1,377 @@
+{
+  "DatasetVersion": "2026-27.entrega2.v2",
+  "WorldId": "72026027-0000-4000-8000-000000000004",
+  "Competition": {
+    "Id": "72026027-0000-4000-8000-000000000002",
+    "Name": "Liga Cumbre de España",
+    "Country": "España"
+  },
+  "Season": {
+    "Id": "72026027-0000-4000-8000-000000000003",
+    "Name": "2026/27",
+    "StartDate": "2026-07-01",
+    "EndDate": "2027-06-30"
+  },
+  "Clubs": [
+    {
+      "Id": "72026027-0001-4000-8000-000000000005",
+      "Name": "Club Deportivo Ferrería de Bilbao",
+      "City": "Bilbao",
+      "Country": "España",
+      "Reputation": 4,
+      "Profile": {
+        "ShortName": "Ferrería",
+        "Region": "País Vasco",
+        "FoundationYear": 1901,
+        "SportingIdentity": "Club histórico de raíz industrial, fuerte arraigo territorial y tradición de formación local.",
+        "PrimaryColor": "Cobre",
+        "SecondaryColor": "Antracita",
+        "StadiumName": "Estadio de la Fragua",
+        "StadiumCapacity": 50600,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000001",
+      "Name": "Club Atlético Pedernal de Madrid",
+      "City": "Madrid",
+      "Country": "España",
+      "Reputation": 5,
+      "Profile": {
+        "ShortName": "Pedernal",
+        "Region": "Comunidad de Madrid",
+        "FoundationYear": 1909,
+        "SportingIdentity": "Club histórico de élite, identidad competitiva y tradición de esfuerzo colectivo.",
+        "PrimaryColor": "Grafito",
+        "SecondaryColor": "Carmesí",
+        "StadiumName": "Estadio de la Meseta Roja",
+        "StadiumCapacity": 68400,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0001-4000-8000-000000000019",
+      "Name": "Club Deportivo Senda de Pamplona",
+      "City": "Pamplona",
+      "Country": "España",
+      "Reputation": 3,
+      "Profile": {
+        "ShortName": "Senda",
+        "Region": "Navarra",
+        "FoundationYear": 1967,
+        "SportingIdentity": "Club consolidado de arraigo navarro, identidad colectiva y tradición de apoyo popular.",
+        "PrimaryColor": "Verde musgo",
+        "SecondaryColor": "Piedra",
+        "StadiumName": "Estadio del Camino del Norte",
+        "StadiumCapacity": 21800,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000002",
+      "Name": "Unión Deportiva Ensenada de Vigo",
+      "City": "Vigo",
+      "Country": "España",
+      "Reputation": 3,
+      "Profile": {
+        "ShortName": "Ensenada",
+        "Region": "Galicia",
+        "FoundationYear": 1930,
+        "SportingIdentity": "Club atlántico de tradición técnica, formación local y fuerte vínculo con su ciudad.",
+        "PrimaryColor": "Verde océano",
+        "SecondaryColor": "Marfil",
+        "StadiumName": "Estadio de las Rías del Sur",
+        "StadiumCapacity": 25800,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000003",
+      "Name": "Club Deportivo Robledal de Vitoria",
+      "City": "Vitoria-Gasteiz",
+      "Country": "España",
+      "Reputation": 2,
+      "Profile": {
+        "ShortName": "Robledal",
+        "Region": "País Vasco",
+        "FoundationYear": 1925,
+        "SportingIdentity": "Club de dimensión contenida, arraigo alavés y tradición de organización colectiva.",
+        "PrimaryColor": "Verde pino",
+        "SecondaryColor": "Oro viejo",
+        "StadiumName": "Estadio del Anillo Verde",
+        "StadiumCapacity": 19800,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000004",
+      "Name": "Unión Deportiva Palmeral de Elche",
+      "City": "Elche",
+      "Country": "España",
+      "Reputation": 2,
+      "Profile": {
+        "ShortName": "Palmeral",
+        "Region": "Comunidad Valenciana",
+        "FoundationYear": 1932,
+        "SportingIdentity": "Club de tradición ilicitana, arraigo comarcal y trayectoria de alternancia entre categorías.",
+        "PrimaryColor": "Albero",
+        "SecondaryColor": "Verde agua",
+        "StadiumName": "Estadio del Camino del Palmeral",
+        "StadiumCapacity": 29300,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0001-4000-8000-000000000002",
+      "Name": "Unión Deportiva Brisa de Barcelona",
+      "City": "Barcelona",
+      "Country": "España",
+      "Reputation": 5,
+      "Profile": {
+        "ShortName": "Brisa",
+        "Region": "Cataluña",
+        "FoundationYear": 1903,
+        "SportingIdentity": "Histórico de élite, tradición de fútbol asociativo y creativo y fuerte identidad catalana.",
+        "PrimaryColor": "Granate",
+        "SecondaryColor": "Marfil",
+        "StadiumName": "Estadio del Mirador Azul",
+        "StadiumCapacity": 87200,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000005",
+      "Name": "Club Deportivo Fragua del Sur",
+      "City": "Getafe",
+      "Country": "España",
+      "Reputation": 1,
+      "Profile": {
+        "ShortName": "Fragua del Sur",
+        "Region": "Comunidad de Madrid",
+        "FoundationYear": 1988,
+        "SportingIdentity": "Club de historia reciente, escala local metropolitana y tradición de disciplina colectiva.",
+        "PrimaryColor": "Violeta",
+        "SecondaryColor": "Gris perla",
+        "StadiumName": "Estadio de los Talleres",
+        "StadiumCapacity": 16800,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000006",
+      "Name": "Unión Deportiva Acequia de Valencia",
+      "City": "Valencia",
+      "Country": "España",
+      "Reputation": 2,
+      "Profile": {
+        "ShortName": "Acequia",
+        "Region": "Comunidad Valenciana",
+        "FoundationYear": 1914,
+        "SportingIdentity": "Club de tradición popular valenciana, identidad de barrio y resistencia en etapas de dificultad.",
+        "PrimaryColor": "Azul petróleo",
+        "SecondaryColor": "Azafrán",
+        "StadiumName": "Estadio de la Huerta del Norte",
+        "StadiumCapacity": 24700,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0001-4000-8000-000000000008",
+      "Name": "Atlético Mosaico de Málaga",
+      "City": "Málaga",
+      "Country": "España",
+      "Reputation": 2,
+      "Profile": {
+        "ShortName": "Mosaico",
+        "Region": "Andalucía",
+        "FoundationYear": 1946,
+        "SportingIdentity": "Recién ascendido de arraigo malagueño, recuperación de una tradición técnica y apoyo de cantera y afición.",
+        "PrimaryColor": "Añil",
+        "SecondaryColor": "Coral",
+        "StadiumName": "Estadio del Patio Abierto",
+        "StadiumCapacity": 32200,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000007",
+      "Name": "Unión Deportiva Abra de Santander",
+      "City": "Santander",
+      "Country": "España",
+      "Reputation": 2,
+      "Profile": {
+        "ShortName": "Abra",
+        "Region": "Cantabria",
+        "FoundationYear": 1918,
+        "SportingIdentity": "Recién ascendido de tradición centenaria cántabra, arraigo local y recuperación tras una larga ausencia.",
+        "PrimaryColor": "Verde mar",
+        "SecondaryColor": "Cobre",
+        "StadiumName": "Estadio de la Bahía Abierta",
+        "StadiumCapacity": 22400,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000008",
+      "Name": "Club Deportivo Umbral de Vallecas",
+      "City": "Madrid (Vallecas)",
+      "Country": "España",
+      "Reputation": 2,
+      "Profile": {
+        "ShortName": "Umbral",
+        "Region": "Comunidad de Madrid",
+        "FoundationYear": 1929,
+        "SportingIdentity": "Club de marcada identidad de barrio, arraigo vallecano y tradición de fútbol valiente.",
+        "PrimaryColor": "Carmesí",
+        "SecondaryColor": "Grafito",
+        "StadiumName": "Estadio de las Azoteas",
+        "StadiumCapacity": 13700,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0001-4000-8000-000000000006",
+      "Name": "Unión del Faro de A Coruña",
+      "City": "A Coruña",
+      "Country": "España",
+      "Reputation": 3,
+      "Profile": {
+        "ShortName": "Faro",
+        "Region": "Galicia",
+        "FoundationYear": 1906,
+        "SportingIdentity": "Recién ascendido de tradición histórica coruñesa, memoria de éxitos nacionales y recuperación con apoyo popular.",
+        "PrimaryColor": "Turquesa",
+        "SecondaryColor": "Blanco",
+        "StadiumName": "Estadio de Punta Clara",
+        "StadiumCapacity": 28600,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000009",
+      "Name": "Unión Deportiva Litoral de Cornellà",
+      "City": "Cornellà de Llobregat",
+      "Country": "España",
+      "Reputation": 3,
+      "Profile": {
+        "ShortName": "Litoral",
+        "Region": "Cataluña",
+        "FoundationYear": 1907,
+        "SportingIdentity": "Club histórico del área de Barcelona, identidad propia y tradición de formación de futbolistas.",
+        "PrimaryColor": "Plata",
+        "SecondaryColor": "Azul petróleo",
+        "StadiumName": "Estadio del Arco Metropolitano",
+        "StadiumCapacity": 38200,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0001-4000-8000-000000000003",
+      "Name": "Club Atlético Azahar de Sevilla",
+      "City": "Sevilla",
+      "Country": "España",
+      "Reputation": 4,
+      "Profile": {
+        "ShortName": "Azahar",
+        "Region": "Andalucía",
+        "FoundationYear": 1912,
+        "SportingIdentity": "Club histórico sevillano de fuerte arraigo popular, identidad técnica y tradición ofensiva.",
+        "PrimaryColor": "Coral",
+        "SecondaryColor": "Blanco",
+        "StadiumName": "Estadio de la Huerta Clara",
+        "StadiumCapacity": 57500,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0001-4000-8000-000000000001",
+      "Name": "Club Deportivo Horizonte de Madrid",
+      "City": "Madrid",
+      "Country": "España",
+      "Reputation": 5,
+      "Profile": {
+        "ShortName": "Horizonte",
+        "Region": "Comunidad de Madrid",
+        "FoundationYear": 1908,
+        "SportingIdentity": "Histórico de élite y proyección internacional, vocación ofensiva y tradición de exigencia competitiva.",
+        "PrimaryColor": "Azul medianoche",
+        "SecondaryColor": "Oro",
+        "StadiumName": "Estadio de las Siete Puertas",
+        "StadiumCapacity": 81200,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000010",
+      "Name": "Club Deportivo Mareal de Donostia",
+      "City": "Donostia-San Sebastián",
+      "Country": "España",
+      "Reputation": 4,
+      "Profile": {
+        "ShortName": "Mareal",
+        "Region": "País Vasco",
+        "FoundationYear": 1916,
+        "SportingIdentity": "Club de tradición guipuzcoana, formación local y fútbol asociativo con aspiraciones europeas.",
+        "PrimaryColor": "Azul turquesa",
+        "SecondaryColor": "Ocre",
+        "StadiumName": "Estadio de las Tres Bahías",
+        "StadiumCapacity": 37600,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000011",
+      "Name": "Unión Deportiva Aljarafe de Sevilla",
+      "City": "Sevilla",
+      "Country": "España",
+      "Reputation": 4,
+      "Profile": {
+        "ShortName": "Aljarafe",
+        "Region": "Andalucía",
+        "FoundationYear": 1896,
+        "SportingIdentity": "Club histórico sevillano de tradición competitiva, experiencia continental e identidad de esfuerzo colectivo.",
+        "PrimaryColor": "Granate",
+        "SecondaryColor": "Plata",
+        "StadiumName": "Estadio de la Forja del Sur",
+        "StadiumCapacity": 42100,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0001-4000-8000-000000000004",
+      "Name": "Club Deportivo Lumbre de Valencia",
+      "City": "Valencia",
+      "Country": "España",
+      "Reputation": 4,
+      "Profile": {
+        "ShortName": "Lumbre",
+        "Region": "Comunidad Valenciana",
+        "FoundationYear": 1921,
+        "SportingIdentity": "Club histórico valenciano de gran arraigo, tradición de exigencia y juego dinámico de bandas.",
+        "PrimaryColor": "Violeta",
+        "SecondaryColor": "Plata",
+        "StadiumName": "Estadio de la Alameda del Sol",
+        "StadiumCapacity": 49200,
+        "InitialCategory": "Primera categoría"
+      }
+    },
+    {
+      "Id": "72026027-0003-4000-8000-000000000012",
+      "Name": "Club Deportivo Ceramista de Vila-real",
+      "City": "Vila-real",
+      "Country": "España",
+      "Reputation": 4,
+      "Profile": {
+        "ShortName": "Ceramista",
+        "Region": "Comunidad Valenciana",
+        "FoundationYear": 1930,
+        "SportingIdentity": "Club de una ciudad de escala pequeña, continuidad de proyecto y tradición reciente de proyección europea.",
+        "PrimaryColor": "Terracota",
+        "SecondaryColor": "Azul medianoche",
+        "StadiumName": "Estadio del Horno Mayor",
+        "StadiumCapacity": 22600,
+        "InitialCategory": "Primera categoría"
+      }
+    }
+  ]
+}

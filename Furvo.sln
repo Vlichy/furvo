@@ -1,0 +1,34 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Furvo.Core", "src\Furvo.Core\Furvo.Core.csproj", "{1378C799-9643-44C9-AA95-020E5FDF96D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Furvo.Persistence", "src\Furvo.Persistence\Furvo.Persistence.csproj", "{D36DCEE1-0622-4B49-BF5F-1A8AF3189435}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Furvo.Godot", "src\Furvo.Godot\Furvo.Godot.csproj", "{EFAF639A-7F96-4C81-B41F-77930952DDDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Furvo.Tests", "tests\Furvo.Tests\Furvo.Tests.csproj", "{D35158BD-D64C-4462-99D7-F60309826F13}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1378C799-9643-44C9-AA95-020E5FDF96D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1378C799-9643-44C9-AA95-020E5FDF96D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1378C799-9643-44C9-AA95-020E5FDF96D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1378C799-9643-44C9-AA95-020E5FDF96D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D36DCEE1-0622-4B49-BF5F-1A8AF3189435}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D36DCEE1-0622-4B49-BF5F-1A8AF3189435}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D36DCEE1-0622-4B49-BF5F-1A8AF3189435}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D36DCEE1-0622-4B49-BF5F-1A8AF3189435}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFAF639A-7F96-4C81-B41F-77930952DDDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFAF639A-7F96-4C81-B41F-77930952DDDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFAF639A-7F96-4C81-B41F-77930952DDDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFAF639A-7F96-4C81-B41F-77930952DDDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D35158BD-D64C-4462-99D7-F60309826F13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D35158BD-D64C-4462-99D7-F60309826F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D35158BD-D64C-4462-99D7-F60309826F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D35158BD-D64C-4462-99D7-F60309826F13}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

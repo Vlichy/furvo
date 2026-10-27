@@ -1,0 +1,157 @@
+{
+  "DecisionVersion": "reputation-initial-2026-27-v1",
+  "Status": "ApprovedForFutureImplementation",
+  "InternalRange": [
+    0,
+    100
+  ],
+  "Bands": [
+    {
+      "Minimum": 0,
+      "Maximum": 19,
+      "Visible": 1
+    },
+    {
+      "Minimum": 20,
+      "Maximum": 39,
+      "Visible": 2
+    },
+    {
+      "Minimum": 40,
+      "Maximum": 59,
+      "Visible": 3
+    },
+    {
+      "Minimum": 60,
+      "Maximum": 79,
+      "Visible": 4
+    },
+    {
+      "Minimum": 80,
+      "Maximum": 100,
+      "Visible": 5
+    }
+  ],
+  "Clubs": [
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000001",
+      "Name": "Horizonte",
+      "Internal": 98,
+      "Visible": 5
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000002",
+      "Name": "Brisa",
+      "Internal": 96,
+      "Visible": 5
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000001",
+      "Name": "Pedernal",
+      "Internal": 86,
+      "Visible": 5
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000011",
+      "Name": "Aljarafe",
+      "Internal": 76,
+      "Visible": 4
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000005",
+      "Name": "Ferrería",
+      "Internal": 74,
+      "Visible": 4
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000004",
+      "Name": "Lumbre",
+      "Internal": 72,
+      "Visible": 4
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000003",
+      "Name": "Azahar",
+      "Internal": 68,
+      "Visible": 4
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000010",
+      "Name": "Mareal",
+      "Internal": 66,
+      "Visible": 4
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000012",
+      "Name": "Ceramista",
+      "Internal": 64,
+      "Visible": 4
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000006",
+      "Name": "Faro",
+      "Internal": 54,
+      "Visible": 3
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000002",
+      "Name": "Ensenada",
+      "Internal": 52,
+      "Visible": 3
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000009",
+      "Name": "Litoral",
+      "Internal": 47,
+      "Visible": 3
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000019",
+      "Name": "Senda",
+      "Internal": 44,
+      "Visible": 3
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000008",
+      "Name": "Mosaico",
+      "Internal": 34,
+      "Visible": 2
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000007",
+      "Name": "Abra",
+      "Internal": 32,
+      "Visible": 2
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000006",
+      "Name": "Acequia",
+      "Internal": 30,
+      "Visible": 2
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000008",
+      "Name": "Umbral",
+      "Internal": 28,
+      "Visible": 2
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000003",
+      "Name": "Robledal",
+      "Internal": 26,
+      "Visible": 2
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000004",
+      "Name": "Palmeral",
+      "Internal": 24,
+      "Visible": 2
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000005",
+      "Name": "Fragua del Sur",
+      "Internal": 14,
+      "Visible": 1
+    }
+  ]
+}

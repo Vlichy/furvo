@@ -1,0 +1,62 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compilar solución",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "Furvo.sln"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Ejecutar pruebas",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "test",
+        "tests/Furvo.Tests/Furvo.Tests.csproj"
+      ],
+      "group": "test",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Crear/verificar mundo inicial 2026-27",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--file",
+        "tools/BuildInitialWorld.cs",
+        "--",
+        "data/initial-world-2026-27.v2.db"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Crear/verificar plantillas iniciales v3",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--file",
+        "tools/BuildInitialSquads.cs",
+        "--",
+        "data/initial-world-2026-27.v3.db"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

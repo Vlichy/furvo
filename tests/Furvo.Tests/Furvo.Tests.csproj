@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <ProjectReference Include="../../src/Furvo.Persistence/Furvo.Persistence.csproj" />
+    <!-- Correspondencia de desarrollo: solo viaja con las pruebas, nunca con Godot. -->
+    <None Include="../../docs/development/club-reference-2026-27.json" Link="club-reference-2026-27.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../src/Furvo.Persistence/Data/initial-world-2026-27.json" Link="initial-world-2026-27.v1.json" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Datos de validación: publicación original de solo lectura, decisiones y recursos de texto. -->
+    <None Include="../../data/initial-world-2026-27.v3.db" Link="published-v3.db" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../data/initial-world-2026-27.v4.db" Link="published-v4.db" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../docs/decisions/club-reputations-2026-27.json" Link="club-reputations.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../src/Furvo.Godot/Resources/UiStrings.resx" Link="UiStrings.resx" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Políticas puras de presentación: se prueba su fuente real sin cargar el motor ni añadir paquetes. -->
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/AttributeValueStyle.cs" Link="Presentation/AttributeValueStyle.cs" />
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/PortraitResourcePaths.cs" Link="Presentation/PortraitResourcePaths.cs" />
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/PositionInsightRules.cs" Link="Presentation/PositionInsightRules.cs" />
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/PitchPositionLayout.cs" Link="Presentation/PitchPositionLayout.cs" />
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/ClubHistoryPlot.cs" Link="Presentation/ClubHistoryPlot.cs" />
+    <None Include="../../src/Furvo.Godot/Assets/Portraits/avatar.svg" Link="avatar.svg" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

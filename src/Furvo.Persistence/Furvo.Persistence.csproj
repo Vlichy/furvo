@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>net10.0</TargetFramework></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Furvo.Core/Furvo.Core.csproj" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.21" />
+    <!-- Corrección de GHSA-2m69-gcr7-jv3q sin cambiar el proveedor administrado. -->
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.14" />
+    <EmbeddedResource Include="Migrations/*.sql" />
+    <!-- Solo la publicación activa viaja con el juego; la v1 se conserva para revisión histórica. -->
+    <EmbeddedResource Include="Data/initial-world-2026-27.v2.json" />
+    <EmbeddedResource Include="Data/initial-squads-2026-27.json" />
+    <!-- Catálogo manual corregido: la reputación visible de v4 se deriva de estos valores internos. -->
+    <EmbeddedResource Include="Data/club-reputations-2026-27.v2.json" />
+  </ItemGroup>
+</Project>

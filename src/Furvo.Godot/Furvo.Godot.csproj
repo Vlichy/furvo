@@ -1,0 +1,12 @@
+<Project Sdk="Godot.NET.Sdk/4.7.2">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Furvo.Core/Furvo.Core.csproj" />
+    <ProjectReference Include="../Furvo.Persistence/Furvo.Persistence.csproj" />
+    <!-- Empaqueta la publicación única existente; no duplica datos de dominio en código Godot. -->
+    <EmbeddedResource Include="../../data/initial-world-2026-27.v4.db" LogicalName="Furvo.World.Initial2026" />
+  </ItemGroup>
+</Project>

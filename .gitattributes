@@ -1,0 +1,16 @@
+# Texto normalizado de acuerdo con .editorconfig; las bases se conservan byte a byte.
+* text=auto eol=lf
+*.db -text -diff
+*.db3 -text -diff
+*.sqlite -text -diff
+*.sqlite3 -text -diff
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.ogg binary
+*.wav binary

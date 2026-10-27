@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- Textos neutros en español. Futuras traducciones utilizarán las mismas claves en recursos de idioma. -->
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Brand" xml:space="preserve"><value>FURVO</value></data>
+  <data name="Version" xml:space="preserve"><value>V0.1 · Entrega 4</value></data>
+  <data name="HomeTitle" xml:space="preserve"><value>Tu mundo de fútbol</value></data>
+  <data name="HomeDescription" xml:space="preserve"><value>Explora los clubes y futbolistas de la Liga Cumbre de España.</value></data>
+  <data name="SeasonTitle" xml:space="preserve"><value>Temporada 2026/27</value></data>
+  <data name="HomeHelp" xml:space="preserve"><value>20 clubes ficticios · 480 futbolistas · Una identidad para cada jugador</value></data>
+  <data name="BrowseClubs" xml:space="preserve"><value>Consultar clubes</value></data>
+  <data name="ReadOnlyNotice" xml:space="preserve"><value>Consulta del mundo inicial · No se crean ni modifican partidas</value></data>
+  <data name="Home" xml:space="preserve"><value>Inicio</value></data>
+  <data name="LoadingTitle" xml:space="preserve"><value>Cargando el mundo inicial</value></data>
+  <data name="LoadingDescription" xml:space="preserve"><value>Preparando el catálogo de clubes y futbolistas…</value></data>
+  <data name="LoadErrorTitle" xml:space="preserve"><value>No se ha podido cargar el mundo</value></data>
+  <data name="LoadErrorDescription" xml:space="preserve"><value>Comprueba que la instalación contiene el catálogo y que Furvo puede leer y escribir su carpeta de datos de usuario. Si el problema continúa, conserva tus archivos y consulta el registro de errores. No se ha modificado ninguna partida.</value></data>
+  <data name="Retry" xml:space="preserve"><value>Reintentar</value></data>
+  <data name="ClubsSection" xml:space="preserve"><value>Clubes</value></data>
+  <data name="ClubsTitle" xml:space="preserve"><value>Liga Cumbre de España</value></data>
+  <data name="ClubsDescription" xml:space="preserve"><value>{0} clubes · Selecciona una fila y pulsa Ver club, o haz doble clic.</value></data>
+  <data name="Club" xml:space="preserve"><value>Club</value></data>
+  <data name="City" xml:space="preserve"><value>Ciudad</value></data>
+  <data name="Reputation" xml:space="preserve"><value>Reputación (1–5)</value></data>
+  <data name="ViewSquad" xml:space="preserve"><value>Ver plantilla</value></data>
+  <data name="SquadSection" xml:space="preserve"><value>Plantilla</value></data>
+  <data name="SquadDescription" xml:space="preserve"><value>{0} futbolistas · Edades al {1} · Pulsa Nombre, Posición o Edad para ordenar en ambos sentidos.</value></data>
+  <data name="Name" xml:space="preserve"><value>Nombre</value></data>
+  <data name="Position" xml:space="preserve"><value>Posición</value></data>
+  <data name="Age" xml:space="preserve"><value>Edad</value></data>
+  <data name="Nationality" xml:space="preserve"><value>Nacionalidad</value></data>
+  <data name="BackClubs" xml:space="preserve"><value>Volver a clubes</value></data>
+  <data name="ViewPlayer" xml:space="preserve"><value>Ver futbolista</value></data>
+  <data name="PlayerSection" xml:space="preserve"><value>Ficha de futbolista</value></data>
+  <data name="PlayerDescription" xml:space="preserve"><value>{0} · {1} · {2} años · {3}</value></data>
+  <data name="BirthAndSecondary" xml:space="preserve"><value>Nacimiento: {0} · Posiciones secundarias: {1}</value></data>
+  <data name="None" xml:space="preserve"><value>Ninguna</value></data>
+  <data name="Unknown" xml:space="preserve"><value>Sin datos</value></data>
+  <data name="ListSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="Attribute" xml:space="preserve"><value>Atributo</value></data>
+  <data name="Value" xml:space="preserve"><value>1–20</value></data>
+  <data name="BackSquad" xml:space="preserve"><value>Volver a plantilla</value></data>
+  <data name="Category_Technical" xml:space="preserve"><value>Técnicos (17)</value></data>
+  <data name="Category_Mental" xml:space="preserve"><value>Mentales (16)</value></data>
+  <data name="Category_Physical" xml:space="preserve"><value>Físicos (8)</value></data>
+  <data name="Category_Goalkeeper" xml:space="preserve"><value>Portero (10)</value></data>
+  <data name="SortAscending" xml:space="preserve"><value> ↑</value></data>
+  <data name="SortDescending" xml:space="preserve"><value> ↓</value></data>
+  <data name="Position_Goalkeeper" xml:space="preserve"><value>Portero</value></data>
+  <data name="Position_CentreBack" xml:space="preserve"><value>Defensa central</value></data>
+  <data name="Position_RightBack" xml:space="preserve"><value>Lateral derecho</value></data>
+  <data name="Position_LeftBack" xml:space="preserve"><value>Lateral izquierdo</value></data>
+  <data name="Position_DefensiveMidfielder" xml:space="preserve"><value>Mediocentro defensivo</value></data>
+  <data name="Position_CentralMidfielder" xml:space="preserve"><value>Centrocampista central</value></data>
+  <data name="Position_AttackingMidfielder" xml:space="preserve"><value>Mediapunta</value></data>
+  <data name="Position_RightMidfielder" xml:space="preserve"><value>Banda derecha</value></data>
+  <data name="Position_LeftMidfielder" xml:space="preserve"><value>Banda izquierda</value></data>
+  <data name="Position_Striker" xml:space="preserve"><value>Delantero centro</value></data>
+  <data name="Position_RightWinger" xml:space="preserve"><value>Extremo derecho</value></data>
+  <data name="Position_LeftWinger" xml:space="preserve"><value>Extremo izquierdo</value></data>
+  <data name="Position_SecondStriker" xml:space="preserve"><value>Segundo delantero</value></data>
+  <data name="Group_Goalkeeper" xml:space="preserve"><value>Portero</value></data>
+  <data name="Group_Defender" xml:space="preserve"><value>Defensa</value></data>
+  <data name="Group_Midfielder" xml:space="preserve"><value>Centrocampista</value></data>
+  <data name="Group_Forward" xml:space="preserve"><value>Delantero</value></data>
+  <data name="Attribute_ball_control" xml:space="preserve"><value>Control del balón</value></data>
+  <data name="Attribute_first_touch" xml:space="preserve"><value>Primer toque</value></data>
+  <data name="Attribute_technique" xml:space="preserve"><value>Técnica</value></data>
+  <data name="Attribute_dribbling" xml:space="preserve"><value>Regate</value></data>
+  <data name="Attribute_short_passing" xml:space="preserve"><value>Pase corto</value></data>
+  <data name="Attribute_long_passing" xml:space="preserve"><value>Pase largo</value></data>
+  <data name="Attribute_crossing" xml:space="preserve"><value>Centros</value></data>
+  <data name="Attribute_finishing" xml:space="preserve"><value>Remate</value></data>
+  <data name="Attribute_long_shots" xml:space="preserve"><value>Disparo lejano</value></data>
+  <data name="Attribute_shot_power" xml:space="preserve"><value>Potencia de disparo</value></data>
+  <data name="Attribute_heading" xml:space="preserve"><value>Cabeceo</value></data>
+  <data name="Attribute_tackling" xml:space="preserve"><value>Entradas</value></data>
+  <data name="Attribute_marking" xml:space="preserve"><value>Marcaje</value></data>
+  <data name="Attribute_penalties" xml:space="preserve"><value>Penaltis</value></data>
+  <data name="Attribute_free_kicks" xml:space="preserve"><value>Faltas</value></data>
+  <data name="Attribute_corners" xml:space="preserve"><value>Córneres</value></data>
+  <data name="Attribute_throw_ins" xml:space="preserve"><value>Saques de banda</value></data>
+  <data name="Attribute_anticipation" xml:space="preserve"><value>Anticipación</value></data>
+  <data name="Attribute_concentration" xml:space="preserve"><value>Concentración</value></data>
+  <data name="Attribute_decisions" xml:space="preserve"><value>Decisiones</value></data>
+  <data name="Attribute_vision" xml:space="preserve"><value>Visión de juego</value></data>
+  <data name="Attribute_defensive_positioning" xml:space="preserve"><value>Colocación defensiva</value></data>
+  <data name="Attribute_off_the_ball" xml:space="preserve"><value>Desmarques</value></data>
+  <data name="Attribute_teamwork" xml:space="preserve"><value>Trabajo en equipo</value></data>
+  <data name="Attribute_work_rate" xml:space="preserve"><value>Esfuerzo</value></data>
+  <data name="Attribute_determination" xml:space="preserve"><value>Determinación</value></data>
+  <data name="Attribute_composure" xml:space="preserve"><value>Serenidad</value></data>
+  <data name="Attribute_bravery" xml:space="preserve"><value>Valentía</value></data>
+  <data name="Attribute_aggression" xml:space="preserve"><value>Agresividad</value></data>
+  <data name="Attribute_leadership" xml:space="preserve"><value>Liderazgo</value></data>
+  <data name="Attribute_creativity" xml:space="preserve"><value>Talento / creatividad</value></data>
+  <data name="Attribute_tactical_discipline" xml:space="preserve"><value>Disciplina táctica</value></data>
+  <data name="Attribute_tactical_understanding" xml:space="preserve"><value>Comprensión táctica</value></data>
+  <data name="Attribute_pace" xml:space="preserve"><value>Velocidad</value></data>
+  <data name="Attribute_acceleration" xml:space="preserve"><value>Aceleración</value></data>
+  <data name="Attribute_stamina" xml:space="preserve"><value>Resistencia</value></data>
+  <data name="Attribute_strength" xml:space="preserve"><value>Fuerza</value></data>
+  <data name="Attribute_agility" xml:space="preserve"><value>Agilidad</value></data>
+  <data name="Attribute_balance" xml:space="preserve"><value>Equilibrio</value></data>
+  <data name="Attribute_jumping" xml:space="preserve"><value>Salto</value></data>
+  <data name="Attribute_coordination" xml:space="preserve"><value>Coordinación</value></data>
+  <data name="Attribute_reflexes" xml:space="preserve"><value>Reflejos</value></data>
+  <data name="Attribute_handling" xml:space="preserve"><value>Blocaje</value></data>
+  <data name="Attribute_punching" xml:space="preserve"><value>Despejes</value></data>
+  <data name="Attribute_one_on_ones" xml:space="preserve"><value>Uno contra uno</value></data>
+  <data name="Attribute_aerial_claims" xml:space="preserve"><value>Salidas aéreas</value></data>
+  <data name="Attribute_rushing_out" xml:space="preserve"><value>Salidas a los pies</value></data>
+  <data name="Attribute_goalkeeping_positioning" xml:space="preserve"><value>Colocación en portería</value></data>
+  <data name="Attribute_command_of_area" xml:space="preserve"><value>Mando del área</value></data>
+  <data name="Attribute_hand_distribution" xml:space="preserve"><value>Saque con la mano</value></data>
+  <data name="Attribute_defensive_communication" xml:space="preserve"><value>Comunicación defensiva</value></data>
+  <data name="Back" xml:space="preserve"><value>Volver</value></data>
+  <data name="QueryErrorTitle" xml:space="preserve"><value>No se ha podido completar la consulta</value></data>
+  <data name="ClubsErrorDescription" xml:space="preserve"><value>No se puede recuperar el listado de clubes. Vuelve al inicio y reintenta la carga del catálogo.</value></data>
+  <data name="SquadErrorDescription" xml:space="preserve"><value>No se encuentra el club solicitado o no se puede recuperar su plantilla. Vuelve al listado de clubes y selecciona uno de nuevo.</value></data>
+  <data name="PlayerErrorDescription" xml:space="preserve"><value>No se encuentra el futbolista solicitado o su ficha de atributos está incompleta. Vuelve a la plantilla y selecciona un futbolista de nuevo.</value></data>
+  <data name="PlayerAttributesTab" xml:space="preserve"><value>Atributos</value></data>
+  <data name="PlayerPrimaryLine" xml:space="preserve"><value>Posición: {0}</value></data>
+  <data name="PlayerSecondaryLine" xml:space="preserve"><value>Secundarias: {0}</value></data>
+  <data name="PlayerNationalityAge" xml:space="preserve"><value>{0} · {1} años</value></data>
+  <data name="PlayerBirthLine" xml:space="preserve"><value>Nacimiento: {0}</value></data>
+  <data name="PortraitPlaceholder" xml:space="preserve"><value>Avatar provisional del futbolista</value></data>
+  <data name="PortraitIndividual" xml:space="preserve"><value>Retrato del futbolista</value></data>
+  <data name="PortraitUnavailable" xml:space="preserve"><value>Retrato no disponible</value></data>
+  <data name="PitchHeading" xml:space="preserve"><value>Posiciones</value></data>
+  <data name="PitchLegendPrimary" xml:space="preserve"><value>● Principal</value></data>
+  <data name="PitchLegendSecondary" xml:space="preserve"><value>● Secundarias</value></data>
+  <data name="PitchAttackDirection" xml:space="preserve"><value>Ataque →</value></data>
+  <data name="PitchUnknownPosition" xml:space="preserve"><value>Sin posición detallada registrada</value></data>
+  <data name="InsightsHeading" xml:space="preserve"><value>Fortalezas y debilidades</value></data>
+  <data name="StrengthsHeading" xml:space="preserve"><value>Fortalezas</value></data>
+  <data name="WeaknessesHeading" xml:space="preserve"><value>Debilidades</value></data>
+  <data name="NoStrengths" xml:space="preserve"><value>Sin fortalezas destacadas entre los atributos relevantes.</value></data>
+  <data name="NoWeaknesses" xml:space="preserve"><value>Sin carencias destacadas entre los atributos relevantes.</value></data>
+  <data name="PitchCode_Goalkeeper" xml:space="preserve"><value>POR</value></data>
+  <data name="PitchCode_CentreBack" xml:space="preserve"><value>DFC</value></data>
+  <data name="PitchCode_RightBack" xml:space="preserve"><value>LD</value></data>
+  <data name="PitchCode_LeftBack" xml:space="preserve"><value>LI</value></data>
+  <data name="PitchCode_DefensiveMidfielder" xml:space="preserve"><value>MCD</value></data>
+  <data name="PitchCode_CentralMidfielder" xml:space="preserve"><value>MC</value></data>
+  <data name="PitchCode_AttackingMidfielder" xml:space="preserve"><value>MP</value></data>
+  <data name="PitchCode_RightMidfielder" xml:space="preserve"><value>MD</value></data>
+  <data name="PitchCode_LeftMidfielder" xml:space="preserve"><value>MI</value></data>
+  <data name="PitchCode_Striker" xml:space="preserve"><value>DC</value></data>
+  <data name="PitchCode_RightWinger" xml:space="preserve"><value>ED</value></data>
+  <data name="PitchCode_LeftWinger" xml:space="preserve"><value>EI</value></data>
+  <data name="PitchCode_SecondStriker" xml:space="preserve"><value>SD</value></data>
+  <data name="ViewClub" xml:space="preserve"><value>Ver club</value></data>
+  <data name="ClubSection" xml:space="preserve"><value>Ficha de club</value></data>
+  <data name="ClubInformationTab" xml:space="preserve"><value>Información</value></data>
+  <data name="ClubSquadTab" xml:space="preserve"><value>Plantilla</value></data>
+  <data name="ClubHistoryTab" xml:space="preserve"><value>Historia</value></data>
+  <data name="ClubEconomyTab" xml:space="preserve"><value>Economía</value></data>
+  <data name="PendingDefinition" xml:space="preserve"><value>Pendiente de definir</value></data>
+  <data name="NotAvailable" xml:space="preserve"><value>No disponible</value></data>
+  <data name="ClubEmblemPlaceholder" xml:space="preserve"><value>Emblema provisional de Furvo</value></data>
+  <data name="ClubEmblemLetter" xml:space="preserve"><value>F</value></data>
+  <data name="ClubLocationFormat" xml:space="preserve"><value>{0} · {1} · {2}</value></data>
+  <data name="ClubCompetitionFormat" xml:space="preserve"><value>{0} · Reputación {1}/5</value></data>
+  <data name="ClubColorsFormat" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="ClubInstitution" xml:space="preserve"><value>Identidad institucional</value></data>
+  <data name="ClubFoundationYear" xml:space="preserve"><value>Fundación</value></data>
+  <data name="ClubNickname" xml:space="preserve"><value>Apodo</value></data>
+  <data name="ClubSupporters" xml:space="preserve"><value>Afición</value></data>
+  <data name="ClubColors" xml:space="preserve"><value>Colores oficiales</value></data>
+  <data name="ClubRivalries" xml:space="preserve"><value>Rivalidades históricas</value></data>
+  <data name="ClubSubscribers" xml:space="preserve"><value>Abonados</value></data>
+  <data name="ClubTradition" xml:space="preserve"><value>Perfil y tradición</value></data>
+  <data name="ClubStadium" xml:space="preserve"><value>Estadio</value></data>
+  <data name="StadiumName" xml:space="preserve"><value>Nombre</value></data>
+  <data name="StadiumCity" xml:space="preserve"><value>Ciudad del estadio</value></data>
+  <data name="StadiumCapacity" xml:space="preserve"><value>Capacidad</value></data>
+  <data name="StadiumAverageAttendance" xml:space="preserve"><value>Asistencia media</value></data>
+  <data name="StadiumRecordAttendance" xml:space="preserve"><value>Récord de asistencia</value></data>
+  <data name="StadiumOccupancy" xml:space="preserve"><value>Ocupación (%)</value></data>
+  <data name="StadiumPlaceholder" xml:space="preserve"><value>Imagen provisional del estadio</value></data>
+  <data name="HistoryPendingNotice" xml:space="preserve"><value>Historia pendiente de revisión y aprobación. No hay resultados históricos publicados para este club.</value></data>
+  <data name="HistoryTrajectory" xml:space="preserve"><value>Trayectoria deportiva</value></data>
+  <data name="HistoryFirstSeasons" xml:space="preserve"><value>Temporadas en Primera</value></data>
+  <data name="HistorySecondSeasons" xml:space="preserve"><value>Temporadas en Segunda</value></data>
+  <data name="HistoryBest" xml:space="preserve"><value>Mejor puesto en Primera</value></data>
+  <data name="HistoryWorst" xml:space="preserve"><value>Peor puesto en Primera</value></data>
+  <data name="HistoryAllTime" xml:space="preserve"><value>Clasificación histórica acumulada</value></data>
+  <data name="HistoryPromotions" xml:space="preserve"><value>Ascensos a Primera</value></data>
+  <data name="HistoryRelegations" xml:space="preserve"><value>Descensos a Segunda</value></data>
+  <data name="HistoryLastPromotion" xml:space="preserve"><value>Último ascenso</value></data>
+  <data name="HistoryLastRelegation" xml:space="preserve"><value>Último descenso</value></data>
+  <data name="HistoryPositionSeason" xml:space="preserve"><value>{0}.º · {1}</value></data>
+  <data name="HistoryRankingCriterion" xml:space="preserve"><value>Criterio previsto: puntos acumulados en Primera (3 por victoria y 1 por empate); no se calcula a partir de la reputación.</value></data>
+  <data name="HistoryStandings" xml:space="preserve"><value>Historial de clasificaciones</value></data>
+  <data name="HistorySeason" xml:space="preserve"><value>Temporada</value></data>
+  <data name="HistoryDivision" xml:space="preserve"><value>División</value></data>
+  <data name="HistoryPosition" xml:space="preserve"><value>Posición final</value></data>
+  <data name="HistoryFirstDivision" xml:space="preserve"><value>Primera</value></data>
+  <data name="HistorySecondDivision" xml:space="preserve"><value>Segunda</value></data>
+  <data name="HistoryNoResults" xml:space="preserve"><value>Sin clasificaciones históricas aprobadas</value></data>
+  <data name="HistoryEvolution" xml:space="preserve"><value>Evolución histórica</value></data>
+  <data name="HistoryChartLegend" xml:space="preserve"><value>Naranja: Primera · Azul: Segunda · ↑ Ascenso · ↓ Descenso · Los períodos sin datos no se representan como resultados.</value></data>
+  <data name="ChartFirstTop" xml:space="preserve"><value>1ª · 1</value></data>
+  <data name="ChartFirstBottom" xml:space="preserve"><value>1ª · 20</value></data>
+  <data name="ChartSecondTop" xml:space="preserve"><value>2ª · 1</value></data>
+  <data name="ChartSecondBottom" xml:space="preserve"><value>2ª · 20</value></data>
+  <data name="ChartPointSymbol" xml:space="preserve"><value>●</value></data>
+  <data name="ChartPromotionSymbol" xml:space="preserve"><value>↑</value></data>
+  <data name="ChartRelegationSymbol" xml:space="preserve"><value>↓</value></data>
+  <data name="HistoryPromotion" xml:space="preserve"><value>Ascenso</value></data>
+  <data name="HistoryRelegation" xml:space="preserve"><value>Descenso</value></data>
+  <data name="HistoryPointTooltip" xml:space="preserve"><value>{0} · División {1} · Puesto {2} · {3}</value></data>
+  <data name="HistoryOrigin_AuthoredBefore2026" xml:space="preserve"><value>Historia editorial aprobada</value></data>
+  <data name="HistoryOrigin_SimulatedSave" xml:space="preserve"><value>Historia generada en la partida</value></data>
+  <data name="HistoryHonours" xml:space="preserve"><value>Palmarés</value></data>
+  <data name="HistoryHonourFormat" xml:space="preserve"><value>{0} · {1} títulos · {2}</value></data>
+  <data name="HistoryLegends" xml:space="preserve"><value>Leyendas y récords</value></data>
+  <data name="HistoryPlayers" xml:space="preserve"><value>Jugadores históricos</value></data>
+  <data name="HistoryCoaches" xml:space="preserve"><value>Entrenadores históricos</value></data>
+  <data name="HistoryTopScorer" xml:space="preserve"><value>Máximo goleador histórico</value></data>
+  <data name="HistoryMostAppearances" xml:space="preserve"><value>Jugador con más partidos</value></data>
+  <data name="HistoryCoachAppearances" xml:space="preserve"><value>Entrenador con más encuentros</value></data>
+  <data name="HistoryRecords" xml:space="preserve"><value>Récords deportivos</value></data>
+  <data name="EconomyPending" xml:space="preserve"><value>Sistema económico pendiente de implementación. No hay cifras económicas disponibles.</value></data>
+  <data name="EconomyBudgets" xml:space="preserve"><value>Tesorería y presupuestos</value></data>
+  <data name="EconomyAccounts" xml:space="preserve"><value>Ingresos, gastos y obligaciones</value></data>
+  <data name="EconomyCash" xml:space="preserve"><value>Saldo (tesorería)</value></data>
+  <data name="EconomyTransferBudget" xml:space="preserve"><value>Presupuesto de fichajes</value></data>
+  <data name="EconomyWageBudget" xml:space="preserve"><value>Presupuesto salarial</value></data>
+  <data name="EconomyCommittedWages" xml:space="preserve"><value>Salarios comprometidos</value></data>
+  <data name="EconomyIncome" xml:space="preserve"><value>Ingresos</value></data>
+  <data name="EconomyExpenses" xml:space="preserve"><value>Gastos</value></data>
+  <data name="EconomyBalance" xml:space="preserve"><value>Balance económico</value></data>
+  <data name="EconomyDebt" xml:space="preserve"><value>Deuda</value></data>
+  <data name="EconomySituation" xml:space="preserve"><value>Situación financiera</value></data>
+  <data name="EconomyDefinitions" xml:space="preserve"><value>Tesorería: dinero disponible. Presupuesto: límites planificados. Balance: ingresos menos gastos del período. Son conceptos distintos; todavía no hay importes calculados.</value></data>
+  <data name="ClubDetailsError" xml:space="preserve"><value>No se puede recuperar la ficha del club. Vuelve al listado y selecciona un club de nuevo.</value></data>
+</root>

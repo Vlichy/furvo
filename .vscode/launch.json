@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Furvo (Godot .NET)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Compilar solución",
+      "program": "${env:GODOT4}",
+      "args": [
+        "--path",
+        "${workspaceFolder}/src/Furvo.Godot"
+      ],
+      "cwd": "${workspaceFolder}/src/Furvo.Godot",
+      "stopAtEntry": false
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "Date": "2026-10-27",
+  "Sdk": "10.0.402",
+  "Godot": "4.7.2.stable.mono.official.ed1daf0bf",
+  "Builds": {
+    "Debug": {
+      "Command": "dotnet build Furvo.sln",
+      "Errors": 0,
+      "Warnings": 0
+    },
+    "Release": {
+      "Command": "dotnet build Furvo.sln -c Release --no-restore",
+      "Errors": 0,
+      "Warnings": 0
+    }
+  },
+  "Tests": {
+    "Command": "dotnet test Furvo.sln",
+    "Passed": 90,
+    "Failed": 0,
+    "Skipped": 0,
+    "PreviousCasesRetained": 74
+  },
+  "NuGetAudit": "NoKnownVulnerabilitiesDetected",
+  "Schema": 4,
+  "NewMigrations": 0,
+  "ProtectedHashes": {
+    "data/initial-world-2026-27.db": "d4949e610ba88f4f80864c9a4637412063e411a61a9f6068e9902f9d176a2a0e",
+    "data/initial-world-2026-27.v2.db": "d1c9a4905a49e1ea36c383d460f07739c34e4ee785699f84533c1b797a45c597",
+    "data/initial-world-2026-27.v3.db": "4666ae27c4804abc130f6d13fce9b7cfc57cf8b96844309886b3b263a859991a",
+    "src/Furvo.Persistence/Migrations/001_Initial.sql": "4f9af9defbbf00852d165e53d02c1bfa7bb6d0a037e3d44bad4c32eade026e12",
+    "src/Furvo.Persistence/Migrations/002_World.sql": "f600fad91df93da810db4e60a5159cacdee4c34816aa41eabfc840a55d229b92",
+    "src/Furvo.Persistence/Migrations/003_ClubUniverseAndScales.sql": "7d25be5cb83dd1570fbd44945204aeba7f1410d510e475dfc646d48334460b5a",
+    "src/Furvo.Persistence/Migrations/004_PlayerPositionsAndGeneration.sql": "cb53640921c0123bbb35f23f06af9f473fc134ad39a64fd3d3578194becc129e"
+  },
+  "ProtectedFilesUnchanged": true,
+  "Visual": {
+    "UserConfirmed": [
+      "Inicio",
+      "Clubes",
+      "Plantilla de Mosaico"
+    ],
+    "AgentObserved": [
+      "Clubes",
+      "Plantilla de Mosaico",
+      "Selección real habilita botón",
+      "Ficha de Asier Villabrisa Valcárcel"
+    ],
+    "AfterLatestScrollAdjustment": "NotVisuallyRechecked",
+    "FullRoundTrip": "Pending",
+    "OtherResolutions": "Pending",
+    "StoppedByUser": true,
+    "HeadlessSmoke": "NotExecuted_RequestRejected",
+    "WindowsExport": "NotTested"
+  },
+  "RealUserSavesOpened": false,
+  "NewDependencies": []
+}

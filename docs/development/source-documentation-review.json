@@ -1,0 +1,187 @@
+{
+  "Purpose": "Revisión de documentación: comparar código sin comentarios ni espacios fuera de literales, conservando los literales íntegros.",
+  "FilesChecked": 30,
+  "AllowedChanges": "Solo selección del recurso v2, destino predeterminado v2 y expectativa de WorldId en una prueba; sin cambios de firmas ni lógica por documentar.",
+  "Checks": [
+    {
+      "File": "src/Furvo.Core/Domain/ClubId.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "a9ba74bf005ade7995aeeedc38298cc762cec436c5a430cb7dd6cd13eb587e83"
+    },
+    {
+      "File": "src/Furvo.Core/Domain/ClubProfile.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "d50182525961e2be64eff0f46ad7ef93c90966b4d8c4dffcd627f008bcfd1f71"
+    },
+    {
+      "File": "src/Furvo.Core/Domain/CoachId.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "66f9ac1bba55dd7588f3a670b09455d2a2c390f1a1062d09fe8cdf8c9759961a"
+    },
+    {
+      "File": "src/Furvo.Core/Domain/CompetitionId.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "e92ffd4b265aba4e77eecdd269b1e3465401e61fab0839cb134554f1f16813b3"
+    },
+    {
+      "File": "src/Furvo.Core/Domain/ContractId.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "765a2fe415355e265451b4c285e0a1a1b812c5815c052e26918f8d7aab7b61a6"
+    },
+    {
+      "File": "src/Furvo.Core/Domain/DomainRules.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "e68b4ee8a0e3d3beac9a91d12747d28181c96c9717a724f6c27c1308e46c306d"
+    },
+    {
+      "File": "src/Furvo.Core/Domain/Entities.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "226034e7a6e7cfc76980171ce9d85d1b80e4ed13e365eda814384be6b398ac93"
+    },
+    {
+      "File": "src/Furvo.Core/Domain/PlayerAttributes.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "0ece241c6fe9051bc1586fe6cfca61201fabf93776102ab4af7e1d87a13103eb"
+    },
+    {
+      "File": "src/Furvo.Core/Domain/PlayerId.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "39e0493f3aca3b474e8993eaea86c3e0d7bb5dbe7322b0281c3295b83babe69d"
+    },
+    {
+      "File": "src/Furvo.Core/Domain/SaveId.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "c4d55ffec1fe63af73f7238b5b03a18f7dcbb535fd6848bcb32832b91f5083ea"
+    },
+    {
+      "File": "src/Furvo.Core/Domain/SeasonId.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "a4f204793a60b345fa7a5cc8e39e590d5012e9c109549fe4f22b960f141eab46"
+    },
+    {
+      "File": "src/Furvo.Core/Domain/WorldId.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "a1847815bca52945ce804e3703d98a5d4fffdd9debcdec43b7b73f919610579c"
+    },
+    {
+      "File": "src/Furvo.Core/Saves/ISaveStore.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "c869ce207328d5abcefdd9b0c6435c44676d06d91a1ee71aa937ef1e8edc3f94"
+    },
+    {
+      "File": "src/Furvo.Core/Worlds/IWorldStore.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "325933bfc94f14a91755c3dad6a41a570bfef4926176ebce3bd0e8472fd89ffd"
+    },
+    {
+      "File": "src/Furvo.Godot/Scripts/Main.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "fafb0c2f007e60cb6ba33ff527a9854240448e3b2f9f1027b3f0d1a564db0828"
+    },
+    {
+      "File": "src/Furvo.Persistence/InitialWorld2026.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": true,
+      "ExecutableSha256": "2069b9b84bda95a4af1af2e964c207a31eb9d966b3accfe4d43458610d6979fc"
+    },
+    {
+      "File": "src/Furvo.Persistence/Migrations/001_Initial.sql",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "57f1ae9a58a94db366fb24bd643a5e30246ee7cc5e8fde6cd1a8a85ab6df9e79"
+    },
+    {
+      "File": "src/Furvo.Persistence/Migrations/002_World.sql",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "9fd136eb77c2fbee785cc4c746f98d46bd833eab4bb3893058d513e2a3ec20ab"
+    },
+    {
+      "File": "src/Furvo.Persistence/Migrations/003_ClubUniverseAndScales.sql",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "df282edd6024bb30f8a2cf7b0e6e0fd3e282aeea96dad462ac91d5ec0b940c64"
+    },
+    {
+      "File": "src/Furvo.Persistence/SchemaCompatibilityException.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "bd44d2339e9d0cd82ab68dd19a3f7bc5104150843dcf937af691b2207dda8b66"
+    },
+    {
+      "File": "src/Furvo.Persistence/SqliteSaveStore.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "cdb03b1b3be7e6a154f9f30865274c0b04b05e3ac9eeccf2f784f12c88c17e8a"
+    },
+    {
+      "File": "src/Furvo.Persistence/SqliteWorldFiles.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "215738a4aff26c32b8d55ad15c4088a4169156a2ab947560791a9e91ddfeb859"
+    },
+    {
+      "File": "src/Furvo.Persistence/SqliteWorldStore.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "9dca596eb3b3bd236c0061a3c9de52544138b9bc761097dc37e54369718b9395"
+    },
+    {
+      "File": "src/Furvo.Persistence/WorldDatabase.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "81e01c2e430809d9cbdd885b991293825b4c0036a3f6017f78bceabd177858a7"
+    },
+    {
+      "File": "tests/Furvo.Tests/ClubUniverseTests.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": true,
+      "ExecutableSha256": "302691a8e09a24ca99486d73d1b101704e4864c27483d24339d378b3584753f4"
+    },
+    {
+      "File": "tests/Furvo.Tests/PlayerAttributeTests.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "439da0c2d869cc13cfc33a6e26e6a690cf1d0d913b5cb3afaab9c501d721ccae"
+    },
+    {
+      "File": "tests/Furvo.Tests/SaveStoreTests.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "cad751a1630d12c2b8148168ddaabd045ffe323f1ed11be85da33655ee84fd17"
+    },
+    {
+      "File": "tests/Furvo.Tests/ScaleMigrationTests.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "d3da8dd415dbe8927f61983f3fc50881f9e3db3699caaf5be9bd8c03f0d7af8e"
+    },
+    {
+      "File": "tests/Furvo.Tests/WorldStoreTests.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": false,
+      "ExecutableSha256": "10911a8003e5b03149dba7ec27a4e54888b643df6745d974084125d035fb2d43"
+    },
+    {
+      "File": "tools/BuildInitialWorld.cs",
+      "CodeMatches": true,
+      "IntentionalDataSelectionChange": true,
+      "ExecutableSha256": "45cbca29d1c1aaa96a746cd1c13e0bb72f00c814f3f500bc6def841af6d76886"
+    }
+  ]
+}
