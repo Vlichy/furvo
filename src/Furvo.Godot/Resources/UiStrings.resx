@@ -230,12 +230,12 @@
   <data name="EconomyTransferBudget" xml:space="preserve"><value>Presupuesto de fichajes</value></data>
   <data name="EconomyWageBudget" xml:space="preserve"><value>Presupuesto salarial</value></data>
   <data name="EconomyCommittedWages" xml:space="preserve"><value>Salarios comprometidos</value></data>
-  <data name="EconomyIncome" xml:space="preserve"><value>Ingresos</value></data>
-  <data name="EconomyExpenses" xml:space="preserve"><value>Gastos</value></data>
+  <data name="EconomyIncome" xml:space="preserve"><value>Ingresos previstos</value></data>
+  <data name="EconomyExpenses" xml:space="preserve"><value>Gastos previstos</value></data>
   <data name="EconomyBalance" xml:space="preserve"><value>Balance económico</value></data>
   <data name="EconomyDebt" xml:space="preserve"><value>Deuda total</value></data>
   <data name="EconomySituation" xml:space="preserve"><value>Situación financiera</value></data>
-  <data name="EconomyDefinitions" xml:space="preserve"><value>Abonos: ingresos monetarios, distintos del número de abonados. Tesorería y presupuestos son conceptos distintos. Los intereses devengados son gastos financieros; devolver el principal de una deuda no es un gasto de resultados. Compras y ventas deberán separar pagos/cobros de reconocimiento contable. No hay importes ni cálculos implementados.</value></data>
+  <data name="EconomyDefinitions" xml:space="preserve"><value>Abonos: ingresos monetarios, distintos del número de abonados. Tesorería y presupuestos son conceptos distintos. Los intereses devengados son gastos financieros; devolver el principal de una deuda no es un gasto de resultados. Compras y ventas deberán separar pagos/cobros de reconocimiento contable. Las previsiones aprobadas no son resultados cerrados ni movimientos realizados.</value></data>
   <data name="ClubDetailsError" xml:space="preserve"><value>No se puede recuperar la ficha del club. Vuelve al listado y selecciona un club de nuevo.</value></data>
   <data name="ClubKit0" xml:space="preserve"><value>Primera</value></data>
   <data name="ClubKit1" xml:space="preserve"><value>Segunda</value></data>
@@ -397,7 +397,7 @@
   <data name="OfferObjectiveConditions" xml:space="preserve"><value>{0} · Prioridad {1} · Hasta {2} · Carácter: {3}</value></data>
   <data name="MandatoryObjective" xml:space="preserve"><value>Obligatorio</value></data>
   <data name="AdvisoryObjective" xml:space="preserve"><value>Orientativo</value></data>
-  <data name="SignManagerContract" xml:space="preserve"><value>Firmar contrato</value></data>
+  <data name="SignManagerContract" xml:space="preserve"><value>Firmar contrato y comenzar carrera</value></data>
   <data name="RejectAndStartUnemployed" xml:space="preserve"><value>Rechazar y comenzar en paro</value></data>
   <data name="BackChooseClub" xml:space="preserve"><value>Volver a elegir club</value></data>
   <data name="CareerConfirmationTitle" xml:space="preserve"><value>Confirmación de inicio</value></data>
@@ -503,4 +503,125 @@
   <data name="OfferSalaryRuleMismatch" xml:space="preserve"><value>El salario no coincide con la regla inicial aprobada.</value></data>
   <data name="OfferSalaryBelowMinimum" xml:space="preserve"><value>El salario anual bruto debe superar el mínimo anual aplicable.</value></data>
   <data name="OfferSalaryCurrencyMismatch" xml:space="preserve"><value>La moneda salarial debe coincidir con la configurada para el país del club.</value></data>
+  <data name="Currency_EUR" xml:space="preserve"><value>EUR (€)</value></data>
+  <data name="EconomyApprovedNotice" xml:space="preserve"><value>Situación inicial aprobada 2026/27. Presupuestos y previsiones separados de los saldos. Los compromisos salariales de jugadores siguen sin datos.</value></data>
+  <data name="EconomicForecastNotice" xml:space="preserve"><value>Previsión anual de planificación; no representa cobros, pagos ni un resultado contable cerrado.</value></data>
+  <data name="EconomyForecastYouth" xml:space="preserve"><value>Desarrollo juvenil previsto</value></data>
+  <data name="EconomySportingOperations" xml:space="preserve"><value>Operaciones deportivas previstas</value></data>
+  <data name="CareerManagerCommitment" xml:space="preserve"><value>Coste anual comprometido del entrenador (incluido en personal)</value></data>
+  <data name="NavArea_Home" xml:space="preserve"><value>Inicio</value></data>
+  <data name="NavArea_Team" xml:space="preserve"><value>Equipo</value></data>
+  <data name="NavArea_Market" xml:space="preserve"><value>Mercado</value></data>
+  <data name="NavArea_Competition" xml:space="preserve"><value>Competición</value></data>
+  <data name="NavArea_Club" xml:space="preserve"><value>Club</value></data>
+  <data name="NavArea_Career" xml:space="preserve"><value>Carrera</value></data>
+  <data name="NavPage_Desktop" xml:space="preserve"><value>Escritorio</value></data>
+  <data name="NavPage_Inbox" xml:space="preserve"><value>Bandeja de entrada</value></data>
+  <data name="NavPage_OwnSquad" xml:space="preserve"><value>Plantilla</value></data>
+  <data name="NavPage_OwnInformation" xml:space="preserve"><value>Información y estadio</value></data>
+  <data name="NavPage_OwnEconomy" xml:space="preserve"><value>Economía</value></data>
+  <data name="NavPage_OwnHistory" xml:space="preserve"><value>Historia y récords</value></data>
+  <data name="NavPage_PublicClubs" xml:space="preserve"><value>Explorar clubes</value></data>
+  <data name="NavPage_Profile" xml:space="preserve"><value>Perfil del entrenador</value></data>
+  <data name="NavPage_Contract" xml:space="preserve"><value>Contrato</value></data>
+  <data name="NavInbox" xml:space="preserve"><value>Bandeja de entrada</value></data>
+  <data name="CareerHeaderInbox" xml:space="preserve"><value>Bandeja</value></data>
+  <data name="CareerContinue" xml:space="preserve"><value>Continuar</value></data>
+  <data name="CareerContinueUnavailable" xml:space="preserve"><value>Continuar no está disponible: falta el sistema validado de calendario y eventos. La fecha de la partida no cambia.</value></data>
+  <data name="CareerGameMenu" xml:space="preserve"><value>Menú de partida</value></data>
+  <data name="CareerMainMenu" xml:space="preserve"><value>Menú principal</value></data>
+  <data name="CareerNoTeam" xml:space="preserve"><value>Sin club: no hay plantilla propia que dirigir. Puedes consultar clubes y jugadores en Club.</value></data>
+  <data name="CareerFeatureUnavailable" xml:space="preserve"><value>Área prevista; todavía no hay funciones disponibles.</value></data>
+  <data name="CareerFreeCoach" xml:space="preserve"><value>Entrenador libre — Sin club</value></data>
+  <data name="CareerIdentity" xml:space="preserve"><value>Identidad deportiva</value></data>
+  <data name="CareerNextMatch" xml:space="preserve"><value>Próximo partido</value></data>
+  <data name="CareerNoCalendar" xml:space="preserve"><value>Sin próximo partido: todavía no existe un calendario de competición.</value></data>
+  <data name="CareerSportingSituation" xml:space="preserve"><value>Situación deportiva</value></data>
+  <data name="CareerNoStandings" xml:space="preserve"><value>Clasificación, puntos y partidos disputados aún no disponibles.</value></data>
+  <data name="CareerNoAgreedObjectives" xml:space="preserve"><value>Sin objetivos contractuales exigibles aceptados. Las propuestas institucionales no son obligaciones.</value></data>
+  <data name="CareerSquadCard" xml:space="preserve"><value>Plantilla</value></data>
+  <data name="CareerSquadCount" xml:space="preserve"><value>{0} futbolistas en la plantilla</value></data>
+  <data name="OpenCareerSquad" xml:space="preserve"><value>Consultar plantilla</value></data>
+  <data name="CareerEconomyCard" xml:space="preserve"><value>Economía del club</value></data>
+  <data name="OpenCareerEconomy" xml:space="preserve"><value>Consultar economía</value></data>
+  <data name="CareerInboxEmpty" xml:space="preserve"><value>No hay mensajes ni decisiones pendientes registrados. El sistema de comunicaciones aún no está disponible.</value></data>
+  <data name="CareerOffers" xml:space="preserve"><value>Ofertas de empleo</value></data>
+  <data name="CareerOffersEmpty" xml:space="preserve"><value>No hay ofertas de empleo registradas. El mercado de entrenadores aún no está disponible.</value></data>
+  <data name="CareerVacancies" xml:space="preserve"><value>Vacantes</value></data>
+  <data name="CareerVacanciesEmpty" xml:space="preserve"><value>No hay vacantes registradas. No se generan clubes interesados en esta entrega.</value></data>
+  <data name="CareerProfessionalHistory" xml:space="preserve"><value>Historial profesional</value></data>
+  <data name="CareerHistoryEmpty" xml:space="preserve"><value>El historial profesional detallado aún no está implementado. No se generan antecedentes de carrera.</value></data>
+  <data name="BrowseCareerClubs" xml:space="preserve"><value>Consultar clubes</value></data>
+  <data name="BackCareerDashboard" xml:space="preserve"><value>Volver al escritorio</value></data>
+  <data name="CareerWorkspaceError" xml:space="preserve"><value>No se ha podido abrir la sección de la carrera. Puedes volver al escritorio o al menú principal.</value></data>
+  <data name="SquadAssignment" xml:space="preserve"><value>Rol</value></data>
+  <data name="SquadPlayer" xml:space="preserve"><value>Jugador</value></data>
+  <data name="SquadQuality" xml:space="preserve"><value>Calidad</value></data>
+  <data name="SquadCondition" xml:space="preserve"><value>Condición</value></data>
+  <data name="SquadAttribute1" xml:space="preserve"><value>Atributo 1</value></data>
+  <data name="SquadAttribute2" xml:space="preserve"><value>Atributo 2</value></data>
+  <data name="SquadAttribute3" xml:space="preserve"><value>Atributo 3</value></data>
+  <data name="SquadAssignment_Starter" xml:space="preserve"><value>Titular</value></data>
+  <data name="SquadAssignment_Substitute" xml:space="preserve"><value>Suplente</value></data>
+  <data name="SquadAssignment_Reserve" xml:space="preserve"><value>Reserva</value></data>
+  <data name="SquadAssignment_Unassigned" xml:space="preserve"><value>Sin asignar</value></data>
+  <data name="CareerSquadHeading" xml:space="preserve"><value>{0} · {1} futbolistas · Temporada {2}</value></data>
+  <data name="CareerSquadError" xml:space="preserve"><value>No se ha podido consultar la plantilla o sus atributos visibles.</value></data>
+  <data name="CareerResume" xml:space="preserve"><value>Continuar partida</value></data>
+  <data name="GameSettings" xml:space="preserve"><value>Ajustes</value></data>
+  <data name="CareerSaveUnavailable" xml:space="preserve"><value>Guardar partida</value></data>
+  <data name="CareerLoadUnavailable" xml:space="preserve"><value>Cargar partida</value></data>
+  <data name="CareerPersistenceUnavailable" xml:space="preserve"><value>Este flujo todavía no está implementado. La carrera ya se conserva al confirmar su creación; no se simula un guardado.</value></data>
+  <data name="NavPage_NoClub" xml:space="preserve"><value>Sin club</value></data>
+  <data name="CareerNoClubManagement" xml:space="preserve"><value>No tienes un club bajo tu dirección. La futura contratación dependerá de ofertas y vacantes reales; no se puede elegir equipo desde una carrera activa.</value></data>
+  <data name="PositionCode_Goalkeeper" xml:space="preserve"><value>POR</value></data>
+  <data name="PositionCode_CentreBack" xml:space="preserve"><value>DFC</value></data>
+  <data name="PositionCode_RightBack" xml:space="preserve"><value>LD</value></data>
+  <data name="PositionCode_LeftBack" xml:space="preserve"><value>LI</value></data>
+  <data name="PositionCode_DefensiveMidfielder" xml:space="preserve"><value>MCD</value></data>
+  <data name="PositionCode_CentralMidfielder" xml:space="preserve"><value>MC</value></data>
+  <data name="PositionCode_AttackingMidfielder" xml:space="preserve"><value>MP</value></data>
+  <data name="PositionCode_RightMidfielder" xml:space="preserve"><value>MD</value></data>
+  <data name="PositionCode_LeftMidfielder" xml:space="preserve"><value>MI</value></data>
+  <data name="PositionCode_RightWinger" xml:space="preserve"><value>ED</value></data>
+  <data name="PositionCode_LeftWinger" xml:space="preserve"><value>EI</value></data>
+  <data name="PositionCode_Striker" xml:space="preserve"><value>DC</value></data>
+  <data name="PositionCode_SecondStriker" xml:space="preserve"><value>SD</value></data>
+  <data name="SquadPhysical" xml:space="preserve"><value>Estado físico</value></data>
+  <data name="SquadRhythm" xml:space="preserve"><value>Ritmo</value></data>
+  <data name="SquadMorale" xml:space="preserve"><value>Moral</value></data>
+  <data name="SquadForm" xml:space="preserve"><value>Forma (últimos 5)</value></data>
+  <data name="SquadPlayed" xml:space="preserve"><value>PJ</value></data>
+  <data name="SquadGoals" xml:space="preserve"><value>G</value></data>
+  <data name="SquadAssists" xml:space="preserve"><value>A</value></data>
+  <data name="SquadAverage" xml:space="preserve"><value>Media</value></data>
+  <data name="SquadDataNotice" xml:space="preserve"><value>Indicadores deportivos sin modelo aprobado: sin valoración. Roles leídos de la alineación guardada; carreras antiguas sin inicializar: sin asignar. PJ, G y A son cero solo en el estado inicial confirmado sin partidos.</value></data>
+  <data name="IndicatorNoData_Quality" xml:space="preserve"><value>Calidad sin valoración. No existe una fórmula aprobada; las cinco barras inactivas no representan calidad cero.</value></data>
+  <data name="IndicatorNoData_Physical" xml:space="preserve"><value>Estado físico sin datos. No se calcula desde Resistencia ni otros atributos permanentes.</value></data>
+  <data name="IndicatorNoData_Rhythm" xml:space="preserve"><value>Ritmo competitivo sin datos. No se ha generado un porcentaje inicial.</value></data>
+  <data name="IndicatorNoData_Morale" xml:space="preserve"><value>Moral sin datos. El círculo neutro no representa moral normal.</value></data>
+  <data name="IndicatorNoData_Form" xml:space="preserve"><value>No hay actuaciones registradas. Cada círculo corresponde a un partido jugado; un círculo inactivo no significa mal rendimiento.</value></data>
+  <data name="Morale_VeryHigh" xml:space="preserve"><value>Muy alta</value></data>
+  <data name="Morale_High" xml:space="preserve"><value>Feliz</value></data>
+  <data name="Morale_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Morale_Low" xml:space="preserve"><value>Baja</value></data>
+  <data name="Morale_VeryLow" xml:space="preserve"><value>Muy baja</value></data>
+  <data name="IndicatorAppearance" xml:space="preserve"><value>{0} · Nota registrada: {1}</value></data>
+  <data name="IndicatorPercentage" xml:space="preserve"><value>{0} %</value></data>
+  <data name="IndicatorSegments" xml:space="preserve"><value>{0} de 5 segmentos, según el dato recibido</value></data>
+  <data name="IndicatorNoDataShort" xml:space="preserve"><value>Sin datos</value></data>
+  <data name="NavPage_Lineup" xml:space="preserve"><value>Alineación</value></data>
+  <data name="LineupLegacyNotice" xml:space="preserve"><value>Esta carrera no tiene alineación guardada. Inicializar es una acción explícita y no modifica el mundo inicial ni contratos.</value></data>
+  <data name="InitializeLineup" xml:space="preserve"><value>Inicializar alineación</value></data>
+  <data name="LineupError" xml:space="preserve"><value>No se ha podido consultar o guardar la alineación.</value></data>
+  <data name="LineupSaved" xml:space="preserve"><value>Guardado · revisión {0}</value></data>
+  <data name="LineupCandidateOrder" xml:space="preserve"><value>Orden provisional por atributos visibles. No representa calidad oficial.</value></data>
+  <data name="LineupNatural" xml:space="preserve"><value>POSICIÓN NATURAL</value></data>
+  <data name="LineupSecondary" xml:space="preserve"><value>POSICIÓN SECUNDARIA</value></data>
+  <data name="LineupNoCandidates" xml:space="preserve"><value>Sin candidatos registrados para esta demarcación.</value></data>
+  <data name="LineupChooseSlot" xml:space="preserve"><value>Pasa el cursor o pulsa una posición. El clic fija la selección para elegir futbolista.</value></data>
+  <data name="LineupUnpin" xml:space="preserve"><value>Desfijar selección</value></data>
+  <data name="LineupChangeError" xml:space="preserve"><value>No se ha guardado el cambio. Vuelve a abrir la alineación e inténtalo de nuevo.</value></data>
+  <data name="LineupSwapError" xml:space="preserve"><value>Intercambio no válido: el otro titular no puede ocupar el puesto liberado. Elige otro candidato.</value></data>
+  <data name="LineupSummary" xml:space="preserve"><value>11 titulares · {0} suplentes · {1} reservas · {2} fuera de posición. Cada cambio se guarda automáticamente en esta carrera.</value></data>
 </root>

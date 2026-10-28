@@ -1,21 +1,22 @@
 using Godot;
-
 namespace Furvo.Presentation.Components;
-
-/// <summary>Menú de exploración único: Continuar oculta la ventana sin reconstruir el club ni la tabla.</summary>
-public partial class ExplorationMenu : Window
+/// <summary>Menú único de pausa. No existe un guardado pendiente: las pantallas actuales son consultas y la creación se confirma en SQLite.</summary>
+public partial class ExplorationMenu:Window
 {
-    public ExplorationMenu(Theme theme, Action home, Action options, Action exit)
+    private readonly bool _career;
+    public ExplorationMenu(Theme theme,Action home,Action options,Action exit,bool career=false)
     {
-        Name = "ExplorationMenu"; Title = UiText.Get("ExplorationMenuTitle");
-        var body = WindowUi.Body(this, theme);
-        body.AddChild(ClubUi.Text("ExplorationMenuHeading", Title, 22, "f1b96b"));
-        body.AddChild(WindowUi.Button("ContinueExploration", Hide));
-        body.AddChild(WindowUi.Button("ReturnMainMenu", () => { Hide(); home(); }));
-        body.AddChild(WindowUi.Button("Options", () => { Hide(); options(); }));
-        body.AddChild(WindowUi.Button("ExitGame", exit));
-        CloseRequested += Hide;
-        WindowInput += input => { if (WindowUi.IsEscape(input)) { SetInputAsHandled(); Hide(); } };
+        _career=career;Name="ExplorationMenu";Title=UiText.Get(career?"CareerGameMenu":"ExplorationMenuTitle");var body=WindowUi.Body(this,theme);
+        body.AddChild(ClubUi.Text("ExplorationMenuHeading",Title,22,"f1b96b"));
+        var resume=WindowUi.Button("ContinueExploration",Hide);if(career)resume.Text=UiText.Get("CareerResume");body.AddChild(resume);
+        if(career)
+        {
+            foreach(var key in new[]{"CareerSaveUnavailable","CareerLoadUnavailable"})
+                body.AddChild(new Button{Name=key,Text=UiText.Get(key),Disabled=true,TooltipText=UiText.Get("CareerPersistenceUnavailable"),CustomMinimumSize=new Vector2(0,44)});
+        }
+        var settings=WindowUi.Button("Options",()=>{Hide();options();});if(career)settings.Text=UiText.Get("GameSettings");body.AddChild(settings);
+        body.AddChild(WindowUi.Button("ReturnMainMenu",()=>{Hide();home();}));body.AddChild(WindowUi.Button("ExitGame",exit));
+        CloseRequested+=Hide;WindowInput+=input=>{if(WindowUi.IsEscape(input)){SetInputAsHandled();Hide();}};
     }
-    public void Open() => PopupCentered(new Vector2I(440, 290));
+    public void Open()=>PopupCentered(new Vector2I(480,_career?450:290));
 }

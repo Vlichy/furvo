@@ -16,7 +16,7 @@ public partial class ManagerOfferDocument:VBoxContainer
         ClubUi.Field(terms,"CoachFullName",profile.FullName);ClubUi.Field(terms,"OfferHiringClub",club.Club.Name);ClubUi.Field(terms,"OfferIncorporationSeason",season.Name);
         ClubUi.Field(terms,"OfferStart",Date(offer.Terms.StartDate));ClubUi.Field(terms,"OfferEnd",EndDateText(offer.Terms));
         ClubUi.Field(terms,"OfferAnnualSalary",offer.Terms.GrossAnnualSalary?.ToString("N2",CultureInfo.GetCultureInfo("es-ES")));
-        ClubUi.Field(terms,"OfferCurrency",offer.Terms.Currency);
+        ClubUi.Field(terms,"OfferCurrency",offer.Terms.Currency is {} code?CurrencyText(code):null);
         ClubUi.Field(terms,"OfferTermination",offer.Terms.TerminationKind==TerminationClauseKind.NoSpecificEconomicClause?UiText.Get("NoSpecificEconomicClause"):offer.Terms.TerminationKind==TerminationClauseKind.Defined?offer.Terms.TerminationConditions:null);
         var commitments=ClubUi.ResponsiveColumns(body);var philosophy=ClubUi.Card(commitments,"ClubPhilosophy");var objectives=ClubUi.Card(commitments,"ClubBoardExpectations");
         if(offer.Commitments.Approval!=CommitmentApproval.Approved)
@@ -57,6 +57,7 @@ public partial class ManagerOfferDocument:VBoxContainer
         }
     }
     public static string SigningIssueText(ManagerSigningIssue issue)=>string.IsNullOrWhiteSpace(issue.Subject)?UiText.Get(issue.Code):UiText.Format("OfferSigningIssueSubject",UiText.Get(issue.Code),issue.Subject);
+    public static string CurrencyText(string code)=>code=="EUR"?UiText.Get("Currency_EUR"):code;
     public static string? Money(decimal? amount,string? currency)=>amount.HasValue && currency is not null?amount.Value.ToString("N2",CultureInfo.GetCultureInfo("es-ES"))+" "+currency:null;
     public static string? EndDateText(ManagerEmploymentTerms terms)
     {

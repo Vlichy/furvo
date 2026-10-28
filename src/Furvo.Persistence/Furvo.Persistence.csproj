@@ -6,6 +6,7 @@
     <!-- Corrección de GHSA-2m69-gcr7-jv3q sin cambiar el proveedor administrado. -->
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.14" />
     <EmbeddedResource Include="Migrations/*.sql" />
+    <EmbeddedResource Include="Data/initial-economy-2026-27.v1.json" />
     <!-- Solo la publicación activa viaja con el juego; la v1 se conserva para revisión histórica. -->
     <EmbeddedResource Include="Data/initial-world-2026-27.v2.json" />
     <EmbeddedResource Include="Data/initial-squads-2026-27.json" />

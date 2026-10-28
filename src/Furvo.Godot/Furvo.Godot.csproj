@@ -9,6 +9,6 @@
     <ProjectReference Include="../Furvo.Core/Furvo.Core.csproj" />
     <ProjectReference Include="../Furvo.Persistence/Furvo.Persistence.csproj" />
     <!-- Empaqueta la publicación única existente; no duplica datos de dominio en código Godot. -->
-    <EmbeddedResource Include="../../data/initial-world-2026-27.v4.db" LogicalName="Furvo.World.Initial2026" />
+    <EmbeddedResource Include="../../data/initial-world-2026-27.v5.db" LogicalName="Furvo.World.Initial2026" />
   </ItemGroup>
 </Project>

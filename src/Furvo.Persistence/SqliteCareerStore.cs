@@ -50,6 +50,7 @@ public sealed class SqliteCareerStore : ICareerStore
                 if(employed)
                 {
                     var offer=request.Offer!.ForSignature();var terms=offer.Terms;
+                    SqliteEconomyStore.CommitManager(target,t,offer);
                     using var contract=WorldDatabase.Command(target,t,"INSERT INTO manager_contracts(id,career_singleton,coach_id,club_id,start_date,end_date,gross_annual_salary,currency,termination_kind,termination_conditions,offer_json) VALUES($id,1,$coach,$club,$start,$end,$salary,$currency,$termination_kind,$termination,$json);",
                         ("$id",request.ContractId!.Value.ToString()),("$coach",request.CoachId.ToString()),("$club",offer.ClubId.ToString()),
                         ("$start",Date(terms.StartDate!.Value)),("$end",Date(terms.EndDate!.Value)),("$termination_kind",(int)terms.TerminationKind),
@@ -63,6 +64,7 @@ public sealed class SqliteCareerStore : ICareerStore
                 using(var state=WorldDatabase.Command(target,t,"INSERT INTO career_state VALUES(1,$id,$coach,$season,$date,$mode,$employment,$club,$contract,$hash);",
                     ("$id",request.Id.ToString()),("$coach",request.CoachId.ToString()),("$season",season.Id.ToString()),("$date",Date(date)),("$mode",(int)request.Mode),
                     ("$employment",employed?2:1),("$club",employed?request.Offer!.ClubId.ToString():null),("$contract",request.ContractId?.ToString()),("$hash",hash)))state.ExecuteNonQuery();
+                SqliteLineupStore.Initialize(target,t,world,request.Id,employed?request.Offer!.ClubId:null,date);
                 using(var check=WorldDatabase.Command(target,t,"PRAGMA foreign_key_check;"))using(var rows=check.ExecuteReader())if(rows.Read())throw new InvalidDataException("Referencias incoherentes en la carrera.");
                 t.Commit();
             });
@@ -114,6 +116,15 @@ public sealed class SqliteCareerStore : ICareerStore
         }
         using(var declined=WorldDatabase.Command(c,t,"SELECT offer_json FROM declined_manager_offers WHERE career_singleton=1;"))if(declined.ExecuteScalar() is string json)rejected=CareerJson.Read<ManagerOffer>(json).Freeze();
         if((employment==CareerEmploymentState.Employed)!=(club is not null && contract is not null) || (employment==CareerEmploymentState.Unemployed && (club is not null || contract is not null)) || ((mode==2)!=(rejected is not null)))throw new InvalidDataException("Estado laboral incoherente.");
+        var economic=SqliteEconomyStore.ReadResources(c,t);
+        if(economic.Count>0)
+        {
+            if(economic.Count!=20 || economic.Any(e=>e.SeasonId!=season))throw new InvalidDataException("Estado económico incompleto.");
+            var committed=economic.Where(e=>e.ManagerCommittedAnnualCost is not null).ToArray();
+            if(contract is null ? committed.Length!=0 : committed.Length!=1 || committed[0].ClubId!=club ||
+               committed[0].ManagerCommittedAnnualCost!=contract.AcceptedOffer.Resources.EconomicPlan?.PlanningManagerEmployerCost)
+                throw new InvalidDataException("Compromiso económico incompatible con contrato.");
+        }
         return new CareerSummary(id,info.WorldId,season,date,new CareerCoach(coach,profile),employment,club,contract,rejected);
     }
     private static string Date(DateOnly date)=>date.ToString("yyyy-MM-dd",CultureInfo.InvariantCulture);

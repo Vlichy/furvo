@@ -1,3 +1,100 @@
+## Estado vigente — alineaciones y formaciones iniciales (28/10/2026)
+
+- Debug y Release: compilación de cuatro proyectos, 0 errores y 0 advertencias. Se utilizó MSBuild secuencial (-m:1); la invocación paralela devolvió fallo sin diagnóstico en este entorno.
+- Debug y Release: **273 pruebas superadas, 0 fallidas y 0 omitidas**. Incluyen las 265 anteriores y ocho nuevas pruebas: catálogo, 220 combinaciones de club/esquema, reproducibilidad con entrada reordenada, cambios y persistencia, aislamiento, ampliación explícita de carreras anteriores, veinte firmas y reaperturas, variación por semilla, exclusión de ocultos y rechazo de plantillas inválidas.
+- Godot 4.7.2 .NET con ventana y renderizado OpenGL: GodotUiSmoke.gd superado. Comprueba hover, clic fijado, candidatos naturales/secundarios, sustitución, cambio de formación, revisión persistida, coherencia 11 titulares/7 suplentes/6 reservas y navegación. Conserva el recorrido anterior de perfiles, oferta, paro y fichas de 51 atributos.
+- Capturas reales a 1280×720, 1600×900 y 1920×1080 en artifacts/career-visual/career-lineup-*.png y career-squad-*.png. Inspección de distribución, legibilidad, panel derecho y límites; cubre las capturas concretas, no una sesión manual exhaustiva de todos los clubes/formaciones.
+- SHA-256: **16 de 16 bases preexistentes idénticas**, incluidas cinco publicaciones iniciales, carreras, perfiles y catálogos de usuario. No se crea publicación del mundo. Las pruebas de interfaz usan almacenamiento aislado en artifacts.
+- Extensión versionada Lineups001_Initial.sql solo en carreras nuevas o por inicialización explícita. Ninguna migración ni generación al cargar o abrir carreras antiguas.
+- Calidad, condición, ritmo y moral siguen sin valores ficticios. Criterio de selección provisional no visible como calidad oficial.
+
+Véanse [reglas, persistencia e inventario](LINEUPS.md) y [tabla editorial de los veinte clubes](INITIAL_FORMATIONS.md). Los estados anteriores sobre roles sin asignar y ausencia de alineaciones quedan como historial; no describen carreras nuevas.
+
+Comprobación local en PowerShell desde la raíz:
+
+```powershell
+dotnet build Furvo.sln -m:1
+dotnet test Furvo.sln --no-build -m:1
+dotnet build Furvo.sln -c Release -m:1
+dotnet test Furvo.sln -c Release --no-build -m:1
+```
+
+Abrir src/Furvo.Godot/project.godot y pulsar F6/F5 según escena/proyecto. Crear una carrera de prueba con club → Equipo → Plantilla / Alineación. Comprobar puestos, hover/clic, elección, intercambio compatible/rechazado, cambio de esquema y regreso a Plantilla. Revisar también teclado, nombres largos y escenarios de disco inaccesible; estos últimos no se han inspeccionado manualmente. No se habilita un flujo general nuevo de cargar partidas.
+
+## Estado vigente — plantilla de seguimiento e Inicio simplificado (28/10/2026)
+
+Equipo > Plantilla tiene doce columnas: Rol, Posición, Jugador, Calidad, Estado físico, Ritmo, Moral, Forma (últimos 5), PJ, G, A y Media. Indicadores reutilizables sin valoraciones inventadas; los atributos individuales siguen en la ficha. En el estado inicial confirmado sin partidos: PJ/G/A=0, Media — y cinco círculos de forma inactivos. Calidad, condición, ritmo y moral continúan sin datos. La distribución inicial de roles está aprobada pero pendiente de reglas y persistencia: se mantiene Sin asignar. Inicio abre directamente el escritorio; Bandeja se abre desde la cabecera y tiene regreso al escritorio, sin submenú redundante.
+
+[Componentes, contratos de datos, archivos, validación y dependencias](SQUAD_INDICATORS.md). Debug/Release: 265 pruebas superadas y compilaciones sin errores ni advertencias. Recorrido Godot y salida en pantalla completa superados; capturas revisadas a tres resoluciones. No hay cambios SQLite. Los apartados anteriores sobre ocho columnas y submenú de Inicio quedan como historial y son sustituidos por este estado.
+
+## Resultados ejecutados — 28/10/2026
+
+- Compilaciones Debug y Release: cuatro proyectos, 0 errores y 0 advertencias.
+- .NET Debug y Release: 265 superadas, 0 fallidas y 0 omitidas por configuración (249 anteriores y 16 casos nuevos). Se prueban rangos de cinco segmentos/porcentajes, datos desconocidos, ceros iniciales confirmados, cinco actuaciones cronológicas, exclusión de no participantes, notas no agregadas y ordenación sin mutar filas.
+- GodotUiSmoke.gd con renderizado real: recorrido completo superado, FURVO_WORKSPACE_OK para contratado/en paro, FURVO_CAREER_UI_OK y FURVO_UI_SMOKE_OK. Comprueba Inicio sin submenú, Bandeja y regreso, 24 jugadores, doce columnas, metadatos de cinco segmentos/círculos, estadísticas iniciales, media desconocida, ordenación/selección por ID y fichas de 51 atributos públicos.
+- Revisión visual de capturas renderizadas de la tabla a 1280×720, 1600×900 y 1920×1080 y del escritorio sin submenú. Sin columnas ocultas ni scroll horizontal observado en esas resoluciones; barras/círculos sin datos y textos legibles. Se corrigió la superposición del texto nativo en las celdas gráficas y se conservaron sus descripciones para tecnologías de asistencia. Esta revisión cubre las capturas concretas, no una campaña de interacción manual con todos los clubes.
+- GodotApplicationSmoke.gd: salida 0 en pantalla completa real, escritorio, seis áreas, Esc y salida del juego.
+- SHA-256: 15 bases preexistentes idénticas, incluidas las cinco publicaciones del mundo. Sin migraciones ni publicación nueva.
+- No se simulan valores para colorear la pantalla: en las capturas de partida los indicadores pendientes están inactivos. Los ejemplos de pruebas unitarias no se importan a las carreras.
+
+Capturas: artifacts/career-visual/career-squad-1280x720.png (variantes 1600x900/1920x1080) y career-employed-1280x720.png. Artefactos ignorados por Git y reproducibles con el guion --capture.
+
+## Corrección vigente — menú, Club propio y plantilla deportiva (28/10/2026)
+
+La cabecera de carrera tiene solo Menú de partida como acceso al menú; Guardar/Cargar siguen deshabilitados. Club abre el empleador contratado y en paro muestra Sin club, sin selector público ni Elegir club. Equipo > Plantilla es una pantalla independiente con ocho columnas: Rol, Posición, Jugador, Calidad, Condición y tres atributos reales por demarcación. Roles Sin asignar y calidad/condición — hasta disponer de sistemas persistidos; sin atributos ocultos ni valoraciones inventadas. El explorador inicial previo a contratar se conserva.
+
+[Informe, correspondencias por posición, archivos y validación](NAVIGATION_SQUAD_CORRECTION.md). Debug/Release sin errores ni advertencias; 249 pruebas superadas por configuración y regresión Godot superada, incluida salida en pantalla completa. Catorce bases preexistentes intactas; no hay migraciones. Las descripciones anteriores de un selector público dentro de carrera quedan sustituidas por esta corrección.
+
+## Resultados ejecutados — 28/10/2026
+
+- Debug y Release: cuatro proyectos compilan con 0 errores y 0 advertencias.
+- Pruebas .NET: 249 superadas, 0 fallidas, 0 omitidas por configuración (244 previas y 5 casos nuevos). Se actualiza la prueba de la antigua ruta pública para exigir su denegación, sin eliminar cobertura. Los nuevos casos verifican trece demarcaciones, valores persistidos de los 480 jugadores, roles no inventados, orden determinista y cambio contextual sin mutar atributos.
+- GodotUiSmoke.gd: recorrido completo sin ventana y con renderizado real, salida 0 y marcadores FURVO_WORKSPACE_OK para contratado/en paro, FURVO_CAREER_UI_OK y FURVO_UI_SMOKE_OK. Comprueba menú único, Continuar partida, regreso al inicio, selector inicial preservado, Club propio/Sin club, ocho columnas, 24 filas, altura uniforme, selección por ID después de ordenar en ambos sentidos, apertura por botón y activación de fila, 51 atributos públicos y regreso.
+- GodotApplicationSmoke.gd: salida 0 en pantalla completa real; Esc abre el menú y Salir del juego cierra Godot correctamente.
+- Revisión visual de capturas renderizadas de plantilla a 1280×720, 1600×900 y 1920×1080, menú de partida, Club propio y Sin club. Se revisaron alineación, textos, colores, scroll y botones; se redujo espaciado y se fijó altura uniforme. Esta inspección cubre las capturas indicadas, no una campaña manual exhaustiva de todos los clubes/equipos.
+- SHA-256: catorce bases preexistentes idénticas, incluidas las cinco publicaciones del mundo. Sin migraciones ni modificaciones de jugadores, contratos, reputaciones, perfiles o partidas existentes.
+- git diff --check sin incidencias. Sin dependencias nuevas, commit ni push.
+
+Capturas locales reproducibles: artifacts/career-visual/career-squad-1280x720.png (también 1600x900/1920x1080), career-game-menu.png, career-own-club.png y career-no-club.png. Se generan con perfiles y carreras de prueba aislados.
+
+## Estado vigente — escritorio y navegación de carrera (28/10/2026)
+
+Tras iniciar una carrera se abre el escritorio contratado o en paro, con seis áreas superiores y subnavegación contextual. La identidad, fecha, club y economía proceden de la copia SQLite de esa carrera. Se reutilizan plantillas, jugadores, información/estadio, economía, historia y contrato. Los permisos de Core no dependen del club consultado. Mercado, Competición y Continuar quedan deshabilitados con explicación; no hay avance temporal, ofertas ficticias ni nuevas mecánicas.
+
+[Mapa, capturas, inventario, decisiones futuras y comprobación manual](CAREER_NAVIGATION.md). Debug/Release: 244 pruebas superadas por configuración y compilaciones sin errores ni advertencias. Pruebas Godot y salida en pantalla completa superadas; capturas de ambos escritorios revisadas a tres resoluciones. Doce bases preexistentes intactas; sin migraciones. Los apartados siguientes conservan el historial de entregas anteriores.
+
+## Resultados ejecutados — 28/10/2026
+
+- Compilación Debug y Release: cuatro proyectos, 0 errores y 0 advertencias.
+- Pruebas .NET: 244 superadas, 0 fallidas y 0 omitidas por configuración (234 anteriores + 10 casos de navegación/permisos). Incluyen denegación de rutas propias desde código, club ajeno, identidad, fecha sin avance, hashes y economía de cada copia.
+- GodotUiSmoke.gd: salida 0, FURVO_WORKSPACE_OK en paro y contratado, FURVO_CAREER_UI_OK y FURVO_UI_SMOKE_OK. Se mantienen formulario, firma/rechazo/paro, tres carreras aisladas, tablas y 51 atributos públicos.
+- Prueba con renderizado OpenGL real y capturas de ambos escritorios a 1280×720, 1600×900 y 1920×1080: recorridos completos superados. Se revisaron las capturas; se corrigieron anchura/altura de la cabecera y se añadieron comprobaciones de límites/solapamiento.
+- GodotApplicationSmoke.gd con modo fullscreen real: salida 0 y FURVO_APPLICATION_SMOKE_OK; escritorio, seis áreas, Esc y salida del juego.
+- SHA-256: doce bases preexistentes idénticas, incluidas las cinco publicaciones del mundo. Sin migraciones ni nuevas publicaciones.
+- git diff --check sin incidencias. No se declara una campaña manual completa de todos los clubes/equipos: la inspección visual cubre las capturas indicadas y los recorridos automatizados descritos.
+
+## Estado vigente — economía aprobada y firma habilitada (28/10/2026)
+
+El usuario aprobó la propuesta initial-economy-2026-27-draft-v1. La nueva publicación v5 contiene los veinte estados económicos y conserva los 480 jugadores sin cambios. Economía y Contrato consultan los mismos datos; la firma crea una carrera independiente y registra el compromiso del entrenador en una transacción, sin duplicar gastos ni efectuar un pago anual ficticio. Margen salarial real de jugadores: desconocido hasta disponer de contratos salariales. Las publicaciones/partidas antiguas no se modifican.
+
+[Implementación, migración, inventario, pruebas y límites](ECONOMY_IMPLEMENTATION.md). Debug/Release sin errores ni advertencias; 234 pruebas superadas por configuración. Godot con firma y tres carreras aisladas superado; capturas renderizadas de Economía/Contrato revisadas a 1280×720, 1600×900 y 1920×1080. Los apartados siguientes conservan el historial y sus bloqueos anteriores quedan sustituidos por este estado.
+
+## Estado vigente — propuesta económica, etapa 1 (28/10/2026)
+
+Se ha preparado una propuesta ficticia de los veinte clubes para aprobación; no se incorpora a SQLite ni se habilita la firma real. Los presupuestos/previsiones no son saldos ni movimientos. El margen contractual de jugadores permanece desconocido; la reserva de planificación del borrador no lo sustituye. El sueldo propuesto del entrenador está incluido una sola vez en personal. No hay cambios funcionales ni de esquema.
+
+[Diagnóstico, veinte filas, fórmulas y aprobación pendiente](INITIAL_ECONOMY_PROPOSAL.md). Datos: docs/proposals/initial-economy-2026-27.draft.json, estado AwaitingUserApproval, sin uso en ejecución. Esta nota sustituye las indicaciones anteriores sobre el estado de aprobación; los apartados siguientes conservan el historial.
+
+### Validación ejecutada el 28/10/2026
+
+- Debug y Release: cuatro proyectos, 0 errores y 0 advertencias.
+- .NET Debug/Release: 222 superadas, 0 fallidas, 0 omitidas por configuración; incluyen persistencia y firma con fixtures, sin altas personales.
+- Validador documental: FURVO_ECONOMIC_PROPOSAL_OK para veinte clubes.
+- GodotUiSmoke.gd sin ventana: salida 0, FURVO_CAREER_UI_OK y FURVO_UI_SMOKE_OK; formulario, firma real bloqueada, rechazo/paro, independencia y regresión de explorador.
+- SHA-256: nueve bases preexistentes idénticas, incluidas cuatro publicaciones del mundo.
+- No hay inspección visual manual a 1280×720, 1600×900 ni 1920×1080. Las comprobaciones automáticas de geometría no la sustituyen.
+- No se valida una economía persistida de producción ni una firma real aprobada: pertenecen a etapa 2.
+
 ## Estado vigente — simplificación del contrato inicial (27/10/2026)
 
 La oferta inicial incorpora fechas 01/07/2026–30/06/2027 y EUR por país del club. Sin filas de duración ni fichajes restante en la oferta. El salario depende de un margen anual aún pendiente de aprobación sobre el suelo legal configurado; es el único bloqueo actual de las veinte ofertas reales. Nuevos perfiles: debutante o exfutbolista; experiencia histórica conservada sin reescritura. No cambian esquemas ni contratos existentes. Compilación Debug/Release sin errores ni advertencias; 222 pruebas superadas por configuración y prueba de escena Godot superada. Los apartados anteriores de entrega que siguen se conservan como historial y quedan subordinados a esta corrección.

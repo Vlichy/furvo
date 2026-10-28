@@ -1,3 +1,27 @@
+## Corrección vigente — menú, Club propio y plantilla deportiva (28/10/2026)
+
+La cabecera de carrera tiene solo Menú de partida como acceso al menú; Guardar/Cargar siguen deshabilitados. Club abre el empleador contratado y en paro muestra Sin club, sin selector público ni Elegir club. Equipo > Plantilla es una pantalla independiente con ocho columnas: Rol, Posición, Jugador, Calidad, Condición y tres atributos reales por demarcación. Roles Sin asignar y calidad/condición — hasta disponer de sistemas persistidos; sin atributos ocultos ni valoraciones inventadas. El explorador inicial previo a contratar se conserva.
+
+[Informe, correspondencias por posición, archivos y validación](NAVIGATION_SQUAD_CORRECTION.md). Debug/Release sin errores ni advertencias; 249 pruebas superadas por configuración y regresión Godot superada, incluida salida en pantalla completa. Catorce bases preexistentes intactas; no hay migraciones. Las descripciones anteriores de un selector público dentro de carrera quedan sustituidas por esta corrección.
+
+## Estado vigente — escritorio y navegación de carrera (28/10/2026)
+
+Tras iniciar una carrera se abre el escritorio contratado o en paro, con seis áreas superiores y subnavegación contextual. La identidad, fecha, club y economía proceden de la copia SQLite de esa carrera. Se reutilizan plantillas, jugadores, información/estadio, economía, historia y contrato. Los permisos de Core no dependen del club consultado. Mercado, Competición y Continuar quedan deshabilitados con explicación; no hay avance temporal, ofertas ficticias ni nuevas mecánicas.
+
+[Mapa, capturas, inventario, decisiones futuras y comprobación manual](CAREER_NAVIGATION.md). Debug/Release: 244 pruebas superadas por configuración y compilaciones sin errores ni advertencias. Pruebas Godot y salida en pantalla completa superadas; capturas de ambos escritorios revisadas a tres resoluciones. Doce bases preexistentes intactas; sin migraciones. Los apartados siguientes conservan el historial de entregas anteriores.
+
+## Estado vigente — economía aprobada y firma habilitada (28/10/2026)
+
+El usuario aprobó la propuesta initial-economy-2026-27-draft-v1. La nueva publicación v5 contiene los veinte estados económicos y conserva los 480 jugadores sin cambios. Economía y Contrato consultan los mismos datos; la firma crea una carrera independiente y registra el compromiso del entrenador en una transacción, sin duplicar gastos ni efectuar un pago anual ficticio. Margen salarial real de jugadores: desconocido hasta disponer de contratos salariales. Las publicaciones/partidas antiguas no se modifican.
+
+[Implementación, migración, inventario, pruebas y límites](ECONOMY_IMPLEMENTATION.md). Debug/Release sin errores ni advertencias; 234 pruebas superadas por configuración. Godot con firma y tres carreras aisladas superado; capturas renderizadas de Economía/Contrato revisadas a 1280×720, 1600×900 y 1920×1080. Los apartados siguientes conservan el historial y sus bloqueos anteriores quedan sustituidos por este estado.
+
+## Estado vigente — propuesta económica, etapa 1 (28/10/2026)
+
+Se ha preparado una propuesta ficticia de los veinte clubes para aprobación; no se incorpora a SQLite ni se habilita la firma real. Los presupuestos/previsiones no son saldos ni movimientos. El margen contractual de jugadores permanece desconocido; la reserva de planificación del borrador no lo sustituye. El sueldo propuesto del entrenador está incluido una sola vez en personal. No hay cambios funcionales ni de esquema.
+
+[Diagnóstico, veinte filas, fórmulas y aprobación pendiente](INITIAL_ECONOMY_PROPOSAL.md). Datos: docs/proposals/initial-economy-2026-27.draft.json, estado AwaitingUserApproval, sin uso en ejecución. Esta nota sustituye las indicaciones anteriores sobre el estado de aprobación; los apartados siguientes conservan el historial.
+
 ## Estado vigente — simplificación del contrato inicial (27/10/2026)
 
 La oferta inicial incorpora fechas 01/07/2026–30/06/2027 y EUR por país del club. Sin filas de duración ni fichajes restante en la oferta. El salario depende de un margen anual aún pendiente de aprobación sobre el suelo legal configurado; es el único bloqueo actual de las veinte ofertas reales. Nuevos perfiles: debutante o exfutbolista; experiencia histórica conservada sin reescritura. No cambian esquemas ni contratos existentes. Compilación Debug/Release sin errores ni advertencias; 222 pruebas superadas por configuración y prueba de escena Godot superada. Los apartados anteriores de entrega que siguen se conservan como historial y quedan subordinados a esta corrección.
@@ -108,3 +132,8 @@ Nota de estabilidad: la atomicidad se verifica frente a fallos controlados dentr
 Se ejecutó la compilación final en una instancia normal de Godot 4.7.2 .NET. Se inspeccionó visualmente Crear entrenador en una ventana ampliada: avatar, seis campos, opciones de experiencia y botones Volver/Guardar visibles. No se completó inspección manual de oferta, confirmación y resumen en los tres tamaños exactos. La prueba geométrica y los smokes no se presentan como sustitutos de esa revisión. La aplicación queda abierta para validación del usuario.
 
 Incidencias corregidas durante la validación: el foco del primer campo se difiere a Ready para no pedirlo antes de entrar al árbol; los identificadores del resumen se asocian al nodo desplazable correcto. La última prueba de escena no muestra esos errores.
+
+
+## Alineaciones — 28/10/2026
+
+La entrega de alineaciones añade Equipo → Plantilla / Alineación, selección inicial reproducible y persistencia independiente por carrera. La apertura de carreras antiguas no migra ni genera alineaciones automáticamente. Véanse [arquitectura, reglas e inventario de archivos](LINEUPS.md) y [formaciones iniciales de los veinte clubes](INITIAL_FORMATIONS.md). Esta sección actualiza las referencias anteriores a roles sin asignar y al orden inicial por rol: ahora las carreras nuevas tienen once y se ordenan por posición futbolística.

@@ -11,6 +11,7 @@ namespace Furvo.Presentation;
 public partial class Main : Control
 {
     private IWorldQueries? _queries;
+    private IWorldQueries? _initialQueries;
     private ClubSummary? _club;
     private SquadSort _sort = SquadSort.Position;
     private bool _exploring;
@@ -59,6 +60,7 @@ public partial class Main : Control
     /// <summary>Las pantallas se reconstruyen con contenedores adaptables; retirar nodos evita interacciones diferidas con la pantalla anterior.</summary>
     private VBoxContainer Frame(string section, string title, string description, bool showHeading = true)
     {
+        if(CareerActive)return CareerFrame(title,description,showHeading);
         foreach (var child in GetChildren()) { RemoveChild(child); child.QueueFree(); }
         var background = new ColorRect { Color = new Color("0d192b"), MouseFilter = MouseFilterEnum.Ignore };
         background.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
@@ -105,6 +107,7 @@ public partial class Main : Control
     private void ShowHome()
     {
         _loadRequest++; _exploring = false;
+        if(CareerActive){_workspace=null;_queries=_initialQueries;_careerFlow=null;_careers=null;_club=null;}
         var body = Frame("Version", UiText.Get("HomeTitle"), UiText.Get("HomeDescription"));
         var center = new VBoxContainer { SizeFlagsVertical = SizeFlags.ExpandFill, Alignment = BoxContainer.AlignmentMode.Center };
         body.AddChild(center);
@@ -141,7 +144,7 @@ public partial class Main : Control
                 return (Queries: PublishedWorldQueries.Open(database), Path: database);
             });
             if (request != _loadRequest || !IsInsideTree()) return;
-            _queries = queries.Queries; _initialWorldPath=queries.Path;
+            _queries = queries.Queries; _initialQueries=queries.Queries; _initialWorldPath=queries.Path;
             next();
         }
         catch (Exception error)
@@ -164,6 +167,7 @@ public partial class Main : Control
     {
         try
         {
+            if(CareerActive)throw new InvalidOperationException("No hay selector de clubes dentro de una carrera.");
             var clubs = _queries!.GetClubs();
             var body = Frame("ClubsSection", UiText.Get("ClubsTitle"), UiText.Format("ClubsDescription", clubs.Count));
             var table = new DataTable([
@@ -173,8 +177,12 @@ public partial class Main : Control
             body.AddChild(table);
             var bar = new HBoxContainer();
             body.AddChild(bar);
-            bar.AddChild(Button("BackCoachProfiles", ()=>ShowCoachProfiles(false)));
-            bar.AddChild(Button("StartUnemployed", ()=>ShowCareerConfirmation(Furvo.Core.Careers.CareerStartMode.Unemployed)));
+            if(CareerActive)bar.AddChild(Button("BackCareerDashboard",()=>NavigateCareer(Furvo.Core.Careers.CareerPage.Desktop)));
+            else
+            {
+                bar.AddChild(Button("BackCoachProfiles", ()=>ShowCoachProfiles(false)));
+                bar.AddChild(Button("StartUnemployed", ()=>ShowCareerConfirmation(Furvo.Core.Careers.CareerStartMode.Unemployed)));
+            }
             string? selected = null;
             void OpenClub(string id)
             {
@@ -198,6 +206,7 @@ public partial class Main : Control
     /// <summary>La ficha individual vuelve a la misma pestaña Plantilla sin perder orden o selección.</summary>
     private void ShowSquad()
     {
+        if(CareerActive){ShowCareerSquad();return;}
         _clubTab = 1;
         ShowClub();
     }
@@ -207,6 +216,7 @@ public partial class Main : Control
     {
         try
         {
+            if(CareerActive)_workspace!.RequireManagement(_club!.Id);
             var details = _queries!.GetClubDetails(_club!.Id);
             var history = _queries.GetClubHistory(_club.Id);
             var body = Frame("ClubSection", "", "", showHeading: false);
@@ -223,7 +233,7 @@ public partial class Main : Control
             // FlowContainer conserva el pie fuera de las pestañas y envuelve los botones si falta ancho.
             var bar = new HFlowContainer { Name = "ClubFooter", SizeFlagsHorizontal = SizeFlags.ExpandFill };
             bar.AddThemeConstantOverride("h_separation", 14); bar.AddThemeConstantOverride("v_separation", 6);
-            body.AddChild(bar); bar.AddChild(Button("BackClubs", ShowClubs));
+            body.AddChild(bar); bar.AddChild(CareerActive?Button("BackCareerDashboard",()=>NavigateCareer(Furvo.Core.Careers.CareerPage.Desktop)):Button("BackClubs", ShowClubs));
             var squad = _queries.GetSquad(_club.Id, _sort, _descending);
             var description = Label(UiText.Format("SquadDescription", squad.Count, _queries.ReferenceDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)), 15, _muted);
             description.Name = "SquadDescription"; description.AutowrapMode = TextServer.AutowrapMode.WordSmart;
@@ -236,8 +246,11 @@ public partial class Main : Control
             squadPage.AddChild(table);
             var open = Button("ViewPlayer", () => { if (_selectedPlayer is not null) ShowPlayer(new PlayerId(Guid.Parse(_selectedPlayer))); });
             open.Disabled = _selectedPlayer is null; bar.AddChild(open);
-            var choose = Button("ChooseClub", ShowManagerOffer);
-            choose.AddThemeColorOverride("font_color", _accent); bar.AddChild(choose);
+            if(!CareerActive)
+            {
+                var choose = Button("ChooseClub", ShowManagerOffer);
+                choose.AddThemeColorOverride("font_color", _accent); bar.AddChild(choose);
+            }
             table.RowSelected += id => { _selectedPlayer = id; open.Disabled = false; };
             table.RowActivated += id => ShowPlayer(new PlayerId(Guid.Parse(id)));
             table.SortRequested += column =>
@@ -249,7 +262,14 @@ public partial class Main : Control
                 x.Age?.ToString(CultureInfo.InvariantCulture) ?? UiText.Get("Unknown"), x.Nationality ?? UiText.Get("Unknown")])), _selectedPlayer);
             table.MarkSort(_sort switch { SquadSort.Position => 1, SquadSort.Age => 2, _ => 0 }, _descending);
             tabs.CurrentTab = _clubTab; open.Visible = _clubTab == 1;
-            tabs.TabChanged += tab => { _clubTab = (int)tab; open.Visible = _clubTab == 1; if (_clubTab == 1) table.FocusTable(); };
+            tabs.TabChanged += tab => { _clubTab = (int)tab; open.Visible = _clubTab == 1; if (_clubTab == 1) table.FocusTable();
+                if(CareerActive)
+                {
+                    _workspace!.Open(_clubTab switch{1=>Furvo.Core.Careers.CareerPage.OwnSquad,2=>Furvo.Core.Careers.CareerPage.OwnHistory,3=>Furvo.Core.Careers.CareerPage.OwnEconomy,_=>Furvo.Core.Careers.CareerPage.OwnInformation});
+                    var expectedPage=_workspace.Page;var expectedClub=_club!.Id;
+                    Callable.From(()=>{if(CareerActive && _workspace!.Page==expectedPage && _club?.Id==expectedClub){if(expectedPage==Furvo.Core.Careers.CareerPage.OwnSquad)ShowCareerSquad();else ShowClub();}}).CallDeferred();
+                }
+            };
             if (_clubTab == 1) table.FocusTable();
         }
         catch (Exception error) { GD.PushError(error.ToString()); ShowError("ClubDetailsError", ShowClub, ShowClubs); }
@@ -267,7 +287,7 @@ public partial class Main : Control
             menu = new ExplorationMenu(Theme, ShowHome, () => ShowDisplayOptions(() =>
             {
                 if (GetNodeOrNull<ExplorationMenu>("ExplorationMenu") is { } existing) existing.Open();
-            }), ExitGame);
+            }), ExitGame,CareerActive);
             AddChild(menu);
         }
         if (menu.Visible) menu.Hide(); else menu.Open();

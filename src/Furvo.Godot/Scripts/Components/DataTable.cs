@@ -7,7 +7,8 @@ public sealed record TableColumn(string Title, int MinimumWidth, int ExpandRatio
     HorizontalAlignment HeaderAlignment = HorizontalAlignment.Center,
     HorizontalAlignment CellAlignment = HorizontalAlignment.Left, bool Wrap = false);
 /// <summary>Fila con identidad independiente de su texto y de su posición en pantalla.</summary>
-public sealed record TableRow(string Id, IReadOnlyList<string> Cells);
+public sealed record TableCellVisual(string Kind,int Elements,Action<Rid,Rect2> Paint,string Description);
+public sealed record TableRow(string Id, IReadOnlyList<string> Cells,IReadOnlyDictionary<int,string>? CellColors=null,IReadOnlyDictionary<int,TableCellVisual>? Visuals=null);
 
 /// <summary>Tabla reutilizable para clubes, plantillas y atributos; soporta selección, activación y petición de orden.</summary>
 public partial class DataTable : VBoxContainer
@@ -19,16 +20,18 @@ public partial class DataTable : VBoxContainer
     public event Action<int>? SortRequested;
     public string? SelectedId => _tree.GetSelected()?.GetMetadata(0).AsString();
 
-    public DataTable(IReadOnlyList<TableColumn> columns, bool selectable = true, bool fitContent = false)
+    public DataTable(IReadOnlyList<TableColumn> columns, bool selectable = true, bool fitContent = false,int rowHeight=0,int rowSpacing=-1)
     {
         _columns = columns;
         _fitContent = fitContent;
+        _rowHeight=rowHeight;
         SizeFlagsHorizontal = SizeFlags.ExpandFill;
         SizeFlagsVertical = SizeFlags.ExpandFill;
         _tree = new Tree { Columns = columns.Count, HideRoot = true, ColumnTitlesVisible = true,
             SelectMode = Tree.SelectModeEnum.Row, SizeFlagsHorizontal = SizeFlags.ExpandFill,
             SizeFlagsVertical = SizeFlags.ExpandFill, CustomMinimumSize = new Vector2(0, 180),
             AllowReselect = true, FocusMode = selectable ? FocusModeEnum.All : FocusModeEnum.None };
+        if(rowSpacing>=0)_tree.AddThemeConstantOverride("v_separation",rowSpacing);
         AddChild(_tree);
         for (var i = 0; i < columns.Count; i++)
         {
@@ -49,6 +52,7 @@ public partial class DataTable : VBoxContainer
         _selectable = selectable;
     }
 
+    private readonly int _rowHeight;
     private readonly bool _selectable;
     private readonly bool _fitContent;
 
@@ -64,13 +68,21 @@ public partial class DataTable : VBoxContainer
             rowCount++;
             var item = _tree.CreateItem(root);
             item.SetMetadata(0, row.Id);
+            if(_rowHeight>0)item.CustomMinimumHeight=_rowHeight;
             for (var i = 0; i < _columns.Count; i++)
             {
                 item.SetText(i, row.Cells[i]);
+                if(row.CellColors?.TryGetValue(i,out var color)==true)item.SetCustomColor(i,new Color(color));
                 item.SetTextAlignment(i, _columns[i].CellAlignment);
                 if (_columns[i].Wrap) item.SetAutowrapMode(i, TextServer.AutowrapMode.WordSmart);
                 item.SetSelectable(i, _selectable);
                 item.SetTooltipText(i, row.Cells[i]);
+                if(row.Visuals?.TryGetValue(i,out var visual)==true)
+                {
+                    item.SetCellMode(i,TreeItem.TreeCellMode.Custom);item.SetText(i,"");item.SetDescription(i,visual.Description);item.SetMeta("cell_text_"+i,row.Cells[i]);item.SetEditable(i,false);
+                    item.SetTooltipText(i,visual.Description);item.SetMeta("visual_"+i,visual.Kind);item.SetMeta("visual_elements_"+i,visual.Elements);
+                    item.SetCustomDrawCallback(i,Callable.From<TreeItem,Rect2>((_,rect)=>visual.Paint(_tree.GetCustomDrawingCanvasItem(),rect)));
+                }
             }
             if (_selectable && row.Id == selectedId) item.Select(0);
         }

@@ -99,9 +99,18 @@ func run_test() -> void:
     await process_frame
     if not check(find_named(screen,"ViewClub") != null,"No llega al explorador desde el perfil"):
         return
+    find_named(screen,"StartUnemployed").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"ConfirmCareerCreation").emit_signal("pressed")
+    for i in range(200):
+        if find_named(screen,"CareerDashboard") != null:
+            break
+        await create_timer(0.05).timeout
+    if not check(find_named(screen,"CareerDashboard") != null and find_named(screen,"CareerPrimaryNavigation").get_child_count() == 6,"No abre el escritorio en pantalla completa"):
+        return
     await escape()
     var menu = find_named(screen,"ExplorationMenu")
     if not check(menu != null and menu.visible,"Esc no abre el menú en pantalla completa"):
         return
-    print("FURVO_APPLICATION_SMOKE_OK: fullscreen, modo real aplicado, Esc y Salir exploración")
+    print("FURVO_APPLICATION_SMOKE_OK: fullscreen, escritorio de carrera, seis áreas, Esc y Salir")
     find_named(menu,"ExitGame").emit_signal("pressed")

@@ -15,7 +15,9 @@ public static class PublishedWorldQueries
             throw new InvalidDataException("Se requiere una publicación inicial, no una partida.");
         var data = store.Load();
         if (data.Seasons.Count != 1) throw new InvalidDataException("La publicación debe identificar una temporada inicial.");
-        return new WorldQueries(data, data.Seasons[0].StartDate);
+        var economic=SqliteEconomyStore.ReadResources(databasePath);
+        if(economic.Count!=0 && (economic.Count!=data.Clubs.Count || economic.Any(e=>e.SeasonId!=data.Seasons[0].Id)))throw new InvalidDataException("Publicación económica incompleta.");
+        return new WorldQueries(data, data.Seasons[0].StartDate,economic);
     }
 
     /// <summary>Materializa bytes de la publicación incluida en el ensamblado en una caché identificada por SHA-256.</summary>

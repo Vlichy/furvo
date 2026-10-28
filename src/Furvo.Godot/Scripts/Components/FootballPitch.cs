@@ -10,11 +10,15 @@ public partial class FootballPitch : Control
         Name = "FootballPitch"; CustomMinimumSize = new Vector2(0, 116); MouseFilter = MouseFilterEnum.Ignore;
         Resized += QueueRedraw; SetMeta("end_area_count", FootballPitchGeometry.EndAreas.Count);
     }
+    public static Rect2 FieldRect(Vector2 size)
+    {
+        var scale=Mathf.Max(0,Mathf.Min((size.X-18)/111,(size.Y-10)/68));var extent=new Vector2(105,68)*scale;
+        return new Rect2((size-extent)/2,extent);
+    }
     public override void _Draw()
     {
         if (Size.X < 20 || Size.Y < 20) return;
-        var scale = Mathf.Min((Size.X - 18) / 111, (Size.Y - 10) / 68);
-        var offset = (Size - new Vector2(105, 68) * scale) / 2;
+        var rect=FieldRect(Size);var scale=rect.Size.X/105;var offset=rect.Position;
         Vector2 P(double x, double y) => offset + new Vector2((float)x, (float)y) * scale;
         var ink = new Color("c5d9c7"); var stroke = Mathf.Max(1, scale * .35f);
         void Box(double x, double y, double w, double h) => DrawRect(new Rect2(P(x,y), new Vector2((float)w,(float)h)*scale), ink, false, stroke);

@@ -21,6 +21,7 @@ internal static class CareerJson
         o.Converters.Add(new IdConverter<CoachProfileId>(g=>new(g),x=>x.Value));
         o.Converters.Add(new IdConverter<CoachId>(g=>new(g),x=>x.Value));
         o.Converters.Add(new IdConverter<SaveId>(g=>new(g),x=>x.Value));
+        o.Converters.Add(new IdConverter<PlayerId>(g=>new(g),x=>x.Value));
         o.Converters.Add(new IdConverter<ClubId>(g=>new(g),x=>x.Value));
         o.Converters.Add(new IdConverter<SeasonId>(g=>new(g),x=>x.Value));
         o.Converters.Add(new IdConverter<ManagerContractId>(g=>new(g),x=>x.Value)); return o;

@@ -67,6 +67,7 @@ public partial class Main
     {
         try
         {
+            if(CareerActive)throw new InvalidOperationException("La exploración de carrera es de solo consulta.");
             EnsureCareerServices();if(_careerFlow!.Profile is null || _club is null)throw new InvalidOperationException("Falta entrenador o club.");
             var offer=_careerFlow.SelectClub(_club.Id);var body=Frame("CareerSection",UiText.Get("ManagerOfferTitle"),UiText.Get("ManagerOfferDescription"));
             body.AddChild(OfferDocument(offer));var actions=new HFlowContainer{Name="ManagerOfferActions"};actions.AddThemeConstantOverride("h_separation",12);body.AddChild(actions);
@@ -111,20 +112,5 @@ public partial class Main
         }
         catch(Exception error){GD.PushError(error.ToString());ShowError("CareerPrepareError",ShowClubs,ShowClubs);}
     }
-    private void ShowCareerWelcome(CareerSummary career)
-    {
-        var body=Frame("CareerSection",UiText.Get("CareerWelcomeTitle"),UiText.Get("CareerWelcomeDescription"));body.SetMeta("career_id",career.Id.ToString());
-        var content=ClubUi.ScrollBody(body,"CareerWelcomeSummary");content.GetParent().SetMeta("career_id",career.Id.ToString());content.GetParent().SetMeta("coach_id",career.Coach.Id.ToString());
-        content.AddChild(new CoachAvatar(career.Coach.ProfileSnapshot.AvatarKey));
-        ClubUi.Field(content,"CoachFullName",career.Coach.ProfileSnapshot.FullName);
-        ClubUi.Field(content,"EconomySeason",_queries!.GetSeasons().Single(s=>s.Id==career.SeasonId).Name);
-        ClubUi.Field(content,"CareerDate",career.CurrentDate.ToString("dd/MM/yyyy",CultureInfo.InvariantCulture));
-        ClubUi.Field(content,"CareerEmployment",UiText.Get(career.Employment==CareerEmploymentState.Employed?"CareerEmployed":"CareerUnemployed"));
-        ClubUi.Field(content,"CareerClub",career.ClubId is {} club?_queries.GetClubDetails(club).Club.Name:UiText.Get("NoClub"));
-        if(career.Contract is {} contract)
-        {
-            ClubUi.Field(content,"OfferAnnualSalary",ManagerOfferDocument.Money(contract.AcceptedOffer.Terms.GrossAnnualSalary,contract.AcceptedOffer.Terms.Currency));
-        }
-        var footer=new HFlowContainer();footer.AddThemeConstantOverride("h_separation",12);body.AddChild(footer);footer.AddChild(Button("Home",ShowHome));footer.AddChild(Button("ExitGame",ExitGame));
-    }
+    private void ShowCareerWelcome(CareerSummary career)=>EnterCareer(career);
 }

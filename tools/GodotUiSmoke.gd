@@ -56,17 +56,260 @@ func press_escape() -> void:
     Input.parse_input_event(release)
     await process_frame
 
+func capture_economy_screen(label: String) -> void:
+    if not OS.get_cmdline_user_args().has("--capture") or DisplayServer.get_name() == "headless":
+        return
+    var directory = ProjectSettings.globalize_path("res://../../artifacts/"+("career-visual" if label.begins_with("career-") else "economy-visual"))
+    DirAccess.make_dir_recursive_absolute(directory)
+    await RenderingServer.frame_post_draw
+    root.get_texture().get_image().save_png(directory.path_join(label + ".png"))
+
 func check_career_layout(screen: Node, footer_key: String) -> bool:
     for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
         root.size = resolution
         await process_frame
         await process_frame
+        if footer_key == "BackChooseClub":
+            await capture_economy_screen("contract-"+str(resolution.x)+"x"+str(resolution.y))
+            if OS.get_cmdline_user_args().has("--capture"):
+                var scroll = find_named(screen,"ManagerOfferScroll") as ScrollContainer
+                scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
+                await process_frame
+                await process_frame
+                await capture_economy_screen("contract-resources-"+str(resolution.x)+"x"+str(resolution.y))
+                scroll.scroll_vertical = 0
+                await process_frame
         var footer = find_named(screen,footer_key) as Control
         if not require(footer != null and footer.get_global_rect().position.x >= 0 and footer.get_global_rect().end.x <= root.size.x and footer.get_global_rect().end.y <= root.size.y,"Control inferior de carrera fuera de pantalla"):
             return false
     root.size = Vector2i(1280,720)
     await process_frame
     return true
+
+func check_career_workspace(screen: Node, employed: bool) -> bool:
+    find_named(screen,"NavArea_Home").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"CareerContextNavigation") == null and find_named(screen,"NavPage_Desktop") == null and find_named(screen,"NavPage_Inbox") == null,"Inicio mantiene el submenú redundante"):
+        return false
+    var original_employer = find_named(screen,"CareerEmployer").text
+    var original_date = find_named(screen,"CareerHeaderDate").text
+    if not require(find_named(screen,"Home") == null,"La cabecera duplica el acceso al menú principal"):
+        return false
+    find_named(screen,"CareerGameMenu").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"CareerSaveUnavailable").disabled and find_named(screen,"CareerLoadUnavailable").disabled,"Guardar o cargar se presenta como operativo"):
+        return false
+    if OS.get_cmdline_user_args().has("--capture") and DisplayServer.get_name() != "headless":
+        var directory = ProjectSettings.globalize_path("res://../../artifacts/career-visual")
+        DirAccess.make_dir_recursive_absolute(directory)
+        await RenderingServer.frame_post_draw
+        find_named(screen,"ExplorationMenu").get_texture().get_image().save_png(directory.path_join("career-game-menu.png"))
+    find_named(screen,"ContinueExploration").emit_signal("pressed")
+    await process_frame
+    if not require(not find_named(screen,"ExplorationMenu").visible,"Continuar partida no cierra el menú"):
+        return false
+    if not require(find_named(screen,"CareerPrimaryNavigation").get_child_count() == 6,"No existen seis áreas de carrera"):
+        return false
+    if not require(find_named(screen,"CareerContinue").disabled and not find_named(screen,"CareerContinue").tooltip_text.is_empty(),"Continuar simula avance o no explica el bloqueo"):
+        return false
+    if not require(find_named(screen,"NavArea_Market").disabled and find_named(screen,"NavArea_Competition").disabled and find_named(screen,"NavArea_Team").disabled != employed,"Permisos visuales de carrera incorrectos"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await process_frame
+        await create_timer(0.1).timeout
+        for key in ["CareerContinue","CareerHeaderInbox","CareerGameMenu","CareerPrimaryNavigation"]:
+            var control = find_named(screen,key) as Control
+            if not require(control.get_global_rect().position.x >= 0 and control.get_global_rect().end.x <= root.size.x+1 and control.get_global_rect().end.y <= root.size.y,"Cabecera o navegación fuera de pantalla"):
+                return false
+        if not require(find_named(screen,"CareerCoachName").get_global_rect().position.y >= 0 and find_named(screen,"CareerEmployer").get_global_rect().end.y <= find_named(screen,"CareerPrimaryNavigation").get_global_rect().position.y,"Identidad de entrenador fuera de la cabecera"):
+            return false
+        if not require(find_named(screen,"CareerBrand").size.x >= 70 and find_named(screen,"CareerBrand").size.y < 50 and not find_named(screen,"CareerBrand").get_global_rect().intersects(find_named(screen,"CareerCoachName").get_global_rect()),"La identidad de Furvo se parte o solapa la cabecera"):
+            return false
+        await capture_economy_screen("career-"+("employed-" if employed else "unemployed-")+str(resolution.x)+"x"+str(resolution.y))
+    root.size = Vector2i(1280,720)
+    find_named(screen,"CareerHeaderInbox").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"CareerInbox").get_meta("entry_count") == 0,"Se generaron mensajes ficticios"):
+        return false
+    find_named(screen,"BackCareerDashboard").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"CareerDashboard") != null,"La bandeja no vuelve al escritorio"):
+        return false
+    find_named(screen,"NavArea_Career").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"CareerProfile") != null,"No se abre el perfil de carrera"):
+        return false
+    find_named(screen,"NavPage_Contract").emit_signal("pressed")
+    await process_frame
+    if not require((find_named(screen,"ManagerOfferDocument") != null) == employed,"Contrato incompatible con situación laboral"):
+        return false
+    if employed:
+        find_named(screen,"NavArea_Team").emit_signal("pressed")
+        await process_frame
+        var table = find_trees(find_named(screen,"SquadTable"))[0]
+        if not require(table.get_root().get_child_count() == 24,"Se perdió la plantilla de carrera"):
+            return false
+        if not require(table.columns == 12 and find_named(screen,"ClubTabs") == null and find_named(screen,"ClubHeader") == null,"Plantilla conserva pestañas o cabecera institucional"):
+            return false
+        var expected_columns = ["Rol","Posición","Jugador","Calidad","Estado físico","Ritmo","Moral","Forma (últimos 5)","PJ","G","A","Media"]
+        for column in range(12):
+            if not require(table.get_column_title(column).begins_with(expected_columns[column]),"Orden de columnas de plantilla incorrecto"):
+                return false
+        if not require(table.get_column_title(1).contains("↑"),"El orden inicial no es por posición"):
+            return false
+        var ranks = ["POR","DFC","LD","LI","MCD","MC","MP","MD","MI","ED","EI","SD","DC"]
+        var previous_rank = -1
+        for row in table.get_root().get_children():
+            var rank = ranks.find(row.get_text(1))
+            if not require(rank >= previous_rank,"Orden futbolístico inicial incorrecto"):
+                return false
+            previous_rank = rank
+            if not require(row.get_text(0) in ["Titular","Suplente","Reserva"] and row.get_meta("cell_text_3") == "—" and row.get_meta("cell_text_4") == "—","Asignación ausente o calidad/condición inventada"):
+                return false
+            for column in [3,4,5,7]:
+                if not require(row.get_meta("visual_elements_"+str(column)) == 5,"El indicador no contiene cinco elementos"):
+                    return false
+            if not require(row.get_meta("visual_elements_6") == 1 and row.get_meta("visual_6") == "Morale","Moral no utiliza círculo y descripción"):
+                return false
+            for column in [8,9,10]:
+                if not require(row.get_text(column) == "0","Se inventaron estadísticas iniciales"):
+                    return false
+            if not require(row.get_text(11) == "—","Se inventó una nota media"):
+                return false
+        for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+            root.size = resolution
+            await create_timer(0.1).timeout
+            if not require(table.get_global_rect().end.x <= root.size.x+1 and find_named(screen,"ViewPlayer").get_global_rect().end.y <= root.size.y+1,"La plantilla o navegación queda fuera de pantalla"):
+                return false
+            var first_height = table.get_item_area_rect(table.get_root().get_first_child()).size.y
+            for row in table.get_root().get_children():
+                if not require(absf(table.get_item_area_rect(row).size.y-first_height) < 1,"Las filas de plantilla no tienen altura uniforme"):
+                    return false
+            await capture_economy_screen("career-squad-"+str(resolution.x)+"x"+str(resolution.y))
+        root.size = Vector2i(1280,720)
+        table.get_root().get_first_child().select(0)
+        table.emit_signal("item_selected")
+        var selected_player_id = table.get_selected().get_metadata(0)
+        for direction in range(2):
+            table.emit_signal("column_title_clicked",2,MOUSE_BUTTON_LEFT)
+            await process_frame
+            table = find_trees(find_named(screen,"SquadTable"))[0]
+            if not require(table.get_selected().get_metadata(0) == selected_player_id,"La ordenación de plantilla cambia la identidad seleccionada"):
+                return false
+        find_named(screen,"ViewPlayer").emit_signal("pressed")
+        await process_frame
+        if not require(find_attribute_rows(screen).size() == 51 and find_named(screen,"CareerPrimaryNavigation") != null,"Se perdió la ficha o navegación de carrera"):
+            return false
+        find_named(screen,"BackSquad").emit_signal("pressed")
+        await process_frame
+        table = find_trees(find_named(screen,"SquadTable"))[0]
+        if not require(table.get_selected().get_metadata(0) == selected_player_id,"Volver de la ficha pierde la selección"):
+            return false
+        table.emit_signal("item_activated")
+        await process_frame
+        if not require(find_attribute_rows(screen).size() == 51,"No se abre el futbolista por activación de su nombre/fila"):
+            return false
+        find_named(screen,"BackSquad").emit_signal("pressed")
+        await process_frame
+        if not await check_lineup(screen):
+            return false
+        find_named(screen,"NavArea_Club").emit_signal("pressed")
+        await process_frame
+        find_named(screen,"NavPage_OwnEconomy").emit_signal("pressed")
+        await process_frame
+        if not require(find_named(screen,"EconomyCashValue").text != "No disponible","No se consulta la economía de carrera"):
+            return false
+        find_named(screen,"NavPage_OwnHistory").emit_signal("pressed")
+        await process_frame
+        if not require(find_named(screen,"ClubHistoryPage") != null,"No se conserva Historia"):
+            return false
+    else:
+        if not require(find_named(screen,"CareerNoContract") != null,"El entrenador libre muestra contrato activo"):
+            return false
+    find_named(screen,"NavArea_Club").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"NavPage_PublicClubs") == null and find_named(screen,"ChooseClub") == null and find_named(screen,"StartUnemployed") == null and find_named(screen,"CareerEmployer").text == original_employer,"La carrera conserva un selector o cambia empleador"):
+        return false
+    if not require((find_named(screen,"ClubInformationPage") != null) == employed,"Club no abre el equipo contratado o atribuye uno al entrenador libre"):
+        return false
+    if not employed and not require(find_named(screen,"NoClubInformation") != null,"Falta el estado explícito Sin club"):
+        return false
+    await capture_economy_screen("career-own-club" if employed else "career-no-club")
+    find_named(screen,"NavArea_Home").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"CareerHeaderDate").text == original_date,"La navegación cambió la fecha"):
+        return false
+    if not employed:
+        if not require(find_named(screen,"EconomyTransferBudgetValue") == null and find_named(screen,"CareerOffersList").get_meta("entry_count") == 0 and find_named(screen,"CareerVacanciesList").get_meta("entry_count") == 0,"El escritorio libre asigna recursos u ofertas ficticias"):
+            return false
+    print("FURVO_WORKSPACE_OK: "+("contratado" if employed else "en paro")+", seis áreas, permisos, consulta, contrato y fecha estable")
+    return true
+
+func check_lineup(screen: Node) -> bool:
+    find_named(screen,"NavPage_Lineup").emit_signal("pressed")
+    await process_frame
+    if not require(find_marked_nodes(screen,"slot_id").size() == 11,"Faltan puestos en la alineación"):
+        return false
+    var first = find_marked_nodes(screen,"slot_id")[0]
+    first.emit_signal("mouse_entered")
+    await process_frame
+    if not require(find_named(screen,"LineupCandidateGroup0") != null and find_named(screen,"LineupCandidateGroup1") != null,"Hover no actualiza candidatos"):
+        return false
+    first.emit_signal("pressed")
+    var position_text = find_named(screen,"LineupCandidatePosition").text
+    find_marked_nodes(screen,"slot_id")[1].emit_signal("mouse_entered")
+    await process_frame
+    if not require(find_named(screen,"LineupCandidatePosition").text == position_text,"El hover pierde la selección fijada"):
+        return false
+    var old_player = first.get_meta("player_id")
+    for candidate in find_marked_nodes(screen,"eligibility"):
+        if candidate.get_meta("player_id") != old_player:
+            candidate.emit_signal("pressed")
+            break
+    await process_frame
+    if not require(find_named(screen,"LineupPage").get_meta("lineup_revision") == 1,"No se guardó la sustitución"):
+        return false
+    var picker = find_named(screen,"LineupFormation")
+    picker.select((picker.selected+1)%picker.item_count)
+    picker.emit_signal("item_selected",picker.selected)
+    await process_frame
+    if not require(find_named(screen,"LineupPage").get_meta("lineup_revision") == 2,"No se guardó la formación"):
+        return false
+    var ids: Array = []
+    for circle in find_marked_nodes(screen,"slot_id"):
+        ids.append(circle.get_meta("player_id"))
+    if not require(ids.size() == 11 and ids.count(ids[0]) == 1,"Once inválido"):
+        return false
+    find_marked_nodes(screen,"slot_id")[0].emit_signal("pressed")
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(0.2).timeout
+        var pitch = find_named(screen,"LineupPitch")
+        var side = find_named(screen,"LineupCandidateScroll")
+        if not require(not pitch.get_global_rect().intersects(side.get_global_rect()) and side.get_global_rect().end.x <= root.size.x+1 and find_named(screen,"LineupSummary").get_global_rect().end.y <= root.size.y+1,"Desbordamiento de alineación"):
+            return false
+        await capture_economy_screen("career-lineup-"+str(resolution.x)+"x"+str(resolution.y))
+    root.size = Vector2i(1280,720)
+    find_named(screen,"NavPage_OwnSquad").emit_signal("pressed")
+    await process_frame
+    var counts = {"Titular":0,"Suplente":0,"Reserva":0}
+    for row in find_trees(find_named(screen,"SquadTable"))[0].get_root().get_children():
+        counts[row.get_text(0)] += 1
+    if not require(counts == {"Titular":11,"Suplente":7,"Reserva":6},"Roles de plantilla incoherentes"):
+        return false
+    find_named(screen,"NavPage_Lineup").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"LineupPage").get_meta("lineup_revision") == 2,"Abrir pantalla regeneró alineación"):
+        return false
+    print("FURVO_LINEUP_OK: hover, selección fijada, sustitución, formación, persistencia, roles y tres resoluciones")
+    return true
+
+func return_career_main_menu(screen: Node) -> void:
+    find_named(screen,"CareerGameMenu").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"ReturnMainMenu").emit_signal("pressed")
+    await process_frame
 
 func run_test() -> void:
     root.size = Vector2i(1280, 720)
@@ -306,14 +549,27 @@ func run_test() -> void:
                     if not require(find_named(economy, section) != null, "Falta un bloque económico"):
                         return
                 var economic_fields = find_marked_nodes(economy, "economic_unavailable")
-                if not require(economic_fields.size() == 34, "Faltan campos financieros no disponibles"):
+                if not require(economic_fields.size() > 0 and economic_fields.size() < 34 and find_named(economy,"EconomyCashValue").text != "No disponible", "No se cargaron recursos económicos aprobados"):
                     return
                 for field in economic_fields:
                     if not require(field.text == "No disponible", "Se inventó un importe financiero"):
                         return
-                for amount in ["EconomyCashValue", "EconomyTransferBudgetValue", "EconomyWageBudgetValue", "EconomyCommittedWagesValue", "EconomyIncomeValue", "EconomyExpensesValue", "EconomyBalanceValue", "EconomyDebtValue"]:
+                for amount in ["EconomyCommittedWagesValue", "EconomyRemainingWagesValue", "EconomyBalanceValue"]:
                     if not require(find_named(screen, amount).text == "No disponible", "Se inventó una cifra económica"):
                         return
+                for amount in ["EconomyCashValue","EconomyTransferBudgetValue","EconomyWageBudgetValue","EconomyDebtValue","EconomyTelevisionValue","EconomyStaffValue"]:
+                    if not require(find_named(economy,amount).text.ends_with(" EUR"),"Falta una cifra económica aprobada en EUR"):
+                        return
+                if not require(find_named(economy,"ForecastNotice") != null,"No se distingue la previsión del resultado real"):
+                    return
+                if sample_index == 0 and OS.get_cmdline_user_args().has("--capture"):
+                    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+                        root.size = resolution
+                        await process_frame
+                        await process_frame
+                        await capture_economy_screen("economy-"+str(resolution.x)+"x"+str(resolution.y))
+                    root.size = Vector2i(1280,720)
+                    await process_frame
         if not require(find_named(screen, "ViewPlayer").visible, "No se puede abrir un futbolista desde Plantilla"):
             return
         var squad = find_trees(screen)[0]
@@ -502,7 +758,7 @@ func run_test() -> void:
         await process_frame
     if not require(opened_ids.size() == 4 and opened_ids[0] != opened_ids[1] and opened_ids[1] != opened_ids[2] and opened_ids[2] != opened_ids[3], "No se probaron cuatro futbolistas distintos"):
         return
-    # Elegir y volver no publica carreras; la firma real permanece bloqueada por reglas pendientes.
+    # Elegir y volver no publica carreras; la firma aprobada solo persiste después de confirmar.
     var selection = find_trees(screen)[0]
     selection.get_root().get_first_child().select(0)
     selection.emit_signal("item_selected")
@@ -512,18 +768,18 @@ func run_test() -> void:
     await process_frame
     if not await check_career_layout(screen,"BackChooseClub"):
         return
-    if not require(find_named(screen,"ManagerOfferDocument") != null and find_named(screen,"SignManagerContract").disabled,"La oferta no existe o permite firmar condiciones incompletas"):
+    if not require(find_named(screen,"ManagerOfferDocument") != null and not find_named(screen,"SignManagerContract").disabled,"La oferta aprobada no permite firmar"):
         return
     if not require(find_named(screen,"OfferDurationLabel") == null and find_named(screen,"OfferDurationMonthsLabel") == null and find_named(screen,"OfferCurrencyLabel") != null,"La oferta conserva duración en temporadas o no muestra moneda"):
         return
-    if not require(find_named(screen,"OfferEndValue").text == "30/06/2027 (1 año)" and find_named(screen,"OfferCurrencyValue").text == "EUR","Fechas o moneda inicial incorrectas"):
+    if not require(find_named(screen,"OfferEndValue").text == "30/06/2027 (1 año)" and find_named(screen,"OfferCurrencyValue").text == "EUR (€)","Fechas o moneda inicial incorrectas"):
         return
     if not require(find_named(screen,"OfferHiringClubLabel").text == "Club" and find_named(screen,"OfferIncorporationSeasonLabel").text == "Temporada de incorporación","Literales de club o temporada incorrectos"):
         return
-    if not require(find_named(screen,"ManagerOfferDocument").get_meta("signing_block_count") == 1,"Se bloquea por apartados opcionales pendientes"):
+    if not require(find_named(screen,"ManagerOfferDocument").get_meta("signing_block_count") == 0,"Se bloquea por apartados opcionales pendientes"):
         return
     for reason in ["OfferSalaryMissing"]:
-        if not require(find_named(screen,reason) != null,"Falta un motivo de bloqueo específico"):
+        if not require(find_named(screen,reason) == null,"Se mantiene un bloqueo salarial resuelto"):
             return
     for old_reason in ["OfferTermsPending","OfferCommitmentsPending","OfferTacticalPending","OfferEndMissing","OfferCurrencyMissing","EconomyRemainingBudgetLabel"]:
         if not require(find_named(screen,old_reason) == null,"Se muestra un bloqueo genérico u opcional obsoleto"):
@@ -547,19 +803,22 @@ func run_test() -> void:
     find_named(screen,"ConfirmCareerCreation").emit_signal("pressed")
     find_named(screen,"ConfirmCareerCreation").emit_signal("pressed")
     for attempt in range(200):
-        if find_named(screen,"CareerWelcomeSummary") != null:
+        if find_named(screen,"CareerDashboard") != null:
             break
         await create_timer(0.05).timeout
-    var welcome = find_named(screen,"CareerWelcomeSummary")
-    if not require(welcome != null and find_named(screen,"CareerEmploymentValue").text == "En paro" and find_named(screen,"CareerClubValue").text == "Ninguno","No comienza carrera válida en paro"):
+    var welcome = find_named(screen,"CareerDashboard")
+    if not require(welcome != null and find_named(screen,"CareerEmploymentValue").text == "En paro" and find_named(screen,"CareerEmployer").text == "Entrenador libre — Sin club","No comienza carrera válida en paro"):
         return
-    if not await check_career_layout(screen,"Home"):
+    if not await check_career_layout(screen,"CareerGameMenu"):
         return
+    if not await check_career_workspace(screen,false):
+        return
+    welcome = find_named(screen,"CareerDashboard")
     var first_career = welcome.get_meta("career_id")
     var first_coach = welcome.get_meta("coach_id")
     if not require(DirAccess.get_files_at(test_root.path_join("careers")).size() == 1,"La doble confirmación creó carreras duplicadas"):
         return
-    find_named(screen,"Home").emit_signal("pressed")
+    await return_career_main_menu(screen)
     await process_frame
     find_named(screen,"NewGame").emit_signal("pressed")
     await process_frame
@@ -578,15 +837,53 @@ func run_test() -> void:
     await process_frame
     find_named(screen,"ConfirmCareerCreation").emit_signal("pressed")
     for attempt in range(200):
-        if find_named(screen,"CareerWelcomeSummary") != null:
+        if find_named(screen,"CareerDashboard") != null:
             break
         await create_timer(0.05).timeout
-    welcome = find_named(screen,"CareerWelcomeSummary")
+    welcome = find_named(screen,"CareerDashboard")
     if not require(welcome != null and welcome.get_meta("career_id") != first_career and welcome.get_meta("coach_id") != first_coach,"Las dos carreras comparten identidad"):
         return
     if not require(DirAccess.get_files_at(test_root.path_join("careers")).size() == 2,"No se publicaron dos carreras independientes"):
         return
-    print("FURVO_CAREER_UI_OK: perfil reutilizado, firma bloqueada, volver/cancelar sin partida, paro directo/rechazo y dos carreras persistentes")
+    # Tercera carrera: contrato aprobado, confirmación única y recursos consultados desde la partida.
+    await return_career_main_menu(screen)
+    await process_frame
+    find_named(screen,"NewGame").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"SelectCoachProfile").emit_signal("pressed")
+    await process_frame
+    selection = find_trees(screen)[0]
+    selection.get_root().get_first_child().select(0)
+    selection.emit_signal("item_selected")
+    find_named(screen,"ViewClub").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"ChooseClub").emit_signal("pressed")
+    await process_frame
+    var accepted_salary = find_named(screen,"OfferAnnualSalaryValue").text
+    find_named(screen,"SignManagerContract").emit_signal("pressed")
+    await process_frame
+    if not await check_career_layout(screen,"ConfirmCareerCreation"):
+        return
+    find_named(screen,"ConfirmCareerCreation").emit_signal("pressed")
+    find_named(screen,"ConfirmCareerCreation").emit_signal("pressed")
+    for attempt in range(200):
+        if find_named(screen,"CareerDashboard") != null:
+            break
+        await create_timer(0.05).timeout
+    welcome = find_named(screen,"CareerDashboard")
+    if not require(welcome != null and find_named(screen,"CareerEmployer").text != "Entrenador libre — Sin club","No se inició carrera con contrato"):
+        return
+    find_named(screen,"NavArea_Career").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_Contract").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"OfferAnnualSalaryValue").text == accepted_salary,"No se conserva la instantánea contractual"):
+        return
+    if not require(DirAccess.get_files_at(test_root.path_join("careers")).size() == 3,"La firma no publicó exactamente una carrera"):
+        return
+    if not await check_career_workspace(screen,true):
+        return
+    print("FURVO_CAREER_UI_OK: perfil reutilizado, firma aprobada, volver/cancelar sin partida, paro/rechazo y tres carreras independientes")
     await press_escape()
     if not require(find_named(screen,"ExplorationMenu").visible, "Esc no está disponible en el resumen de carrera"):
         return

@@ -39,13 +39,15 @@ public sealed class WorldQueries : IWorldQueries
 {
     private readonly WorldData _world;
     private readonly IReadOnlyList<ClubSummary> _clubs;
+    private readonly IReadOnlyList<ClubFinancialResources> _economics;
     public DateOnly ReferenceDate { get; }
 
     /// <summary>No consulta el reloj ni persiste cambios; la afiliación se determina exclusivamente por contratos vigentes.</summary>
-    public WorldQueries(WorldData world, DateOnly referenceDate)
+    public WorldQueries(WorldData world, DateOnly referenceDate,IReadOnlyList<ClubFinancialResources>? economics=null)
     {
         ArgumentNullException.ThrowIfNull(world);
         _world = world;
+        _economics=Array.AsReadOnly((economics??Array.Empty<ClubFinancialResources>()).ToArray());
         ReferenceDate = referenceDate;
         _clubs = Array.AsReadOnly(world.Clubs.OrderBy(x => x.Name, StringComparer.OrdinalIgnoreCase)
             .ThenBy(x => x.Id.ToString(), StringComparer.Ordinal)
@@ -59,12 +61,12 @@ public sealed class WorldQueries : IWorldQueries
         .ThenBy(s => s.Id.ToString(), StringComparer.Ordinal)
         .Select(s => new SeasonSummary(s.Id, s.Name, s.StartDate, s.EndDate)).ToArray());
 
-    /// <summary>La temporada existe, pero no hay importes aprobados: oferta y Economía comparten estos mismos desconocidos.</summary>
+    /// <summary>Oferta y Economía comparten el mismo estado aprobado; los mundos históricos conservan sus desconocidos.</summary>
     public ClubFinancialResources GetFinancialResources(ClubId clubId, SeasonId seasonId)
     {
         _ = RequireClub(clubId);
         if (!_world.Seasons.Any(s=>s.Id==seasonId)) throw new KeyNotFoundException("Temporada desconocida.");
-        return new ClubFinancialResources(clubId,seasonId);
+        return _economics.SingleOrDefault(e=>e.ClubId==clubId && e.SeasonId==seasonId)??new ClubFinancialResources(clubId,seasonId);
     }
 
     /// <summary>Proyecta los datos ya almacenados; campos nuevos permanecen desconocidos hasta autoría y persistencia aprobadas.</summary>

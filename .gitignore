@@ -49,7 +49,7 @@ __pycache__/
 .codex/
 .agents/
 
-# Partidas y bases de usuario. Las únicas excepciones son las cuatro publicaciones de abajo.
+# Partidas y bases de usuario. Las únicas excepciones son las cinco publicaciones de abajo.
 /saves/
 /savegames/
 /user_data/
@@ -95,3 +95,5 @@ export_credentials.cfg
 !/data/initial-world-2026-27.v2.db
 !/data/initial-world-2026-27.v3.db
 !/data/initial-world-2026-27.v4.db
+
+!/data/initial-world-2026-27.v5.db
