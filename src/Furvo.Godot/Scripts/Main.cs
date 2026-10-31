@@ -308,9 +308,10 @@ public partial class Main : Control
         try
         {
             _selectedPlayer = playerId.ToString();
-            var details = _queries!.GetPlayer(_club!.Id, playerId);
+            var details = CareerActive?new Furvo.Persistence.SqliteClubSquadStore(SportsPath).Details(_workspace!.Career.ClubId!.Value.Value).Single(p=>p.Player.Id==playerId):_queries!.GetPlayer(_club!.Id, playerId);
             var body = Frame("PlayerSection", "", "", showHeading: false);
             body.AddChild(new PlayerSheet(details));
+            if(CareerActive)body.AddChild(Button("MovePlayerTeam",()=>ShowPlayerMovement(playerId)));
             var back = Button("BackSquad", ShowSquad);
             body.AddChild(back);
             back.GrabFocus();

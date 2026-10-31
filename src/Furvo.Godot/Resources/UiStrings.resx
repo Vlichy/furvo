@@ -610,7 +610,6 @@
   <data name="IndicatorPercentage" xml:space="preserve"><value>{0} %</value></data>
   <data name="IndicatorSegments" xml:space="preserve"><value>{0} de 5 segmentos, según el dato recibido</value></data>
   <data name="IndicatorNoDataShort" xml:space="preserve"><value>Sin datos</value></data>
-  <data name="NavPage_Lineup" xml:space="preserve"><value>Alineación</value></data>
   <data name="LineupLegacyNotice" xml:space="preserve"><value>Esta carrera no tiene alineación guardada. Inicializar es una acción explícita y no modifica el mundo inicial ni contratos.</value></data>
   <data name="InitializeLineup" xml:space="preserve"><value>Inicializar alineación</value></data>
   <data name="LineupError" xml:space="preserve"><value>No se ha podido consultar o guardar la alineación.</value></data>
@@ -624,4 +623,597 @@
   <data name="LineupChangeError" xml:space="preserve"><value>No se ha guardado el cambio. Vuelve a abrir la alineación e inténtalo de nuevo.</value></data>
   <data name="LineupSwapError" xml:space="preserve"><value>Intercambio no válido: el otro titular no puede ocupar el puesto liberado. Elige otro candidato.</value></data>
   <data name="LineupSummary" xml:space="preserve"><value>11 titulares · {0} suplentes · {1} reservas · {2} fuera de posición. Cada cambio se guarda automáticamente en esta carrera.</value></data>
+  <data name="NavPage_Lineup" xml:space="preserve"><value>Táctica</value></data>
+  <data name="TacticTab_0" xml:space="preserve"><value>Alineación</value></data>
+  <data name="TacticTab_1" xml:space="preserve"><value>Estilo de juego</value></data>
+  <data name="TacticTab_2" xml:space="preserve"><value>Transiciones</value></data>
+  <data name="TacticTab_3" xml:space="preserve"><value>Balón parado</value></data>
+  <data name="TacticMentality" xml:space="preserve"><value>Mentalidad</value></data>
+  <data name="TacticUnassigned" xml:space="preserve"><value>Sin asignar</value></data>
+  <data name="TacticSaved" xml:space="preserve"><value>Instrucciones guardadas · revisión {0}</value></data>
+  <data name="TacticSaveError" xml:space="preserve"><value>No se pudo guardar. La configuración anterior se conserva; vuelve a abrir Táctica e inténtalo de nuevo.</value></data>
+  <data name="TacticLoadError" xml:space="preserve"><value>No se puede recuperar la táctica de esta carrera.</value></data>
+  <data name="TacticPreviewNotice" xml:space="preserve"><value>Vista previa explicativa. Estas instrucciones aún no tienen efectos en un motor de partidos.</value></data>
+  <data name="TacticGroup_possession" xml:space="preserve"><value>Con balón</value></data>
+  <data name="TacticGroup_defending" xml:space="preserve"><value>Sin balón</value></data>
+  <data name="TacticGroup_transition" xml:space="preserve"><value>Transiciones</value></data>
+  <data name="TacticSetPiece" xml:space="preserve"><value>Tipo de jugada</value></data>
+  <data name="TacticRoutine" xml:space="preserve"><value>Configuración básica</value></data>
+  <data name="TacticTaker" xml:space="preserve"><value>Lanzador designado</value></data>
+  <data name="TacticSetPieceScope" xml:space="preserve"><value>Asignación previa entre los futbolistas del club. Sin selección automática ni editor de jugadas; se conserva aunque el jugador esté en el banquillo o en reserva.</value></data>
+  <data name="TacticSwap" xml:space="preserve"><value>Intercambiar con otro titular…</value></data>
+  <data name="Suitability_0" xml:space="preserve"><value>Natural</value></data>
+  <data name="Suitability_1" xml:space="preserve"><value>Secundaria</value></data>
+  <data name="Suitability_2" xml:space="preserve"><value>Fuera de posición</value></data>
+  <data name="Suitability_99" xml:space="preserve"><value>Incompatible</value></data>
+  <data name="Mentality_VeryDefensive" xml:space="preserve"><value>Muy defensiva</value></data>
+  <data name="Mentality_Defensive" xml:space="preserve"><value>Defensiva</value></data>
+  <data name="Mentality_Balanced" xml:space="preserve"><value>Equilibrada</value></data>
+  <data name="Mentality_Attacking" xml:space="preserve"><value>Ofensiva</value></data>
+  <data name="Mentality_VeryAttacking" xml:space="preserve"><value>Muy ofensiva</value></data>
+  <data name="MentalityDescription_Undefined" xml:space="preserve"><value>Predisposición al riesgo pendiente de configurar.</value></data>
+  <data name="MentalityDescription_VeryDefensive" xml:space="preserve"><value>Prioridad general a minimizar los riesgos.</value></data>
+  <data name="MentalityDescription_Defensive" xml:space="preserve"><value>Predisposición prudente a asumir riesgos.</value></data>
+  <data name="MentalityDescription_Balanced" xml:space="preserve"><value>Predisposición equilibrada a asumir riesgos.</value></data>
+  <data name="MentalityDescription_Attacking" xml:space="preserve"><value>Predisposición a asumir riesgos ofensivos.</value></data>
+  <data name="MentalityDescription_VeryAttacking" xml:space="preserve"><value>Predisposición a asumir riesgos ofensivos elevados.</value></data>
+  <data name="SetPiece_AttackingCorner" xml:space="preserve"><value>Córners ofensivos</value></data>
+  <data name="SetPiece_DefendingCorner" xml:space="preserve"><value>Córners defensivos</value></data>
+  <data name="SetPiece_DirectFreeKick" xml:space="preserve"><value>Faltas directas</value></data>
+  <data name="SetPiece_IndirectFreeKick" xml:space="preserve"><value>Faltas indirectas</value></data>
+  <data name="SetPiece_DefendingFreeKick" xml:space="preserve"><value>Organización defensiva en faltas</value></data>
+  <data name="SetPiece_Penalty" xml:space="preserve"><value>Penaltis</value></data>
+  <data name="SetPiece_ThrowIn" xml:space="preserve"><value>Saques de banda</value></data>
+  <data name="Routine_near_post" xml:space="preserve"><value>Primer palo</value></data>
+  <data name="Routine_far_post" xml:space="preserve"><value>Segundo palo</value></data>
+  <data name="Routine_short" xml:space="preserve"><value>En corto</value></data>
+  <data name="Routine_zonal" xml:space="preserve"><value>Zonal</value></data>
+  <data name="Routine_man" xml:space="preserve"><value>Al hombre</value></data>
+  <data name="Instruction_passing" xml:space="preserve"><value>Estilo de pases</value></data>
+  <data name="InstructionDescription_passing" xml:space="preserve"><value>Preferencia de distancia del pase; la trayectoria es esquemática.</value></data>
+  <data name="Option_passing_short" xml:space="preserve"><value>Cortos</value></data>
+  <data name="Option_passing_mixed" xml:space="preserve"><value>Mixtos</value></data>
+  <data name="Option_passing_long" xml:space="preserve"><value>Largos</value></data>
+  <data name="Instruction_tempo" xml:space="preserve"><value>Ritmo</value></data>
+  <data name="InstructionDescription_tempo" xml:space="preserve"><value>Preferencia de velocidad de circulación. Sin animación ni cifras de rendimiento.</value></data>
+  <data name="Option_tempo_slow" xml:space="preserve"><value>Lento</value></data>
+  <data name="Option_tempo_normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Option_tempo_fast" xml:space="preserve"><value>Rápido</value></data>
+  <data name="Instruction_attack_width" xml:space="preserve"><value>Anchura ofensiva</value></data>
+  <data name="InstructionDescription_attack_width" xml:space="preserve"><value>Separación horizontal orientativa del bloque ofensivo.</value></data>
+  <data name="Option_attack_width_narrow" xml:space="preserve"><value>Estrecha</value></data>
+  <data name="Option_attack_width_normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Option_attack_width_wide" xml:space="preserve"><value>Amplia</value></data>
+  <data name="Instruction_freedom" xml:space="preserve"><value>Libertad posicional</value></data>
+  <data name="InstructionDescription_freedom" xml:space="preserve"><value>Grado de libertad respecto a la estructura. No cambia posiciones registradas.</value></data>
+  <data name="Option_freedom_disciplined" xml:space="preserve"><value>Disciplinada</value></data>
+  <data name="Option_freedom_balanced" xml:space="preserve"><value>Equilibrada</value></data>
+  <data name="Option_freedom_free" xml:space="preserve"><value>Libre</value></data>
+  <data name="Instruction_movement" xml:space="preserve"><value>Movimientos ofensivos</value></data>
+  <data name="InstructionDescription_movement" xml:space="preserve"><value>Preferencia de movilidad colectiva; no reasigna automáticamente a los jugadores.</value></data>
+  <data name="Option_movement_hold" xml:space="preserve"><value>Mantener posiciones</value></data>
+  <data name="Option_movement_mixed" xml:space="preserve"><value>Mixtos</value></data>
+  <data name="Option_movement_exchange" xml:space="preserve"><value>Intercambiar posiciones</value></data>
+  <data name="Instruction_progression" xml:space="preserve"><value>Progresión preferente</value></data>
+  <data name="InstructionDescription_progression" xml:space="preserve"><value>Zonas preferentes de avance, indicadas mediante flechas.</value></data>
+  <data name="Option_progression_flanks" xml:space="preserve"><value>Bandas</value></data>
+  <data name="Option_progression_mixed" xml:space="preserve"><value>Mixta</value></data>
+  <data name="Option_progression_centre" xml:space="preserve"><value>Centro</value></data>
+  <data name="Instruction_pressing" xml:space="preserve"><value>Presión</value></data>
+  <data name="InstructionDescription_pressing" xml:space="preserve"><value>Zona orientativa de inicio de la presión, independiente de la línea defensiva.</value></data>
+  <data name="Option_pressing_low" xml:space="preserve"><value>Baja</value></data>
+  <data name="Option_pressing_medium" xml:space="preserve"><value>Media</value></data>
+  <data name="Option_pressing_high" xml:space="preserve"><value>Alta</value></data>
+  <data name="Instruction_defensive_line" xml:space="preserve"><value>Línea defensiva</value></data>
+  <data name="InstructionDescription_defensive_line" xml:space="preserve"><value>Altura orientativa de la última línea, independiente de la presión.</value></data>
+  <data name="Option_defensive_line_low" xml:space="preserve"><value>Baja</value></data>
+  <data name="Option_defensive_line_medium" xml:space="preserve"><value>Media</value></data>
+  <data name="Option_defensive_line_high" xml:space="preserve"><value>Alta</value></data>
+  <data name="Instruction_marking" xml:space="preserve"><value>Marcaje</value></data>
+  <data name="Option_marking_zonal" xml:space="preserve"><value>Zonal</value></data>
+  <data name="Option_marking_mixed" xml:space="preserve"><value>Mixto</value></data>
+  <data name="Option_marking_man" xml:space="preserve"><value>Al hombre</value></data>
+  <data name="Instruction_defend_width" xml:space="preserve"><value>Anchura defensiva</value></data>
+  <data name="InstructionDescription_defend_width" xml:space="preserve"><value>Separación horizontal orientativa de la última línea.</value></data>
+  <data name="Option_defend_width_narrow" xml:space="preserve"><value>Estrecha</value></data>
+  <data name="Option_defend_width_normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Option_defend_width_wide" xml:space="preserve"><value>Amplia</value></data>
+  <data name="Instruction_organization" xml:space="preserve"><value>Organización defensiva</value></data>
+  <data name="InstructionDescription_organization" xml:space="preserve"><value>Preferencia entre conservar estructura y seguir referencias rivales. Explicación, sin movimientos simulados.</value></data>
+  <data name="Option_organization_hold" xml:space="preserve"><value>Mantener estructura</value></data>
+  <data name="Option_organization_follow" xml:space="preserve"><value>Perseguir rivales</value></data>
+  <data name="Instruction_tackling" xml:space="preserve"><value>Intensidad de entradas</value></data>
+  <data name="InstructionDescription_tackling" xml:space="preserve"><value>Preferencia de prudencia en las entradas. Sin bonificaciones ni probabilidades.</value></data>
+  <data name="Option_tackling_cautious" xml:space="preserve"><value>Prudente</value></data>
+  <data name="Option_tackling_normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Option_tackling_aggressive" xml:space="preserve"><value>Agresiva</value></data>
+  <data name="Instruction_recovery" xml:space="preserve"><value>Al recuperar el balón</value></data>
+  <data name="InstructionDescription_recovery" xml:space="preserve"><value>Situación representada: recuperación del balón; no se dibuja a la vez la pérdida.</value></data>
+  <data name="Option_recovery_counter" xml:space="preserve"><value>Contraatacar</value></data>
+  <data name="Option_recovery_balance" xml:space="preserve"><value>Equilibrar</value></data>
+  <data name="Option_recovery_keep" xml:space="preserve"><value>Conservar la posesión</value></data>
+  <data name="Instruction_loss" xml:space="preserve"><value>Al perder el balón</value></data>
+  <data name="InstructionDescription_loss" xml:space="preserve"><value>Situación representada: pérdida del balón; no se dibuja a la vez la recuperación.</value></data>
+  <data name="Option_loss_counterpress" xml:space="preserve"><value>Contrapresión</value></data>
+  <data name="Option_loss_balance" xml:space="preserve"><value>Equilibrar</value></data>
+  <data name="Option_loss_regroup" xml:space="preserve"><value>Replegar</value></data>
+  <data name="Instruction_keeper" xml:space="preserve"><value>Distribución del portero</value></data>
+  <data name="InstructionDescription_keeper" xml:space="preserve"><value>Situación representada: salida del portero; longitud orientativa de distribución.</value></data>
+  <data name="Option_keeper_short" xml:space="preserve"><value>Salida corta</value></data>
+  <data name="Option_keeper_mixed" xml:space="preserve"><value>Salida mixta</value></data>
+  <data name="Option_keeper_long" xml:space="preserve"><value>Salida larga</value></data>
+  <data name="Instruction_keeper_target" xml:space="preserve"><value>Destino preferente del portero</value></data>
+  <data name="InstructionDescription_keeper_target" xml:space="preserve"><value>Situación representada: distribución del portero al destino preferente, sin obligación automática.</value></data>
+  <data name="Option_keeper_target_defenders" xml:space="preserve"><value>Defensas</value></data>
+  <data name="Option_keeper_target_flanks" xml:space="preserve"><value>Bandas</value></data>
+  <data name="Option_keeper_target_forwards" xml:space="preserve"><value>Delanteros</value></data>
+  <data name="TacticFormation" xml:space="preserve"><value>Formación:</value></data>
+  <data name="TacticBench" xml:space="preserve"><value>Suplentes</value></data>
+  <data name="TacticReserves" xml:space="preserve"><value>Reservas</value></data>
+  <data name="TacticUndefined" xml:space="preserve"><value>Sin configurar</value></data>
+  <data name="TacticNotSaved" xml:space="preserve"><value>Sin instrucciones específicas · elige para configurar</value></data>
+  <data name="TacticDiagramLegend" xml:space="preserve"><value>Pase corto: discontinuo · Pase largo: continuo · Flecha: dirección · Zona: sombreada · Rosa: rival esquemático</value></data>
+  <data name="TacticPreviewHelp" xml:space="preserve"><value>Sin configurar significa que el entrenador no ha elegido una instrucción específica.</value></data>
+  <data name="DiagramTarget" xml:space="preserve"><value>Objetivo</value></data>
+  <data name="DiagramGoal" xml:space="preserve"><value>Portería</value></data>
+  <data name="DiagramLoss" xml:space="preserve"><value>Pérdida</value></data>
+  <data name="DiagramRival1" xml:space="preserve"><value>R1</value></data>
+  <data name="DiagramRival2" xml:space="preserve"><value>R2</value></data>
+  <data name="DiagramRival3" xml:space="preserve"><value>R3</value></data>
+  <data name="DiagramRivalTaker" xml:space="preserve"><value>Lanzador rival</value></data>
+  <data name="OutsideEleven" xml:space="preserve"><value>Fuera del once</value></data>
+  <data name="ShootoutOnly" xml:space="preserve"><value>Tanda de penaltis: cinco lanzadores en orden. No configura el lanzador habitual durante el partido.</value></data>
+  <data name="CrossTarget" xml:space="preserve"><value>Destino del centro</value></data>
+  <data name="CrossMovement" xml:space="preserve"><value>Movimiento del rematador</value></data>
+  <data name="RehearsedVariant" xml:space="preserve"><value>Variante de jugada ensayada</value></data>
+  <data name="WallSize" xml:space="preserve"><value>Barrera</value></data>
+  <data name="NoWall" xml:space="preserve"><value>Sin barrera</value></data>
+  <data name="WallPlayers" xml:space="preserve"><value>{0} jugadores</value></data>
+  <data name="LyingBehindWall" xml:space="preserve"><value>Hombre tumbado detrás de la barrera</value></data>
+  <data name="SetPiecePending" xml:space="preserve"><value>Funciones pendientes o fuera del once: {0}</value></data>
+  <data name="SetPieceReferences" xml:space="preserve"><value>R1–R3 son referencias rivales esquemáticas, sin identidades inventadas. ? = pendiente. * = fuera del once. B1–B4 se corresponden con los asignados a la barrera.</value></data>
+  <data name="Routine_centre" xml:space="preserve"><value>Centro del área</value></data>
+  <data name="Routine_cross" xml:space="preserve"><value>Centro al área</value></data>
+  <data name="Routine_rehearsed" xml:space="preserve"><value>Jugada ensayada</value></data>
+  <data name="Routine_run" xml:space="preserve"><value>Ataque en carrera</value></data>
+  <data name="Routine_late" xml:space="preserve"><value>Llegada desde segunda línea</value></data>
+  <data name="Routine_combined" xml:space="preserve"><value>Movimiento combinado sencillo</value></data>
+  <data name="Routine_one_two" xml:space="preserve"><value>Pase previo y desmarque</value></data>
+  <data name="Routine_yes" xml:space="preserve"><value>Sí</value></data>
+  <data name="Routine_no" xml:space="preserve"><value>No</value></data>
+  <data name="Routine_direct" xml:space="preserve"><value>Disparo directo</value></data>
+  <data name="Routine_flick" xml:space="preserve"><value>Prolongación de cabeza</value></data>
+  <data name="Routine_space" xml:space="preserve"><value>Saque al espacio</value></data>
+  <data name="Routine_back" xml:space="preserve"><value>Saque atrás</value></data>
+  <data name="Routine_area" xml:space="preserve"><value>Centro al área (configuración anterior)</value></data>
+  <data name="Routine_mixed" xml:space="preserve"><value>Mixto</value></data>
+  <data name="Routine_long" xml:space="preserve"><value>Envío largo al área</value></data>
+  <data name="InstructionDescription_marking" xml:space="preserve"><value>Preferencia colectiva; las asignaciones individuales se configuran en Balón parado. No se inventan rivales de un encuentro.</value></data>
+  <data name="SetRole_Receiver" xml:space="preserve"><value>Receptor / apoyo</value></data>
+  <data name="SetRole_Finisher" xml:space="preserve"><value>Rematador</value></data>
+  <data name="SetRole_Header" xml:space="preserve"><value>Prolongador de cabeza</value></data>
+  <data name="SetRole_StayBack" xml:space="preserve"><value>Jugador que se queda atrás</value></data>
+  <data name="SetRole_Zone1" xml:space="preserve"><value>Zona 1</value></data>
+  <data name="SetRole_Zone2" xml:space="preserve"><value>Zona 2</value></data>
+  <data name="SetRole_Zone3" xml:space="preserve"><value>Zona 3</value></data>
+  <data name="SetRole_Marker1" xml:space="preserve"><value>Marca de R1</value></data>
+  <data name="SetRole_Marker2" xml:space="preserve"><value>Marca de R2</value></data>
+  <data name="SetRole_Marker3" xml:space="preserve"><value>Marca de R3</value></data>
+  <data name="SetRole_Wall1" xml:space="preserve"><value>B1 · Jugador de barrera 1</value></data>
+  <data name="SetRole_Wall2" xml:space="preserve"><value>B2 · Jugador de barrera 2</value></data>
+  <data name="SetRole_Wall3" xml:space="preserve"><value>B3 · Jugador de barrera 3</value></data>
+  <data name="SetRole_Wall4" xml:space="preserve"><value>B4 · Jugador de barrera 4</value></data>
+  <data name="SetRole_Prone" xml:space="preserve"><value>Jugador tumbado</value></data>
+  <data name="PenaltyOrder_1" xml:space="preserve"><value>Primer lanzador</value></data>
+  <data name="PenaltyOrder_2" xml:space="preserve"><value>Segundo lanzador</value></data>
+  <data name="PenaltyOrder_3" xml:space="preserve"><value>Tercer lanzador</value></data>
+  <data name="PenaltyOrder_4" xml:space="preserve"><value>Cuarto lanzador</value></data>
+  <data name="PenaltyOrder_5" xml:space="preserve"><value>Quinto lanzador</value></data>
+  <data name="ThrowRoutine_short" xml:space="preserve"><value>Saque corto</value></data>
+  <data name="ThrowRoutine_long" xml:space="preserve"><value>Saque largo al área</value></data>
+  <data name="ThrowRoutine_flick" xml:space="preserve"><value>Prolongación de cabeza</value></data>
+  <data name="ThrowRoutine_space" xml:space="preserve"><value>Saque al espacio</value></data>
+  <data name="ThrowRoutine_back" xml:space="preserve"><value>Saque atrás</value></data>
+  <data name="ThrowRoutine_rehearsed" xml:space="preserve"><value>Saque ensayado</value></data>
+  <data name="ThrowRoutine_mixed" xml:space="preserve"><value>Mixto (configuración anterior)</value></data>
+  <data name="FreeKickShort" xml:space="preserve"><value>Pase corto</value></data>
+  <data name="BenchNatural" xml:space="preserve"><value>Natural: {0}</value></data>
+  <data name="BenchSecondary" xml:space="preserve"><value>Sec.: {0}</value></data>
+  <data name="BenchDestination" xml:space="preserve"><value>Destino: {0}</value></data>
+  <data name="PlanLabel" xml:space="preserve"><value>Plan:</value></data>
+  <data name="PlanPhase" xml:space="preserve"><value>Disposición:</value></data>
+  <data name="Plan_Initial" xml:space="preserve"><value>Inicial</value></data>
+  <data name="Plan_Winning" xml:space="preserve"><value>Ganando</value></data>
+  <data name="Plan_Losing" xml:space="preserve"><value>Perdiendo</value></data>
+  <data name="Phase_WithBall" xml:space="preserve"><value>Con balón</value></data>
+  <data name="Phase_WithoutBall" xml:space="preserve"><value>Sin balón</value></data>
+  <data name="SaveTacticalPlans" xml:space="preserve"><value>Guardar planes</value></data>
+  <data name="CopyTacticalPlan" xml:space="preserve"><value>Copiar desde otro plan…</value></data>
+  <data name="CopyDisposition" xml:space="preserve"><value>Copiar disposición…</value></data>
+  <data name="ResetDisposition" xml:space="preserve"><value>Restablecer</value></data>
+  <data name="ShowPhaseReference" xml:space="preserve"><value>Mostrar referencia</value></data>
+  <data name="PersonalizedFormation" xml:space="preserve"><value>(personalizada)</value></data>
+  <data name="PlanConfirm" xml:space="preserve"><value>Confirmar</value></data>
+  <data name="PlanCancel" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="PlanCopyWarning" xml:space="preserve"><value>Se sobrescribirá el plan {0}, incluidos su once, ambas disposiciones e instrucciones. El plan de origen se conservará.</value></data>
+  <data name="DispositionOverwriteWarning" xml:space="preserve"><value>Se reemplazarán las posiciones y demarcaciones de esta disposición. El once y la otra fase se conservarán.</value></data>
+  <data name="DispositionCopyWarning" xml:space="preserve"><value>Se copiarán posiciones y demarcaciones a esta disposición, manteniendo el once de destino. Se sobrescribirán sus personalizaciones.</value></data>
+  <data name="TacticalRole_CAD" xml:space="preserve"><value>Carrilero derecho (CAD)</value></data>
+  <data name="TacticalRole_CAI" xml:space="preserve"><value>Carrilero izquierdo (CAI)</value></data>
+  <data name="PlanSaveError" xml:space="preserve"><value>No se pudieron guardar los planes. Se conserva el estado anterior.</value></data>
+  <data name="PlanMoveError" xml:space="preserve"><value>No se pudo guardar el movimiento: revisa límites, proximidad y revisión de la táctica.</value></data>
+  <data name="Instruction_counter_route" xml:space="preserve"><value>Vía preferente del contraataque</value></data>
+  <data name="InstructionDescription_counter_route" xml:space="preserve"><value>Referencia descriptiva de progresión tras recuperar el balón. No modifica la disposición guardada.</value></data>
+  <data name="Option_counter_route_right" xml:space="preserve"><value>Banda derecha</value></data>
+  <data name="Option_counter_route_left" xml:space="preserve"><value>Banda izquierda</value></data>
+  <data name="Option_counter_route_both" xml:space="preserve"><value>Ambas bandas</value></data>
+  <data name="Option_counter_route_centre" xml:space="preserve"><value>Por el centro</value></data>
+  <data name="Option_counter_route_long" xml:space="preserve"><value>Pases largos</value></data>
+  <data name="FreeKickLocation" xml:space="preserve"><value>Ubicación de la falta</value></data>
+  <data name="FreeKickLocation_Left" xml:space="preserve"><value>Lateral izquierda</value></data>
+  <data name="FreeKickLocation_Right" xml:space="preserve"><value>Lateral derecha</value></data>
+  <data name="FreeKickLocation_Distant" xml:space="preserve"><value>Central alejada</value></data>
+  <data name="FreeKickLocation_Edge" xml:space="preserve"><value>Frontal del área</value></data>
+  <data name="SetRole_NearPost" xml:space="preserve"><value>Vigilancia del primer palo</value></data>
+  <data name="SetRole_FarPost" xml:space="preserve"><value>Vigilancia del segundo palo</value></data>
+  <data name="SetRole_Rebound" xml:space="preserve"><value>Defensa de rechaces</value></data>
+  <data name="DiagramHold" xml:space="preserve"><value>Posición de referencia</value></data>
+  <data name="DiagramBall" xml:space="preserve"><value>Balón</value></data>
+  <data name="DiagramRivalWall" xml:space="preserve"><value>Barrera rival esquemática</value></data>
+<data name="DiagramRival4" xml:space="preserve"><value>Rival 4</value></data>
+<data name="FreeKickLongShot" xml:space="preserve"><value>Disparo lejano</value></data>
+  <data name="NavPage_Academy" xml:space="preserve"><value>Cantera</value></data>
+  <data name="AcademyTitle" xml:space="preserve"><value>Cantera</value></data>
+  <data name="AcademyIntroduction" xml:space="preserve"><value>Equipos de formación del club. Gestión y modelo táctico independientes por equipo.</value></data>
+  <data name="AcademyLegacyNotice" xml:space="preserve"><value>Esta carrera conserva su formato anterior. Puedes añadir su cantera verificada sin cambiar el primer equipo.</value></data>
+  <data name="InitializeAcademy" xml:space="preserve"><value>Inicializar cantera de esta carrera</value></data>
+  <data name="AcademyLoadError" xml:space="preserve"><value>No se puede cargar la cantera. Comprueba la base de datos y vuelve a intentarlo.</value></data>
+  <data name="AcademyResearchNotice" xml:space="preserve"><value>Inventario documentado disponible. Las categorías adicionales y competiciones sin confirmar permanecen pendientes de investigación.</value></data>
+  <data name="AcademyTeam" xml:space="preserve"><value>Equipo</value></data>
+  <data name="AcademyCategory" xml:space="preserve"><value>Categoría</value></data>
+  <data name="AcademyCategory_Senior" xml:space="preserve"><value>Filial sénior</value></data>
+  <data name="AcademyCategory_Juvenil" xml:space="preserve"><value>Juvenil</value></data>
+  <data name="AcademyPlayers" xml:space="preserve"><value>Futbolistas</value></data>
+  <data name="AcademyCoach" xml:space="preserve"><value>Entrenador responsable</value></data>
+  <data name="AcademyManagement" xml:space="preserve"><value>Gestión</value></data>
+  <data name="AcademyTacticMode" xml:space="preserve"><value>Modelo táctico</value></data>
+  <data name="AcademyManagement_Direct" xml:space="preserve"><value>Directa</value></data>
+  <data name="AcademyManagement_Delegated" xml:space="preserve"><value>Delegada</value></data>
+  <data name="AcademyMode_Synchronized" xml:space="preserve"><value>Sincronizada</value></data>
+  <data name="AcademyMode_Own" xml:space="preserve"><value>Propia</value></data>
+  <data name="OpenAcademyTeam" xml:space="preserve"><value>Ver equipo de cantera</value></data>
+  <data name="AcademySynchronizationWarning" xml:space="preserve"><value>La táctica propia será sustituida por la configuración vigente del primer equipo. Se mantendrán futbolistas propios. ¿Activar la sincronización permanente?</value></data>
+  <data name="AcademySynchronizationNotice" xml:space="preserve"><value>Este equipo utiliza la táctica del primer equipo. Los cambios se sincronizan automáticamente.</value></data>
+  <data name="AcademySection_0" xml:space="preserve"><value>Resumen</value></data>
+  <data name="AcademySection_1" xml:space="preserve"><value>Plantilla</value></data>
+  <data name="AcademySection_2" xml:space="preserve"><value>Táctica</value></data>
+  <data name="AcademySection_3" xml:space="preserve"><value>Desarrollo</value></data>
+  <data name="AcademyStaffLink" xml:space="preserve"><value>Vinculación del técnico</value></data>
+  <data name="AcademyStaffInstitutional" xml:space="preserve"><value>Asignado institucionalmente · Sin condiciones económicas diseñadas</value></data>
+  <data name="AcademyCompetition" xml:space="preserve"><value>Competición de referencia</value></data>
+  <data name="AcademyCompetitionPending" xml:space="preserve"><value>Pendiente de verificación · Sin competición operativa</value></data>
+  <data name="AcademyDelegationNotice" xml:space="preserve"><value>La delegación registra al entrenador responsable. No se simulan partidos ni decisiones automáticas. Los permisos de alineación y la política táctica son independientes.</value></data>
+  <data name="AcademyDevelopmentNotice" xml:space="preserve"><value>Seguimiento actual: edad, posición y atributos visibles en la ficha individual. Sin historial deportivo disponible. Entrenamiento, evolución, promociones y cesiones todavía no implementados.</value></data>
+  <data name="ViewAcademyPlayer" xml:space="preserve"><value>Ver futbolista</value></data>
+  <data name="BackAcademy" xml:space="preserve"><value>Volver a cantera</value></data>
+  <data name="BackAcademyPlayer" xml:space="preserve"><value>Volver al equipo de cantera</value></data>
+  <data name="AcademySetPiecesNotInherited" xml:space="preserve"><value>El vínculo sincroniza esquemas, mentalidad, estilo y transiciones. No copia asignaciones de balón parado del primer equipo.</value></data>
+<data name="AcademyLevel" xml:space="preserve"><value>Nivel en la categoría</value></data>
+<data name="AcademySituation" xml:space="preserve"><value>Situación deportiva</value></data>
+<data name="AcademySituationAssigned" xml:space="preserve"><value>Asignado al equipo · Sin historial</value></data>
+<data name="AcademyPolicyError" xml:space="preserve"><value>No se pudo cambiar la configuración de cantera. Puede haber cambiado en otra operación. Vuelve a cargar el equipo e inténtalo de nuevo.</value></data>
+<data name="AcademyCallupHelp" xml:space="preserve"><value>Convocatoria: arrastra entre suplentes y reservas para intercambiar su selección. No cambia la plantilla permanente.</value></data>
+  <data name="IndividualCustomized" xml:space="preserve"><value>personalizado</value></data>
+  <data name="IndividualInstructions" xml:space="preserve"><value>Instrucciones individuales</value></data>
+  <data name="IndividualReplaceWarning" xml:space="preserve"><value>Este rol tiene instrucciones personalizadas. ¿Reemplazarlas por los valores del nuevo rol? Cancelar conserva la configuración actual.</value></data>
+  <data name="IndividualLowLineWarning" xml:space="preserve"><value>Presión individual alta con línea retrasada: la posición colectiva sigue teniendo prioridad.</value></data>
+  <data name="IndividualFreedomWarning" xml:space="preserve"><value>Libertad individual con disciplina colectiva: los movimientos respetarán la estructura del equipo.</value></data>
+  <data name="IndividualGeometryNotice" xml:space="preserve"><value>Estas preferencias no cambian las posiciones de la pizarra. No hay efectos de partido hasta disponer del motor.</value></data>
+  <data name="PersonnelTitle" xml:space="preserve"><value>Capitanes y jerarquías de especialistas</value></data>
+  <data name="PersonnelNotice" xml:space="preserve"><value>El primer futbolista de la lista que esté sobre el campo será el elegido. Las jerarquías son propias de este equipo.</value></data>
+  <data name="Specialist_Captain" xml:space="preserve"><value>Capitanes</value></data>
+  <data name="Specialist_Penalty" xml:space="preserve"><value>Penaltis durante el partido</value></data>
+  <data name="Specialist_DirectFreeKick" xml:space="preserve"><value>Faltas directas</value></data>
+  <data name="Specialist_IndirectFreeKick" xml:space="preserve"><value>Faltas indirectas</value></data>
+  <data name="Specialist_CornerLeft" xml:space="preserve"><value>Córners desde la izquierda</value></data>
+  <data name="Specialist_CornerRight" xml:space="preserve"><value>Córners desde la derecha</value></data>
+  <data name="Instruction_press_direction" xml:space="preserve"><value>Orientación de la presión</value></data>
+  <data name="Instruction_opponent_keeper" xml:space="preserve"><value>Salida del portero rival</value></data>
+  <data name="Instruction_offside_trap" xml:space="preserve"><value>Trampa del fuera de juego</value></data>
+  <data name="Instruction_press_beaten" xml:space="preserve"><value>Cuando se supera la presión</value></data>
+  <data name="InstructionDescription_press_direction" xml:space="preserve"><value>Orienta la presión hacia la zona elegida; no garantiza recuperar el balón.</value></data>
+  <data name="InstructionDescription_opponent_keeper" xml:space="preserve"><value>Indica cómo dificultar el inicio de juego rival.</value></data>
+  <data name="InstructionDescription_offside_trap" xml:space="preserve"><value>Representa el avance coordinado de la línea; no garantiza un fuera de juego.</value></data>
+  <data name="InstructionDescription_press_beaten" xml:space="preserve"><value>Conducta posterior a una presión superada; diferente de la transición inmediata tras pérdida.</value></data>
+  <data name="Behaviour_keeper_classic" xml:space="preserve"><value>Portero clásico</value></data>
+  <data name="Behaviour_keeper_sweeper" xml:space="preserve"><value>Portero líbero</value></data>
+  <data name="Behaviour_keeper_distributor" xml:space="preserve"><value>Portero distribuidor</value></data>
+  <data name="Behaviour_centre_defensive" xml:space="preserve"><value>Central defensivo</value></data>
+  <data name="Behaviour_centre_playmaker" xml:space="preserve"><value>Central con salida de balón</value></data>
+  <data name="Behaviour_centre_stopper" xml:space="preserve"><value>Central corrector</value></data>
+  <data name="Behaviour_centre_cover" xml:space="preserve"><value>Central de cobertura</value></data>
+  <data name="Behaviour_back_defensive" xml:space="preserve"><value>Lateral defensivo</value></data>
+  <data name="Behaviour_back_balanced" xml:space="preserve"><value>Lateral equilibrado</value></data>
+  <data name="Behaviour_back_attacking" xml:space="preserve"><value>Lateral ofensivo</value></data>
+  <data name="Behaviour_back_inverted" xml:space="preserve"><value>Lateral interior</value></data>
+  <data name="Behaviour_wingback" xml:space="preserve"><value>Carrilero</value></data>
+  <data name="Behaviour_pivot_defensive" xml:space="preserve"><value>Pivote defensivo</value></data>
+  <data name="Behaviour_pivot_playmaker" xml:space="preserve"><value>Pivote organizador</value></data>
+  <data name="Behaviour_ball_winner" xml:space="preserve"><value>Recuperador</value></data>
+  <data name="Behaviour_pivot_support" xml:space="preserve"><value>Mediocentro de apoyo</value></data>
+  <data name="Behaviour_playmaker" xml:space="preserve"><value>Organizador</value></data>
+  <data name="Behaviour_box_to_box" xml:space="preserve"><value>Centrocampista todoterreno</value></data>
+  <data name="Behaviour_interior_support" xml:space="preserve"><value>Interior de apoyo</value></data>
+  <data name="Behaviour_midfield_runner" xml:space="preserve"><value>Centrocampista llegador</value></data>
+  <data name="Behaviour_advanced_playmaker" xml:space="preserve"><value>Organizador adelantado</value></data>
+  <data name="Behaviour_attacking_runner" xml:space="preserve"><value>Mediapunta llegador</value></data>
+  <data name="Behaviour_second_forward" xml:space="preserve"><value>Segundo delantero</value></data>
+  <data name="Behaviour_free_ten" xml:space="preserve"><value>Mediapunta libre</value></data>
+  <data name="Behaviour_winger_classic" xml:space="preserve"><value>Extremo clásico</value></data>
+  <data name="Behaviour_winger_inverted" xml:space="preserve"><value>Extremo inverso</value></data>
+  <data name="Behaviour_wide_midfielder" xml:space="preserve"><value>Interior de banda</value></data>
+  <data name="Behaviour_winger_support" xml:space="preserve"><value>Extremo de apoyo</value></data>
+  <data name="Behaviour_winger_scorer" xml:space="preserve"><value>Extremo goleador</value></data>
+  <data name="Behaviour_poacher" xml:space="preserve"><value>Delantero rematador</value></data>
+  <data name="Behaviour_forward_support" xml:space="preserve"><value>Delantero de apoyo</value></data>
+  <data name="Behaviour_pressing_forward" xml:space="preserve"><value>Delantero presionante</value></data>
+  <data name="Behaviour_target_forward" xml:space="preserve"><value>Hombre objetivo</value></data>
+  <data name="Behaviour_mobile_forward" xml:space="preserve"><value>Delantero móvil</value></data>
+  <data name="Behaviour_false_nine" xml:space="preserve"><value>Falso nueve</value></data>
+  <data name="Individual_forward_runs" xml:space="preserve"><value>Incorporaciones</value></data>
+  <data name="Individual_roaming" xml:space="preserve"><value>Movimientos</value></data>
+  <data name="Individual_runs" xml:space="preserve"><value>Desmarques</value></data>
+  <data name="Individual_width" xml:space="preserve"><value>Anchura individual</value></data>
+  <data name="Individual_involvement" xml:space="preserve"><value>Participación ofensiva</value></data>
+  <data name="Individual_risk" xml:space="preserve"><value>Riesgo de pase</value></data>
+  <data name="Individual_distance" xml:space="preserve"><value>Distancia preferida</value></data>
+  <data name="Individual_creativity" xml:space="preserve"><value>Libertad creativa</value></data>
+  <data name="Individual_dribbling" xml:space="preserve"><value>Conducción</value></data>
+  <data name="Individual_shooting" xml:space="preserve"><value>Frecuencia de disparo</value></data>
+  <data name="Individual_box_runs" xml:space="preserve"><value>Llegadas al área</value></data>
+  <data name="Individual_crossing" xml:space="preserve"><value>Centros</value></data>
+  <data name="Individual_cross_target" xml:space="preserve"><value>Destino de centros</value></data>
+  <data name="Individual_pressing" xml:space="preserve"><value>Intensidad de presión</value></data>
+  <data name="Individual_marking" xml:space="preserve"><value>Tipo de marcaje</value></data>
+  <data name="Individual_tackling" xml:space="preserve"><value>Agresividad en entradas</value></data>
+  <data name="Individual_tracking" xml:space="preserve"><value>Seguimiento del rival</value></data>
+  <data name="Individual_recovery" xml:space="preserve"><value>Participación en el repliegue</value></data>
+  <data name="Individual_keeper_sweeping" xml:space="preserve"><value>Salidas del portero</value></data>
+  <data name="IndividualOption_few" xml:space="preserve"><value>Pocas</value></data>
+  <data name="IndividualOption_balanced" xml:space="preserve"><value>Equilibradas</value></data>
+  <data name="IndividualOption_frequent" xml:space="preserve"><value>Frecuentes</value></data>
+  <data name="IndividualOption_hold" xml:space="preserve"><value>Mantener posición</value></data>
+  <data name="IndividualOption_spaces" xml:space="preserve"><value>Buscar espacios</value></data>
+  <data name="IndividualOption_free" xml:space="preserve"><value>Libertad de movimiento</value></data>
+  <data name="IndividualOption_feet" xml:space="preserve"><value>Al pie</value></data>
+  <data name="IndividualOption_mixed" xml:space="preserve"><value>Mixtos</value></data>
+  <data name="IndividualOption_space" xml:space="preserve"><value>Al espacio</value></data>
+  <data name="IndividualOption_inside" xml:space="preserve"><value>Cerrarse</value></data>
+  <data name="IndividualOption_outside" xml:space="preserve"><value>Abrirse</value></data>
+  <data name="IndividualOption_conservative" xml:space="preserve"><value>Conservadora</value></data>
+  <data name="IndividualOption_aggressive" xml:space="preserve"><value>Agresiva</value></data>
+  <data name="IndividualOption_low" xml:space="preserve"><value>Bajo</value></data>
+  <data name="IndividualOption_medium" xml:space="preserve"><value>Medio</value></data>
+  <data name="IndividualOption_high" xml:space="preserve"><value>Alto</value></data>
+  <data name="IndividualOption_short" xml:space="preserve"><value>Corto</value></data>
+  <data name="IndividualOption_long" xml:space="preserve"><value>Largo</value></data>
+  <data name="IndividualOption_restricted" xml:space="preserve"><value>Restringida</value></data>
+  <data name="IndividualOption_normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="IndividualOption_less" xml:space="preserve"><value>Menos</value></data>
+  <data name="IndividualOption_more" xml:space="preserve"><value>Más</value></data>
+  <data name="IndividualOption_near" xml:space="preserve"><value>Primer palo</value></data>
+  <data name="IndividualOption_centre" xml:space="preserve"><value>Centro</value></data>
+  <data name="IndividualOption_far" xml:space="preserve"><value>Segundo palo</value></data>
+  <data name="IndividualOption_zonal" xml:space="preserve"><value>Zonal</value></data>
+  <data name="IndividualOption_individual" xml:space="preserve"><value>Individual</value></data>
+  <data name="IndividualOption_cautious" xml:space="preserve"><value>Conservadoras</value></data>
+  <data name="IndividualOption_follow" xml:space="preserve"><value>Seguir al rival</value></data>
+  <data name="IndividualOption_positions" xml:space="preserve"><value>Recuperar posiciones</value></data>
+  <data name="IndividualOption_structure" xml:space="preserve"><value>Mantener estructura</value></data>
+  <data name="IndividualOption_repress" xml:space="preserve"><value>Presionar de nuevo cuando sea posible</value></data>
+  <data name="IndividualOption_advance" xml:space="preserve"><value>Adelantarse</value></data>
+  <data name="Option_press_direction_none" xml:space="preserve"><value>Sin preferencia</value></data>
+  <data name="Option_press_direction_left" xml:space="preserve"><value>Forzar hacia banda izquierda</value></data>
+  <data name="Option_press_direction_right" xml:space="preserve"><value>Forzar hacia banda derecha</value></data>
+  <data name="Option_press_direction_centre" xml:space="preserve"><value>Forzar hacia el centro</value></data>
+  <data name="Option_press_direction_flanks" xml:space="preserve"><value>Forzar hacia las bandas</value></data>
+  <data name="Option_opponent_keeper_allow" xml:space="preserve"><value>Permitir salida corta</value></data>
+  <data name="Option_opponent_keeper_press" xml:space="preserve"><value>Presionar salida corta</value></data>
+  <data name="Option_opponent_keeper_selective" xml:space="preserve"><value>Presión selectiva</value></data>
+  <data name="Option_offside_trap_off" xml:space="preserve"><value>Desactivada</value></data>
+  <data name="Option_offside_trap_on" xml:space="preserve"><value>Activada</value></data>
+  <data name="Option_press_beaten_positions" xml:space="preserve"><value>Recuperar posiciones</value></data>
+  <data name="Option_press_beaten_structure" xml:space="preserve"><value>Mantener estructura</value></data>
+  <data name="Option_press_beaten_repress" xml:space="preserve"><value>Presionar de nuevo cuando sea posible</value></data>
+  <data name="PersonnelAvailable" xml:space="preserve"><value>Disponible en el once actual</value></data>
+  <data name="IndividualGroup_attack" xml:space="preserve"><value>Ataque</value></data>
+  <data name="IndividualGroup_creation" xml:space="preserve"><value>Pase y creación</value></data>
+  <data name="IndividualGroup_finish" xml:space="preserve"><value>Finalización</value></data>
+  <data name="IndividualGroup_defend" xml:space="preserve"><value>Defensa</value></data>
+  <data name="NavPage_Training" xml:space="preserve"><value>Entrenamiento</value></data>
+  <data name="NavPage_Analysis" xml:space="preserve"><value>Análisis</value></data>
+  <data name="NavPage_Facilities" xml:space="preserve"><value>Instalaciones</value></data>
+  <data name="CaptainTitle" xml:space="preserve"><value>Primer y segundo capitán</value></data>
+  <data name="TrainingClockNotice" xml:space="preserve"><value>Planificación por equipo. La carrera aún no dispone de avance temporal: las sesiones no se ejecutan al guardarlas.</value></data>
+  <data name="TrainingReviewRequired" xml:space="preserve"><value>La plantilla ha cambiado: revisa y confirma la planificación antes de ejecutarla.</value></data>
+  <data name="TrainingProvisional" xml:space="preserve"><value>Carga de planificación experimental. Calendario de partidos, observaciones físicas y personal especializado pendientes; no equivale a fatiga observada.</value></data>
+  <data name="TrainingLoadError" xml:space="preserve"><value>No se ha podido cargar la planificación de entrenamiento.</value></data>
+  <data name="TrainingPreviousWeek" xml:space="preserve"><value>Semana anterior</value></data>
+  <data name="TrainingNextWeek" xml:space="preserve"><value>Semana siguiente</value></data>
+  <data name="TrainingNoSessions" xml:space="preserve"><value>Sin sesiones planificadas. No implica un día de descanso confirmado.</value></data>
+  <data name="TrainingCreateTitle" xml:space="preserve"><value>Crear o modificar sesión</value></data>
+  <data name="TrainingDuration" xml:space="preserve"><value>Duración en minutos</value></data>
+  <data name="TrainingObjective" xml:space="preserve"><value>Objetivo de la sesión</value></data>
+  <data name="TrainingFrequency" xml:space="preserve"><value>Frecuencia prevista en semanas (sin repetición automática)</value></data>
+  <data name="TrainingUnassignedResponsible" xml:space="preserve"><value>Responsable pendiente de asignación</value></data>
+  <data name="TrainingHeadCoach" xml:space="preserve"><value>Entrenador principal</value></data>
+  <data name="TrainingOpposition" xml:space="preserve"><value>Con oposición</value></data>
+  <data name="TrainingSaveSession" xml:space="preserve"><value>Guardar sesión</value></data>
+  <data name="TrainingEditSession" xml:space="preserve"><value>Editar</value></data>
+  <data name="TrainingDeleteSession" xml:space="preserve"><value>Eliminar sesión planificada</value></data>
+  <data name="TrainingGroups" xml:space="preserve"><value>Grupos de entrenamiento</value></data>
+  <data name="TrainingNewGroup" xml:space="preserve"><value>Crear grupo</value></data>
+  <data name="TrainingSaveGroup" xml:space="preserve"><value>Guardar grupo</value></data>
+  <data name="TrainingManual" xml:space="preserve"><value>Control manual</value></data>
+  <data name="TrainingNoQualifiedStaff" xml:space="preserve"><value>No existe un técnico disponible para delegar esta área.</value></data>
+  <data name="TrainingExcluded" xml:space="preserve"><value>Excepciones individuales (selección múltiple)</value></data>
+  <data name="TrainingPlayers" xml:space="preserve"><value>Futbolistas</value></data>
+  <data name="TrainingSessionsPlanned" xml:space="preserve"><value>Sesiones planificadas</value></data>
+  <data name="TrainingPlannedLoad" xml:space="preserve"><value>Carga prevista (u.)</value></data>
+  <data name="TrainingObservedFatigue" xml:space="preserve"><value>Fatiga observada</value></data>
+  <data name="SportsDateFormat" xml:space="preserve"><value>AAAA-MM-DD</value></data>
+  <data name="SportsTimeFormat" xml:space="preserve"><value>HH:mm</value></data>
+  <data name="TrainingTab_0" xml:space="preserve"><value>Planificación</value></data>
+  <data name="TrainingTab_1" xml:space="preserve"><value>Campo</value></data>
+  <data name="TrainingTab_2" xml:space="preserve"><value>Gimnasio</value></data>
+  <data name="TrainingTab_3" xml:space="preserve"><value>Porteros</value></data>
+  <data name="TrainingTab_4" xml:space="preserve"><value>Jugadas ensayadas</value></data>
+  <data name="TrainingTab_5" xml:space="preserve"><value>Recuperación</value></data>
+  <data name="TrainingManagement_Manual" xml:space="preserve"><value>Gestión manual</value></data>
+  <data name="TrainingManagement_Delegated" xml:space="preserve"><value>Gestión delegada</value></data>
+  <data name="TrainingManagement_Mixed" xml:space="preserve"><value>Gestión mixta</value></data>
+  <data name="TrainingScope_Team" xml:space="preserve"><value>Equipo</value></data>
+  <data name="TrainingScope_Individual" xml:space="preserve"><value>Individual</value></data>
+  <data name="TrainingScope_Position" xml:space="preserve"><value>Por demarcación</value></data>
+  <data name="TrainingScope_Group" xml:space="preserve"><value>Grupo personalizado</value></data>
+  <data name="TrainingLoad_Rest" xml:space="preserve"><value>Descanso</value></data>
+  <data name="TrainingLoad_VeryLow" xml:space="preserve"><value>Muy baja</value></data>
+  <data name="TrainingLoad_Low" xml:space="preserve"><value>Baja</value></data>
+  <data name="TrainingLoad_Medium" xml:space="preserve"><value>Media</value></data>
+  <data name="TrainingLoad_High" xml:space="preserve"><value>Alta</value></data>
+  <data name="TrainingLoad_VeryHigh" xml:space="preserve"><value>Muy alta</value></data>
+  <data name="AnalysisDataNotice" xml:space="preserve"><value>Se muestran únicamente datos de la carrera. No hay estadísticas inventadas ni un modelo de xG.</value></data>
+  <data name="AnalysisTab_0" xml:space="preserve"><value>Equipo</value></data>
+  <data name="AnalysisTab_1" xml:space="preserve"><value>Jugadores</value></data>
+  <data name="AnalysisTab_2" xml:space="preserve"><value>Rival</value></data>
+  <data name="AnalysisTab_3" xml:space="preserve"><value>Informes</value></data>
+  <data name="AnalysisNoMatches" xml:space="preserve"><value>Todavía no existe una fuente de partidos disputados ni datos por zonas.</value></data>
+  <data name="AnalysisAttributesNotice" xml:space="preserve"><value>Abre una fila para consultar atributos visibles, posiciones, fortalezas y debilidades. Las tendencias requieren observaciones reales.</value></data>
+  <data name="AnalysisOpponentUnavailable" xml:space="preserve"><value>Sin calendario ni rival verificado. No existe todavía analista contratado para elaborar un informe competitivo.</value></data>
+  <data name="AnalysisRequestSubject" xml:space="preserve"><value>Objeto de la solicitud</value></data>
+  <data name="AnalysisRequest" xml:space="preserve"><value>Registrar solicitud de análisis</value></data>
+  <data name="AnalysisPendingData" xml:space="preserve"><value>Pendiente de datos y responsable</value></data>
+  <data name="AnalysisReportKind" xml:space="preserve"><value>Tipo de informe</value></data>
+  <data name="AnalysisCreateSnapshot" xml:space="preserve"><value>Crear informe de datos actuales</value></data>
+  <data name="AnalysisKind_Technical" xml:space="preserve"><value>Informe técnico de datos disponibles</value></data>
+  <data name="AnalysisKind_SquadSummary" xml:space="preserve"><value>Resumen para la plantilla</value></data>
+  <data name="AnalysisKind_Individual" xml:space="preserve"><value>Informe individual</value></data>
+  <data name="AnalysisSavePriorities" xml:space="preserve"><value>Guardar prioridades (sin cambiar táctica)</value></data>
+  <data name="AnalysisLoadError" xml:space="preserve"><value>No se ha podido cargar Análisis.</value></data>
+  <data name="SportsTechnologyTitle" xml:space="preserve"><value>Tecnología deportiva</value></data>
+  <data name="SportsTechnologyError" xml:space="preserve"><value>No se ha podido cargar Tecnología deportiva.</value></data>
+  <data name="FacilityOwnership" xml:space="preserve"><value>Disponibilidad</value></data>
+  <data name="FacilityCapacity" xml:space="preserve"><value>Capacidad simultánea por instalación</value></data>
+  <data name="FacilityOwnership_Unknown" xml:space="preserve"><value>Posesión inicial sin verificar</value></data>
+  <data name="FacilityOwnership_Absent" xml:space="preserve"><value>Ausencia verificada</value></data>
+  <data name="FacilityOwnership_Installed" xml:space="preserve"><value>Instalada y verificada</value></data>
+  <data name="FacilityOwnership_Ordered" xml:space="preserve"><value>Pedido pendiente de puesta en servicio</value></data>
+  <data name="FootbonautDescription" xml:space="preserve"><value>Entrenamiento específico de control, primer toque y pase. Uso individual, compartido por equipos mediante reservas; no mejora todos los atributos.</value></data>
+  <data name="FootbonautAcquisitionNotice" xml:space="preserve"><value>Sin precio, espacio y autorización presupuestaria aprobados no se realiza ninguna compra ni se descuenta dinero.</value></data>
+  <data name="FootbonautRequestQuote" xml:space="preserve"><value>Solicitar presupuesto de adquisición</value></data>
+  <data name="FacilityPendingQuote" xml:space="preserve"><value>Presupuesto y autorización pendientes</value></data>
+  <data name="FootbonautReservations" xml:space="preserve"><value>Reservas compartidas del club</value></data>
+  <data name="FacilityNoReservations" xml:space="preserve"><value>Sin reservas planificadas.</value></data>
+  <data name="MovePlayerTeam" xml:space="preserve"><value>Mover a otro equipo</value></data>
+  <data name="MovementRegulationNotice" xml:space="preserve"><value>Se requiere normativa, licencia e inscripción verificadas antes de autorizar el movimiento.</value></data>
+  <data name="MovementReady" xml:space="preserve"><value>Comprobaciones disponibles superadas. La operación se revalidará al confirmar.</value></data>
+  <data name="MovementKind_Permanent" xml:space="preserve"><value>Cambio permanente de equipo</value></data>
+  <data name="MovementKind_Temporary" xml:space="preserve"><value>Participación temporal</value></data>
+  <data name="MovementExecute" xml:space="preserve"><value>Confirmar movimiento</value></data>
+  <data name="MovementRecommendationReason" xml:space="preserve"><value>Motivo de la propuesta del entrenador</value></data>
+  <data name="MovementRecommend" xml:space="preserve"><value>Registrar propuesta del responsable</value></data>
+  <data name="MovementProposalSaved" xml:space="preserve"><value>Propuesta pendiente registrada. El jugador no ha cambiado de equipo.</value></data>
+  <data name="MovementAccept" xml:space="preserve"><value>Aceptar y revalidar</value></data>
+  <data name="MovementReject" xml:space="preserve"><value>Rechazar</value></data>
+  <data name="MovementBack" xml:space="preserve"><value>Volver a la plantilla</value></data>
+  <data name="MovementError" xml:space="preserve"><value>No se ha podido cargar la gestión de movimientos.</value></data>
+  <data name="RecommendationStatus_Pending" xml:space="preserve"><value>Pendiente</value></data>
+  <data name="RecommendationStatus_Accepted" xml:space="preserve"><value>Aceptada</value></data>
+  <data name="RecommendationStatus_Rejected" xml:space="preserve"><value>Rechazada</value></data>
+  <data name="RecommendationStatus_Invalidated" xml:space="preserve"><value>Invalidada</value></data>
+  <data name="AcademyOpenTraining" xml:space="preserve"><value>Abrir entrenamiento de este equipo</value></data>
+  <data name="TrainingResponsibility_Weekly" xml:space="preserve"><value>Planificación semanal</value></data>
+  <data name="TrainingResponsibility_Collective" xml:space="preserve"><value>Entrenamiento colectivo</value></data>
+  <data name="TrainingResponsibility_Individual" xml:space="preserve"><value>Entrenamiento individual</value></data>
+  <data name="TrainingResponsibility_Position" xml:space="preserve"><value>Trabajo por demarcación</value></data>
+  <data name="TrainingResponsibility_Group" xml:space="preserve"><value>Grupos</value></data>
+  <data name="TrainingResponsibility_Gym" xml:space="preserve"><value>Gimnasio</value></data>
+  <data name="TrainingResponsibility_Goalkeepers" xml:space="preserve"><value>Porteros</value></data>
+  <data name="TrainingResponsibility_SetPieces" xml:space="preserve"><value>Jugadas ensayadas</value></data>
+  <data name="TrainingResponsibility_Recovery" xml:space="preserve"><value>Recuperación</value></data>
+  <data name="AnalysisMetric_Possession" xml:space="preserve"><value>Posesión</value></data>
+  <data name="AnalysisMetric_Chances" xml:space="preserve"><value>Ocasiones</value></data>
+  <data name="AnalysisMetric_Shots" xml:space="preserve"><value>Tiros</value></data>
+  <data name="AnalysisMetric_Goals" xml:space="preserve"><value>Goles</value></data>
+  <data name="AnalysisMetric_ExpectedGoals" xml:space="preserve"><value>Goles esperados</value></data>
+  <data name="AnalysisMetric_Recoveries" xml:space="preserve"><value>Recuperaciones</value></data>
+  <data name="AnalysisMetric_Losses" xml:space="preserve"><value>Pérdidas</value></data>
+  <data name="AnalysisMetric_Pressing" xml:space="preserve"><value>Eficacia de presión</value></data>
+  <data name="AnalysisMetric_Zones" xml:space="preserve"><value>Rendimiento por zonas</value></data>
+  <data name="Exercise_technical" xml:space="preserve"><value>Control y técnica</value></data>
+  <data name="Exercise_passing" xml:space="preserve"><value>Pase y creación</value></data>
+  <data name="Exercise_finishing" xml:space="preserve"><value>Finalización y desmarques</value></data>
+  <data name="Exercise_defending" xml:space="preserve"><value>Organización defensiva</value></data>
+  <data name="Exercise_collective" xml:space="preserve"><value>Trabajo táctico colectivo</value></data>
+  <data name="Exercise_general_strength" xml:space="preserve"><value>Fuerza general</value></data>
+  <data name="Exercise_upper_body" xml:space="preserve"><value>Tren superior</value></data>
+  <data name="Exercise_lower_body" xml:space="preserve"><value>Tren inferior</value></data>
+  <data name="Exercise_power" xml:space="preserve"><value>Potencia</value></data>
+  <data name="Exercise_explosiveness" xml:space="preserve"><value>Explosividad</value></data>
+  <data name="Exercise_muscular_endurance" xml:space="preserve"><value>Resistencia muscular</value></data>
+  <data name="Exercise_mobility" xml:space="preserve"><value>Movilidad</value></data>
+  <data name="Exercise_stability" xml:space="preserve"><value>Estabilidad</value></data>
+  <data name="Exercise_prevention" xml:space="preserve"><value>Prevención física</value></data>
+  <data name="Exercise_adapted_physical" xml:space="preserve"><value>Trabajo físico adaptado</value></data>
+  <data name="Exercise_reflexes" xml:space="preserve"><value>Reflejos del portero</value></data>
+  <data name="Exercise_handling" xml:space="preserve"><value>Blocaje</value></data>
+  <data name="Exercise_punching" xml:space="preserve"><value>Despejes del portero</value></data>
+  <data name="Exercise_keeper_exits" xml:space="preserve"><value>Salidas</value></data>
+  <data name="Exercise_aerial" xml:space="preserve"><value>Juego aéreo del portero</value></data>
+  <data name="Exercise_one_on_one" xml:space="preserve"><value>Uno contra uno</value></data>
+  <data name="Exercise_keeper_feet" xml:space="preserve"><value>Juego con los pies</value></data>
+  <data name="Exercise_distribution" xml:space="preserve"><value>Distribución</value></data>
+  <data name="Exercise_keeper_penalties" xml:space="preserve"><value>Portero ante penaltis</value></data>
+  <data name="Exercise_keeper_coordination" xml:space="preserve"><value>Coordinación defensiva del portero</value></data>
+  <data name="Exercise_penalty_practice" xml:space="preserve"><value>Práctica de penaltis y tandas</value></data>
+  <data name="Exercise_corner_practice" xml:space="preserve"><value>Práctica de córners</value></data>
+  <data name="Exercise_free_kick_practice" xml:space="preserve"><value>Práctica de faltas</value></data>
+  <data name="Exercise_throw_practice" xml:space="preserve"><value>Práctica de saques de banda</value></data>
+  <data name="Exercise_rest" xml:space="preserve"><value>Descanso</value></data>
+  <data name="Exercise_active_recovery" xml:space="preserve"><value>Recuperación activa</value></data>
+  <data name="Exercise_regeneration" xml:space="preserve"><value>Trabajo regenerativo</value></data>
+  <data name="Exercise_recovery_mobility" xml:space="preserve"><value>Movilidad regenerativa</value></data>
+  <data name="Exercise_footbonaut_touch" xml:space="preserve"><value>Footbonaut: primer toque</value></data>
+  <data name="Exercise_footbonaut_pass" xml:space="preserve"><value>Footbonaut: precisión de pase</value></data>
+  <data name="Exercise_footbonaut_response" xml:space="preserve"><value>Footbonaut: respuesta</value></data>
+  <data name="Exercise_footbonaut_directions" xml:space="preserve"><value>Footbonaut: recepciones</value></data>
+  <data name="Exercise_footbonaut_weak_foot" xml:space="preserve"><value>Footbonaut: trabajo bilateral</value></data>
+  <data name="Exercise_footbonaut_time_pressure" xml:space="preserve"><value>Footbonaut: presión temporal</value></data>
+  <data name="TrainingInvalidDate" xml:space="preserve"><value>Indica una fecha AAAA-MM-DD y una hora HH:mm válidas.</value></data>
+  <data name="FootbonautTitle" xml:space="preserve"><value>Footbonaut</value></data>
+<data name="AnalysisScopeLabel" xml:space="preserve"><value>Ámbito del informe</value></data>
+<data name="AnalysisScope_Collective" xml:space="preserve"><value>Colectivo</value></data>
+<data name="AnalysisScope_Individual" xml:space="preserve"><value>Individual</value></data>
+<data name="AnalysisScope_Position" xml:space="preserve"><value>Por puesto</value></data>
+<data name="AnalysisScope_Group" xml:space="preserve"><value>Por grupo</value></data>
+<data name="AnalysisContentLabel" xml:space="preserve"><value>Tipo de contenido</value></data>
+<data name="AnalysisContent_Technical" xml:space="preserve"><value>Informe técnico</value></data>
+<data name="AnalysisContent_SquadSummary" xml:space="preserve"><value>Resumen de plantilla</value></data>
+<data name="AnalysisContent_Individual" xml:space="preserve"><value>Detalle de atributos</value></data>
+<data name="AnalysisStaffLabel" xml:space="preserve"><value>Técnico asignado</value></data>
+<data name="AnalysisChooseStaff" xml:space="preserve"><value>Selecciona un técnico responsable</value></data>
+<data name="AnalysisStaff_HeadCoach" xml:space="preserve"><value>Entrenador principal</value></data>
+<data name="AnalysisStaff_AcademyCoach" xml:space="preserve"><value>Entrenador de cantera</value></data>
+<data name="AnalysisNoStaff" xml:space="preserve"><value>No hay personal elegible disponible para este informe.</value></data>
+<data name="AnalysisPlayerLabel" xml:space="preserve"><value>Futbolista analizado</value></data>
+<data name="AnalysisPositionLabel" xml:space="preserve"><value>Puesto analizado</value></data>
+<data name="AnalysisIncludeSecondary" xml:space="preserve"><value>Incluir posiciones secundarias registradas</value></data>
+<data name="AnalysisGroupLabel" xml:space="preserve"><value>Grupo de Entrenamiento</value></data>
+<data name="AnalysisManageGroups" xml:space="preserve"><value>Crear o editar grupos</value></data>
+<data name="AnalysisHistory" xml:space="preserve"><value>Histórico de informes</value></data>
+<data name="AnalysisLegacy" xml:space="preserve"><value>Informe anterior</value></data>
+<data name="AnalysisLegacyNotice" xml:space="preserve"><value>Informe anterior: se conserva su contenido original. No constan una instantánea de integrantes ni el técnico asignado.</value></data>
+<data name="AnalysisSecondaryIncluded" xml:space="preserve"><value>Principal y secundarias</value></data>
+<data name="AnalysisPrimaryOnly" xml:space="preserve"><value>Solo posición principal</value></data>
+<data name="AnalysisPriorities" xml:space="preserve"><value>Prioridades de trabajo (no modifican entrenamientos ni tácticas)</value></data>
 </root>

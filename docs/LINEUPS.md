@@ -1,3 +1,11 @@
+## Estado vigente — planes tácticos y seis disposiciones
+
+Inicial, Ganando y Perdiendo tienen dos disposiciones propias y un único once por plan; mentalidad e instrucciones independientes y balón parado común. Se conserva una fuente canónica de composición, con lectura compatible y conversión transaccional al guardar. [Modelo, migración, archivos y comprobación](TACTICAL_PLANS.md). Las descripciones anteriores de una táctica única se conservan como historial.
+
+## Estado vigente — Equipo → Táctica
+
+La alineación existente se integra en Táctica junto con Estilo de juego, Transiciones y Balón parado. Mentalidad común y configuración estructurada persistente por carrera. Extensión SQLite independiente versión 1, creada al guardar; lecturas sin migraciones. [Decisiones, archivos y comprobación](TACTICS.md). Los apartados siguientes conservan el historial; las referencias a Equipo → Alineación se entienden ahora como Táctica → Alineación.
+
 # Alineaciones iniciales y edición de carrera
 
 Entrega del 28/10/2026. No incorpora partidos, calidad oficial ni instrucciones tácticas.

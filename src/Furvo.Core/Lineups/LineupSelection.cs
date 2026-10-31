@@ -75,6 +75,18 @@ public static class LineupSelection
         if(starters.Length!=11||starters.Select(m=>m.SlotId).Distinct().Count()!=11||lineup.Members.Count(m=>m.Role==LineupRole.Substitute)!=lineup.BenchLimit||lineup.Members.Any(m=>(m.Role==LineupRole.Starter)!=(m.SlotId is not null)))throw new InvalidDataException("Once o banquillo no válidos.");
         foreach(var m in starters){var slot=lineup.Formation.Slots.SingleOrDefault(s=>s.Id==m.SlotId)??throw new InvalidDataException("Puesto desconocido.");if(Compatibility(squad.Single(p=>p.Id==m.PlayerId),slot.Role)>=99)throw new InvalidDataException("Portería incompatible.");}
     }
+    /// <summary>Intercambio completo y sin pérdida de miembros. Admite jugadores de campo fuera de posición, sin penalizaciones.</summary>
+    public static CareerLineup Exchange(CareerLineup current,PlayerId source,PlayerId target,IReadOnlyList<LineupPlayer> squad,bool allowBenchExchange=false)
+    {
+        Validate(current,squad);
+        var a=current.Members.SingleOrDefault(m=>m.PlayerId==source)??throw new InvalidOperationException("Origen ajeno a la plantilla.");
+        var b=current.Members.SingleOrDefault(m=>m.PlayerId==target)??throw new InvalidOperationException("Destino ajeno a la plantilla.");
+        if(source==target||a.Role!=LineupRole.Starter&&b.Role!=LineupRole.Starter&&(!allowBenchExchange||a.Role==b.Role))throw new InvalidOperationException("El intercambio requiere dos jugadores distintos y al menos un titular.");
+        var members=current.Members.Select(m=>m.PlayerId==source?new LineupMember(source,b.Role,b.SlotId):m.PlayerId==target?new LineupMember(target,a.Role,a.SlotId):m).ToArray();
+        var result=current with{Members=Array.AsReadOnly(members)};Validate(result,squad);return result;
+    }
+    public static bool CanExchange(CareerLineup current,PlayerId source,PlayerId target,IReadOnlyList<LineupPlayer> squad,bool allowBenchExchange=false)
+    {try{Exchange(current,source,target,squad,allowBenchExchange);return true;}catch(Exception e) when(e is InvalidOperationException or InvalidDataException or ArgumentException){return false;}}
     public static CareerLineup Replace(CareerLineup current,string slotId,PlayerId candidate,IReadOnlyList<LineupPlayer> squad)
     {
         Validate(current,squad);var slot=current.Formation.Slots.Single(s=>s.Id==slotId);var selected=squad.Single(p=>p.Id==candidate);

@@ -1,14 +1,14 @@
 using Furvo.Core.Domain;
 namespace Furvo.Core.Careers;
 public enum CareerArea { Home,Team,Market,Competition,Club,Career }
-public enum CareerPage { Desktop,Inbox,OwnSquad,OwnInformation,OwnEconomy,OwnHistory,PublicClubs,Profile,Contract,NoClub,Lineup }
+public enum CareerPage { Desktop,Inbox,OwnSquad,OwnInformation,OwnEconomy,OwnHistory,PublicClubs,Profile,Contract,NoClub,Lineup,Academy,Training,Analysis,Facilities }
 /// <summary>Permisos y ruta propios de una carrera. No usa el club consultado ni escribe fechas/datos.</summary>
 public sealed class CareerWorkspace
 {
     public CareerSummary Career { get; }
     public CareerPage Page { get; private set; }=CareerPage.Desktop;
     public CareerArea Area=>Page switch{
-        CareerPage.Desktop or CareerPage.Inbox=>CareerArea.Home,CareerPage.OwnSquad or CareerPage.Lineup=>CareerArea.Team,
+        CareerPage.Desktop or CareerPage.Inbox=>CareerArea.Home,CareerPage.OwnSquad or CareerPage.Lineup or CareerPage.Academy or CareerPage.Training or CareerPage.Analysis=>CareerArea.Team,
         CareerPage.Profile or CareerPage.Contract=>CareerArea.Career,_=>CareerArea.Club};
     public bool HasClub=>Career.Employment==CareerEmploymentState.Employed && Career.ClubId is not null && Career.Contract is not null;
     public CareerWorkspace(CareerSummary career)
@@ -25,7 +25,7 @@ public sealed class CareerWorkspace
     }
     public bool CanManageClub(ClubId id)=>HasClub && Career.ClubId==id;
     public void RequireManagement(ClubId id){if(!CanManageClub(id))throw new InvalidOperationException("No dirige este club.");}
-    public bool CanOpen(CareerPage page)=>Enum.IsDefined(page) && page!=CareerPage.PublicClubs && (page!=CareerPage.NoClub || !HasClub) && (page is not (CareerPage.OwnSquad or CareerPage.Lineup or CareerPage.OwnInformation or CareerPage.OwnEconomy or CareerPage.OwnHistory) || HasClub);
+    public bool CanOpen(CareerPage page)=>Enum.IsDefined(page) && page!=CareerPage.PublicClubs && (page!=CareerPage.NoClub || !HasClub) && (page is not (CareerPage.OwnSquad or CareerPage.Lineup or CareerPage.Academy or CareerPage.Training or CareerPage.Analysis or CareerPage.Facilities or CareerPage.OwnInformation or CareerPage.OwnEconomy or CareerPage.OwnHistory) || HasClub);
     public void Open(CareerPage page){if(!CanOpen(page))throw new InvalidOperationException("Sección no disponible para esta carrera.");Page=page;}
     public bool CanAdvanceTime=>false; // Pendiente del motor validado de calendario/eventos; no simula un avance.
 }

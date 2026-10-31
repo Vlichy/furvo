@@ -20,7 +20,7 @@ public partial class DataTable : VBoxContainer
     public event Action<int>? SortRequested;
     public string? SelectedId => _tree.GetSelected()?.GetMetadata(0).AsString();
 
-    public DataTable(IReadOnlyList<TableColumn> columns, bool selectable = true, bool fitContent = false,int rowHeight=0,int rowSpacing=-1)
+    public DataTable(IReadOnlyList<TableColumn> columns, bool selectable = true, bool fitContent = false,int rowHeight=0,int rowSpacing=-1,bool constrainColumns=false)
     {
         _columns = columns;
         _fitContent = fitContent;
@@ -32,13 +32,14 @@ public partial class DataTable : VBoxContainer
             SizeFlagsVertical = SizeFlags.ExpandFill, CustomMinimumSize = new Vector2(0, 180),
             AllowReselect = true, FocusMode = selectable ? FocusModeEnum.All : FocusModeEnum.None };
         if(rowSpacing>=0)_tree.AddThemeConstantOverride("v_separation",rowSpacing);
+        if(constrainColumns){_tree.ScrollHorizontalEnabled=false;_tree.HideFolding=true;}
         AddChild(_tree);
         for (var i = 0; i < columns.Count; i++)
         {
             _tree.SetColumnTitle(i, columns[i].Title);
             _tree.SetColumnTitleAlignment(i, columns[i].HeaderAlignment);
             // Permite texto largo con salto de línea manteniendo las proporciones configuradas.
-            _tree.SetColumnClipContent(i, columns[i].Wrap);
+            _tree.SetColumnClipContent(i, columns[i].Wrap||constrainColumns);
             _tree.SetColumnCustomMinimumWidth(i, columns[i].MinimumWidth);
             _tree.SetColumnExpand(i, true);
             _tree.SetColumnExpandRatio(i, columns[i].ExpandRatio);

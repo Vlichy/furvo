@@ -22,6 +22,7 @@
     <None Include="../../docs/decisions/club-reputations-2026-27.json" Link="club-reputations.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../src/Furvo.Godot/Resources/UiStrings.resx" Link="UiStrings.resx" CopyToOutputDirectory="PreserveNewest" />
     <!-- Políticas puras de presentación: se prueba su fuente real sin cargar el motor ni añadir paquetes. -->
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/TacticDiagram.cs" Link="Presentation/TacticDiagram.cs" />
     <Compile Include="../../src/Furvo.Godot/Scripts/Components/SquadTrackingRows.cs" Link="Presentation/SquadTrackingRows.cs" />
     <Compile Include="../../src/Furvo.Godot/Scripts/Components/CareerSquadRules.cs" Link="Presentation/CareerSquadRules.cs" />
     <Compile Include="../../src/Furvo.Godot/Scripts/Components/AttributeValueStyle.cs" Link="Presentation/AttributeValueStyle.cs" />

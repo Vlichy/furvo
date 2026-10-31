@@ -1,3 +1,115 @@
+# Registro de validación
+
+## Estado vigente — desarrollo deportivo integrado, 31/10/2026
+
+- Debug y Release: cuatro proyectos compilados, **0 errores y 0 advertencias**.
+- **403/403 pruebas en Debug y 403/403 en Release**, 0 fallos y 0 omitidas. Se conservan las 366 anteriores y se añaden 37 casos. El cambio de dos capitanes actualiza la expectativa del dato efectivo sin destruir prioridades legadas.
+- TRX: `artifacts/test-results/sports-debug.trx` y `sports-release.trx`.
+- Godot 4.7.2 .NET/OpenGL, recorrido completo con **salida 0**, incluidos `FURVO_SPORTS_OK`, `FURVO_ADVANCED_TACTICS_OK`, `FURVO_ACADEMY_OK`, `FURVO_DRAG_OK` y `FURVO_UI_SMOKE_OK`. Se comprueban izquierda/campo/derecha, dos capitanes, seis disposiciones, edición de sesiones, grupos, seis áreas, delegación parcial, informes actuales, tecnología pendiente y reapertura; además, ficha de cantera, bloqueo por licencia desconocida y registro de propuesta sin mover al futbolista.
+- Capturas reales revisadas en 1280×720, 1600×900 y 1920×1080: `artifacts/career-visual/career-individual-*.png`, `career-training-*.png`, `career-sports-technology-*.png`. Se corrigieron encabezados internos/repetidos y variaciones de ancho que afectaban al arrastre.
+- **Cinco publicaciones SQLite iniciales sin cambios por SHA-256** frente al registro previo de este encargo. No se genera una publicación nueva ni se sobrescriben carreras personales. Pruebas nativas en carreras aisladas bajo `artifacts`.
+- Migraciones explícitas de carrera: `Sports001_Initial.sql` y `SportsTactics002_Assignment.sql`. Consulta antigua sin escritura y rollback transaccional cubiertos por pruebas.
+- Corregida la ambigüedad SQL `current_date`: la consulta usa `s.current_date`, con regresión contra la fecha persistida.
+- El banco de desarrollo abarca 30×365 días sintéticos y comprueba determinismo, límites, envejecimiento, dosis excesiva y recuperación gradual; **no equivale a validar treinta temporadas del juego completo ni una calibración comercial**.
+- [Informe e inventario](SPORTS_DELIVERY.md), [matriz de 50 requisitos](SPORTS_VALIDATION_MATRIX.md), [fuentes y lagunas](SPORTS_RESEARCH.md).
+- Pendientes: reloj/calendario, elegibilidad federativa completa, capacidades del personal, IA de planificación/recomendaciones, medicina y aprobación/precios de instalaciones. La interfaz no simula que esos proveedores existan. Revisión humana prolongada, teclado y escalados de Windows complementan el recorrido automático.
+
+
+## Registro anterior — roles, instrucciones individuales y preparación táctica
+
+- Compilación Debug y Release: cuatro proyectos, 0 errores y 0 advertencias. SDK .NET 10.0.402.
+- Suite final: **366/366 pruebas en Debug y 366/366 en Release**, 0 fallos, 0 omitidas. Referencia previa: 343/343; se añaden 23 casos, sin eliminar ni desactivar pruebas anteriores.
+- Resultados: `artifacts/test-results/advanced-debug.trx` y `advanced-release.trx`.
+- Godot 4.7.2 .NET con renderizado nativo: runner completo finalizado con `FURVO_ADVANCED_TACTICS_OK` y `FURVO_UI_SMOKE_OK`, código 0. Se comprueban roles de portero, personalización, cancelación segura, conservación del once, cuatro diagramas defensivos, capitanes tras reapertura, Cantera y regresiones de arrastre/planes/balón parado.
+- Capturas reales e inspección en 1280×720, 1600×900 y 1920×1080: `artifacts/career-visual/career-individual-{resolución}.png` y `career-advanced-defence-{resolución}.png`. Los paneles conservan desplazamiento; a 720p algunas instrucciones requieren desplazar el panel lateral. No se afirma una revisión humana exhaustiva de todas las combinaciones.
+- Integridad: las cinco publicaciones `data/initial-world-2026-27*.db` coinciden byte a byte con el contenido versionado, comprobado con `git ls-files --stage` y `git hash-object`. No hay publicación nueva del mundo ni cambios en esas bases. Las carreras de QA se crean únicamente bajo `artifacts`.
+- Migraciones nuevas: `TacticalBehaviour001_Initial.sql` y `Tactics004_Personnel.sql`; se aplican solo a guardados explícitos de carreras de prueba. Lectura antigua sin escritura cubierta por pruebas. No se migran automáticamente las carreras personales.
+- Pendiente: comprobación humana con distintos escalados de Windows y uso prolongado; efectos del motor, contexto real de rival y entrenamiento todavía no operativos.
+- Catálogo completo, predeterminados, jerarquía, archivos y comandos Windows: [Informe táctico](TACTICAL_BEHAVIOURS.md).
+
+## Registro anterior — alineación automática sin popup y separación de controles
+
+
+- Debug y Release: **cuatro proyectos compilados, 0 errores y 0 advertencias**.
+- Debug y Release: **317 pruebas superadas por configuración, 0 fallidas y 0 omitidas**. Se mantienen las 311 anteriores y se añaden seis casos de asignación automática, persistencia/independencia, cruce pequeño de zona, portero y adecuación natural/secundaria.
+- Godot 4.7.2 .NET con ventana/OpenGL: **recorrido completo, salida 0**, con FURVO_AUTO_POSITION_OK, FURVO_PLANS_OK, FURVO_INSTRUCTIONS_OK y FURVO_UI_SMOKE_OK.
+- Aceptación comprobada: Inicial/Sin balón → arrastrar MC a MP → ningún diálogo → abreviatura MP → color derivado de natural/secundarias → una sola revisión → alternar fases → guardar → recargar la carrera aislada desde SQLite con reconstrucción del espacio de trabajo → recuperar coordenadas y demarcación. No hay selector manual de demarcación ni selector de intercambio con otro titular.
+- Verificados márgenes entre niveles y límites de los grupos de configuración a **1280 × 720, 1600 × 900, 1920 × 1080 y retorno a 1280**. Capturas revisadas en las tres resoluciones; los recorridos anteriores conservan sus comprobaciones de once visible, navegación, instrucciones y balón parado.
+- Se corrigieron durante la validación dos problemas de composición: etiqueta de formación que se partía verticalmente y herramientas cuya búsqueda en el árbol ocurría antes de insertar su contenedor. Ahora se pasa el contenedor explícitamente y la formación informativa no se envuelve.
+- Integridad: SHA-256 sin cambios en las **cinco publicaciones SQLite del mundo inicial**. No hay migración de esquema en esta corrección.
+- QA: la reapertura usa un punto exclusivo de Debug y almacenamiento aislado; llama al flujo real EnterCareer/SqliteCareerStore.Load. No añade carga de partidas al menú del juego ni demuestra un cierre/reinicio completo del proceso. Quedan pendientes esa comprobación desde un futuro flujo de carga, otros DPI y resoluciones menores.
+- TRX: artifacts/test-results/alignment-auto-{debug,release}.trx. Log: artifacts/alignment-auto-native.log. Capturas: artifacts/career-visual/career-auto-position-{resolución}.png.
+- Inventario y explicación del código eliminado: [ALIGNMENT_EDITOR_FIX.md](ALIGNMENT_EDITOR_FIX.md).
+
+### Registro anterior
+
+## Estado vigente — ampliación de instrucciones y pizarra contextual
+
+- Debug y Release: **compilación correcta de cuatro proyectos, 0 errores y 0 advertencias**.
+- Debug y Release: **311 pruebas superadas en cada configuración, 0 fallidas y 0 omitidas**. Se mantienen los 301 casos anteriores y se añaden diez de instrucciones, grafos, ubicaciones y migración. El caso del catálogo anterior se actualiza a las 17 instrucciones aprobadas.
+- La primera ejecución dentro del aislamiento no conectó con testhost y fue anulada. Las ejecuciones completas fuera de ese aislamiento terminaron correctamente; archivos TRX en artifacts/test-results/tactics-expansion-{debug,release}.trx.
+- Godot 4.7.2 .NET con ventana/OpenGL: recorrido completo con **salida 0**, FURVO_INSTRUCTIONS_OK, FURVO_PLANS_OK y FURVO_UI_SMOKE_OK. Incluye cinco vías de contraataque, visibilidad dependiente, ocho contextos ofensivos/defensivos, asignaciones compactas, barrera/tumbado y navegación anterior.
+- Resoluciones comprobadas para los paneles: **1280 × 720, 1600 × 900 y 1920 × 1080**, incluido regreso a 1280. Comprobados límites de las asignaciones tras desplazarse hasta el final. Capturas revisadas de la falta frontal defensiva, la falta lateral ofensiva, el portero mixto y las asignaciones inferiores.
+- Persistencia: pruebas de reapertura independiente por ubicación, instrucciones por plan, rechazo de duplicados sin escritura y migración explícita desde v2 manteniendo la jugada legada; se mantienen las pruebas anteriores de v1, rollback y disposiciones personalizadas.
+- Integridad SHA-256: las **cinco publicaciones SQLite del mundo inicial** dentro del proyecto permanecen idénticas. Las pruebas de interfaz usan almacenamiento aislado en artifacts, sin editar carreras personales.
+- Pendiente manual: DPI, ventanas menores y revisión exhaustiva de todas las combinaciones. Las trayectorias y rivales son referencias descriptivas; no hay simulación ni cálculos de eficacia.
+- Inventario, compatibilidad y comandos: [TACTICAL_INSTRUCTIONS.md](TACTICAL_INSTRUCTIONS.md).
+
+### Registro anterior
+
+## Estado vigente — planes tácticos y formaciones personalizadas
+
+- Debug y Release: cuatro proyectos compilados, **0 errores y 0 advertencias**.
+- Debug y Release: **301 pruebas superadas por configuración, 0 fallidas y 0 omitidas**. Los diez casos nuevos cubren planes, seis disposiciones, independencia, coordenadas, roles, copias, persistencia, compatibilidad y rollback.
+- Godot 4.7.2 .NET con ventana/OpenGL: recorrido automatizado completo terminado con FURVO_PLANS_OK y FURVO_UI_SMOKE_OK. Verificados arrastre nativo, confirmación de demarcación, cancelaciones, copia, restablecimiento, referencias y navegación anterior.
+- Capturas y comprobaciones de límites a 1280 × 720, 1600 × 900 y 1920 × 1080, incluido reducir la ventana tras ampliarla. Diálogo de demarcación dentro del área visible.
+- Integridad: SHA-256 de las **21 bases de datos preexistentes sin cambios**. Las pruebas usan almacenamiento aislado en artifacts; no se modifica el mundo inicial ni las carreras personales.
+- Pendiente de comprobación manual exhaustiva: escalado DPI, navegación completa por teclado y combinaciones de edición fuera del recorrido automatizado. No se implementa simulación ni activación automática de planes.
+- Arquitectura, migración, inventario y comandos: [TACTICAL_PLANS.md](TACTICAL_PLANS.md).
+
+### Registro anterior
+
+## Estado vigente — segunda iteración de Táctica
+
+- Debug y Release: **compilación de cuatro proyectos, 0 errores y 0 advertencias**, con MSBuild secuencial (-m:1).
+- Debug y Release: **291 pruebas superadas por configuración, 0 fallidas y 0 omitidas**. Se conservan las 282 anteriores y se añaden nueve casos: intercambios con suplentes/reservas, destinos inválidos, adecuación tras intercambio de campo, detalles/tanda persistidos, funciones incompatibles, lectura v1 sin escritura y migración explícita conservando datos, grafos/variantes, marcas explícitas y pertenencia de cada símbolo zonal a su área sombreada.
+- Godot 4.7.2 .NET con ventana/OpenGL: **GodotUiSmoke.gd, salida 0**. Los arrastres recorren el sistema nativo _GetDragData/_CanDropData/_DropData mediante InputEventMouseButton y MouseMotion: titular ↔ suplente, titular ↔ reserva y titular ↔ titular. Se verifican cancelación fuera y Escape, revisión persistida, selección y ausencia de pérdida/duplicados.
+- Recorrido de las cuatro pestañas, formación informativa/no editable fuera de Alineación, selector Con balón/Sin balón y conservación de valores; barrera/tumbado con jugadores asignados, zonas y marcajes al hombre/mixto, faltas ofensivas, tanda de cinco y las seis estrategias de banda. Recuperación al reabrir la pantalla y pruebas SQLite al reabrir archivos. Se conservan las comprobaciones anteriores de perfiles, carrera en paro/contratada, consulta y fichas de 51 atributos.
+- Las once formaciones vuelven a recorrerse en la interfaz, comprobando once identificadores únicos.
+- Capturas renderizadas a **1280×720, 1600×900 y 1920×1080** en artifacts/career-visual. Inspeccionadas alineación, fases, barrera/tumbado, marcajes zonal/mixto, centro al área, tanda ordenada y banda ensayada. Se ajustaron la separación del banquillo y el dibujo de barrera/marcadores; las puntas de las flechas se calculan sobre los círculos/objetivos referenciados.
+- **18 de 18 bases preexistentes idénticas por SHA-256**, incluidas cinco publicaciones iniciales y datos personales. Pruebas en archivos aislados. No se crea ni sobrescribe una publicación del mundo.
+- Tactics002_SetPieceAssignments.sql amplía a versión táctica 2 únicamente al guardar. Lecturas v1/v2 sin migración; el lanzador de penalti legado se conserva y no se copia a la nueva tanda.
+- Sin dependencias nuevas. git diff --check sin incidencias.
+
+Las capturas y eventos automatizados no sustituyen una campaña manual exhaustiva con ratón físico, teclado, DPI y todas las combinaciones de asignaciones. La edición con funciones incompatibles se rechaza y conserva lo guardado; deben desasignarse antes de volver a activar una combinación conflictiva. Las referencias rivales son esquemáticas y las funciones no elegidas siguen pendientes, sin identidades automáticas.
+
+[Informe, decisiones, archivos y pasos manuales](TACTICS_ITERATION_2.md). El historial anterior se conserva debajo.
+
+Comandos usados desde la raíz, en PowerShell:
+
+```powershell
+dotnet build Furvo.sln --no-restore -m:1
+dotnet test Furvo.sln --no-build -m:1
+dotnet build Furvo.sln --no-restore -m:1 -c Release
+dotnet test Furvo.sln --no-build -m:1 -c Release
+```
+
+## Estado vigente — Equipo → Táctica
+
+- **Debug y Release:** cuatro proyectos compilados, 0 errores y 0 advertencias, con -m:1.
+- **282 pruebas superadas por configuración, 0 fallidas y 0 omitidas.** Se conservan las 273 anteriores y se añaden nueve de Táctica: lectura sin migración, todas las opciones y mentalidades, siete clases de balón parado, lanzadores válidos/ajenos, aislamiento entre carreras, revisión obsoleta, valores inválidos, rollback, permisos, adecuación posicional e intercambio persistido de titulares.
+- **Godot 4.7.2 .NET con ventana/OpenGL:** GodotUiSmoke.gd superado, salida 0. Cuatro pestañas, mentalidad debajo del submenú, Con balón/Sin balón juntos, vistas reactivas, rutinas/lanzador y recuperación al volver a entrar. Se prueban las once formaciones, ausencia de duplicados y de solapamientos entre nombres, y los once titulares dentro del área visible.
+- **Godot headless final:** salida 0 y FURVO_TACTICS_OK, FURVO_LINEUP_OK, FURVO_WORKSPACE_OK, FURVO_CAREER_UI_OK y FURVO_UI_SMOKE_OK. Añade una operación efectiva de intercambio entre dos centrales titulares y verifica nueva revisión/jugador en el campo.
+- Capturas renderizadas de Alineación, Estilo, Transiciones y Balón parado a **1280×720, 1600×900 y 1920×1080**, en artifacts/career-visual. Se inspeccionaron capturas de las cuatro pestañas y las tres resoluciones, incluida defensa de cinco a 720p. Se compactó la cabecera y se ajustaron nombres mediante anchura/elipsis para conservar once visibles y evitar colisiones.
+- Las instrucciones no espaciales muestran explicación contextual. La vista previa no cambia al pasar accidentalmente sobre otro selector: cambia al enfocar o seleccionar una instrucción.
+- **SHA-256: 17 de 17 bases preexistentes idénticas**, incluidas cinco publicaciones del mundo, perfiles, carreras y catálogos de usuario. Pruebas con carreras aisladas. Sin nuevas publicaciones SQLite.
+- Extensión Tactics001_Initial.sql, versión 1, solo al guardar una configuración. Sin migración automática por lectura y sin modificación de contratos, economía ni jugadores.
+- Sin nuevas dependencias. Git diff --check sin incidencias.
+
+Estas son verificaciones automatizadas más inspección de capturas, no una campaña manual exhaustiva con ratón y teclado. Quedan para revisión del usuario: navegación manual con teclado, escalado de Windows/DPI distinto, nombres personalizados muy largos y errores reales de permisos/disco. La reapertura de archivos se prueba por los servicios; el menú general de cargar partidas continúa fuera del alcance.
+
+[Inventario, arquitectura, limitaciones y comandos de validación](TACTICS.md). Este apartado sustituye las descripciones anteriores de una pantalla Alineación independiente; se conserva el historial a continuación.
+
 ## Estado vigente — alineaciones y formaciones iniciales (28/10/2026)
 
 - Debug y Release: compilación de cuatro proyectos, 0 errores y 0 advertencias. Se utilizó MSBuild secuencial (-m:1); la invocación paralela devolvió fallo sin diagnóstico en este entorno.
@@ -411,3 +523,12 @@ Observación adicional: Plantilla comprobada visualmente a pantalla completa de 
 Estado vigente: **155 pruebas Debug superadas**, cero fallidas/omitidas, compilación sin errores/advertencias. Smoke headless de escena correcto, incluyendo menús, Esc, continuidad, posiciones y Economía. GodotApplicationSmoke.gd pasa con renderizado OpenGL real tanto en ventana como en pantalla completa: Cancelar no aplica cambios, Aplicar cambia resolución y Salir finaliza con código 0 desde menú principal y Esc. No se afirma inspección visual exhaustiva por esos resultados. Release no repetido. Cuatro bases intactas y ningún cambio persistente de posiciones. [Informe, archivos y comandos](NAVIGATION_POSITIONS_FINANCE.md).
 
 Ejecución final confirmada y revisión visual parcial del formulario de entrenador en ventana ampliada, con avatar, campos y pie visibles. Queda la revisión manual completa del resto de pantallas y resoluciones exactas.
+
+
+## Análisis → Informes — 31/10/2026
+
+Compilaciones Debug y Release correctas, cero errores y cero advertencias. **422 pruebas superadas en Debug y 422 en Release**, sin fallos ni omisiones; resultados en artifacts/test-results/analysis-debug.trx y analysis-release.trx. Se mantienen las 403 pruebas previas y se añaden 19 casos.
+
+Godot 4.7.2 .NET: modo enfocado y recorrido completo final con código 0. Se comprobaron cuatro ámbitos, técnico real, grupos compartidos, alineación, desplazamiento, persistencia y capturas de 1280×720, 1600×900 y 1920×1080; también pasó la regresión nativa de arrastre/tácticas/cantera. Se inspeccionaron capturas de resultados y prioridades. El primer recorrido se detuvo en un arrastre previo y la repetición completa pasó.
+
+Cinco publicaciones SQLite intactas por SHA-256. Sin migraciones SQL nuevas ni dependencias añadidas. Furvo se lanzó de nuevo en una ventana normal de 1280×720 y se dejó en ejecución. [Informe, archivos, decisiones y límites](ANALYSIS_REPORTS.md).

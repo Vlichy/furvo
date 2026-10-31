@@ -121,6 +121,10 @@ public sealed class WorldQueries : IWorldQueries
             throw new KeyNotFoundException("El futbolista no pertenece a la plantilla consultada.");
         var player = _world.Players.SingleOrDefault(x => x.Id == playerId)
             ?? throw new KeyNotFoundException("Futbolista desconocido.");
+        return ProjectPlayer(player,club,ReferenceDate);
+    }
+    public static PlayerDetails ProjectPlayer(Player player,ClubSummary club,DateOnly date)
+    {
         var visible = player.Attributes.VisibleValues;
         // Una ficha de consulta incompleta no debe aparentar que contiene los 51 atributos aprobados.
         if (visible.Count != PlayerAttributeCatalog.All.Count(x => !x.IsHidden))
@@ -129,7 +133,7 @@ public sealed class WorldQueries : IWorldQueries
             .GroupBy(x => x.Category).OrderBy(x => (int)x.Key)
             .Select(g => new VisibleAttributeGroup(g.Key, Array.AsReadOnly(g.Where(x => visible.ContainsKey(x.Code))
                 .Select(x => new VisibleAttribute(x.Code, visible[x.Code])).ToArray()))).ToArray();
-        return new PlayerDetails(Summary(player), club, player.BirthDate,
+        return new PlayerDetails(new PlayerSummary(player.Id,player.Name,player.Nationality,player.BirthDate is {} birth&&birth<=date?player.AgeOn(date):null,player.MainPosition,player.Positions?.Primary), club, player.BirthDate,
             Array.AsReadOnly(player.Positions?.Secondary.ToArray() ?? []), Array.AsReadOnly(groups));
     }
 

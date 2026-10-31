@@ -1,3 +1,4 @@
+using Furvo.Persistence;
 using System.Globalization;
 using Furvo.Core.Careers;
 using Furvo.Core.Domain;
@@ -21,7 +22,7 @@ public partial class Main
             var initialNoMatches=career.CurrentDate==season.StartDate;
             var lineup=Lineups().Load();
             var assignments=lineup?.Members.ToDictionary(m=>m.PlayerId,m=>(SquadAssignment)(int)m.Role);
-            var rows=SquadTrackingRows.Sort(_queries.GetSquad(id).Select(p=>new SquadTrackingRow(p,assignments?.GetValueOrDefault(p.Id)??SquadAssignment.Unassigned,PlayerSportingStatus.Initial(initialNoMatches))),_careerSquadSort,_careerSquadDescending);
+            var rows=SquadTrackingRows.Sort(new SqliteClubSquadStore(SportsPath).Details(id.Value).Select(d=>d.Player).Select(p=>new SquadTrackingRow(p,assignments?.GetValueOrDefault(p.Id)??SquadAssignment.Unassigned,PlayerSportingStatus.Initial(initialNoMatches))),_careerSquadSort,_careerSquadDescending);
             if(_selectedPlayer is not null&&!rows.Any(r=>r.Player.Id.ToString()==_selectedPlayer))_selectedPlayer=null;
             var body=Frame("CareerSection",UiText.Get("NavPage_OwnSquad"),UiText.Format("CareerSquadHeading",_club.Name,rows.Count,season.Name));
             var table=new DataTable([

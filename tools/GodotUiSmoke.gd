@@ -1,6 +1,6 @@
 extends SceneTree
-# Prueba de integración de la escena C# real, sin depender de coordenadas ni de una ventana visible.
-# Ejecutar con Godot .NET después de compilar la solución; no escribe publicaciones ni partidas.
+# Prueba de integración de la escena C# real. Los arrastres usan eventos de ratón y coordenadas de controles reales.
+# Ejecutar con Godot .NET tras compilar; solo crea carreras aisladas en artifacts, nunca modifica datos personales.
 
 func find_named(node: Node, target: String) -> Node:
     if node.name == target:
@@ -212,7 +212,15 @@ func check_career_workspace(screen: Node, employed: bool) -> bool:
             return false
         find_named(screen,"BackSquad").emit_signal("pressed")
         await process_frame
+        if OS.get_cmdline_user_args().has("--analysis-only"):
+            return await check_sports_modules(screen)
         if not await check_lineup(screen):
+            return false
+        if not await check_academy(screen):
+            return false
+        if not await check_advanced_tactics(screen):
+            return false
+        if not await check_sports_modules(screen):
             return false
         find_named(screen,"NavArea_Club").emit_signal("pressed")
         await process_frame
@@ -254,7 +262,7 @@ func check_lineup(screen: Node) -> bool:
     var first = find_marked_nodes(screen,"slot_id")[0]
     first.emit_signal("mouse_entered")
     await process_frame
-    if not require(find_named(screen,"LineupCandidateGroup0") != null and find_named(screen,"LineupCandidateGroup1") != null,"Hover no actualiza candidatos"):
+    if not require(find_named(screen,"LineupRole_Substitute") != null and find_named(screen,"LineupRole_Reserve") != null,"Hover no actualiza candidatos"):
         return false
     first.emit_signal("pressed")
     var position_text = find_named(screen,"LineupCandidatePosition").text
@@ -264,7 +272,7 @@ func check_lineup(screen: Node) -> bool:
         return false
     var old_player = first.get_meta("player_id")
     for candidate in find_marked_nodes(screen,"eligibility"):
-        if candidate.get_meta("player_id") != old_player:
+        if candidate.get_meta("player_id") != old_player and not candidate.disabled:
             candidate.emit_signal("pressed")
             break
     await process_frame
@@ -289,6 +297,10 @@ func check_lineup(screen: Node) -> bool:
         var side = find_named(screen,"LineupCandidateScroll")
         if not require(not pitch.get_global_rect().intersects(side.get_global_rect()) and side.get_global_rect().end.x <= root.size.x+1 and find_named(screen,"LineupSummary").get_global_rect().end.y <= root.size.y+1,"Desbordamiento de alineación"):
             return false
+        var viewport = find_named(screen,"TacticLineupScroll")
+        for circle in find_marked_nodes(screen,"slot_id"):
+            if not require(circle.get_global_rect().position.y >= viewport.get_global_rect().position.y and circle.get_global_rect().end.y <= viewport.get_global_rect().end.y+1,"Un titular queda fuera del campo visible"):
+                return false
         await capture_economy_screen("career-lineup-"+str(resolution.x)+"x"+str(resolution.y))
     root.size = Vector2i(1280,720)
     find_named(screen,"NavPage_OwnSquad").emit_signal("pressed")
@@ -302,7 +314,394 @@ func check_lineup(screen: Node) -> bool:
     await process_frame
     if not require(find_named(screen,"LineupPage").get_meta("lineup_revision") == 2,"Abrir pantalla regeneró alineación"):
         return false
+    if not await check_tactics(screen):
+        return false
     print("FURVO_LINEUP_OK: hover, selección fijada, sustitución, formación, persistencia, roles y tres resoluciones")
+    return true
+
+func choose_control(screen: Node, name: String, index: int) -> void:
+    var control = find_named(screen,name)
+    control.select(index)
+    control.emit_signal("item_selected",index)
+    await process_frame
+    await process_frame
+    if name == "LineupFormation" and find_named(screen,"PlanOverwriteDialog") != null:
+        find_named(screen,"PlanOverwriteDialog").emit_signal("confirmed")
+        await process_frame
+        await process_frame
+
+func drag_mouse(from: Vector2, to: Vector2, cancel: bool = false) -> void:
+    var move = InputEventMouseMotion.new()
+    move.position = from
+    move.global_position = from
+    root.push_input(move,true)
+    await process_frame
+    var down = InputEventMouseButton.new()
+    down.button_index = MOUSE_BUTTON_LEFT
+    down.pressed = true
+    down.position = from
+    down.global_position = from
+    root.push_input(down,true)
+    await process_frame
+    for step in range(1,12):
+        var motion = InputEventMouseMotion.new()
+        motion.position = from.lerp(to,float(step)/11.0)
+        motion.global_position = motion.position
+        motion.relative = (to-from)/11.0
+        motion.button_mask = MOUSE_BUTTON_MASK_LEFT
+        root.push_input(motion,true)
+        await process_frame
+    if cancel:
+        await press_escape()
+    var up = InputEventMouseButton.new()
+    up.button_index = MOUSE_BUTTON_LEFT
+    up.pressed = false
+    up.position = to
+    up.global_position = to
+    root.push_input(up,true)
+    await process_frame
+    await process_frame
+    await process_frame
+
+func check_dragging(screen: Node) -> bool:
+    var slot = find_named(screen,"LineupSlot_gk")
+    slot.emit_signal("pressed")
+    await process_frame
+    var candidate = find_marked_nodes(screen,"eligibility")[0]
+    var source_id = slot.get_meta("player_id")
+    var target_id = candidate.get_meta("player_id")
+    var revision = find_named(screen,"LineupPage").get_meta("lineup_revision")
+    find_named(screen,"LineupCandidateScroll").ensure_control_visible(candidate)
+    await process_frame
+    await drag_mouse(slot.get_global_rect().position+Vector2(18,14),candidate.get_global_rect().get_center())
+    if not require(find_named(screen,"LineupSlot_gk").get_meta("player_id") == target_id and find_named(screen,"LineupPage").get_meta("lineup_revision") == revision+1,"Arrastre titular → suplente no intercambia"):
+        return false
+    candidate = find_named(screen,"LineupCandidate_"+source_id)
+    slot = find_named(screen,"LineupSlot_gk")
+    find_named(screen,"LineupCandidateScroll").ensure_control_visible(candidate)
+    await process_frame
+    await drag_mouse(candidate.get_global_rect().get_center(),slot.get_global_rect().position+Vector2(18,14))
+    if not require(find_named(screen,"LineupSlot_gk").get_meta("player_id") == source_id,"Arrastre suplente → titular no funciona"):
+        return false
+    revision = find_named(screen,"LineupPage").get_meta("lineup_revision")
+    slot = find_named(screen,"LineupSlot_gk")
+    await drag_mouse(slot.get_global_rect().position+Vector2(18,14),Vector2(5,5))
+    if not require(find_named(screen,"LineupPage").get_meta("lineup_revision") == revision,"Soltar fuera persiste cambios"):
+        return false
+    slot = find_named(screen,"LineupSlot_gk")
+    candidate = find_marked_nodes(screen,"eligibility")[0]
+    find_named(screen,"LineupCandidateScroll").ensure_control_visible(candidate)
+    await process_frame
+    await drag_mouse(slot.get_global_rect().position+Vector2(18,14),candidate.get_global_rect().get_center(),true)
+    if not require(find_named(screen,"LineupPage").get_meta("lineup_revision") == revision and (find_named(screen,"ExplorationMenu") == null or not find_named(screen,"ExplorationMenu").visible),"Escape no cancela solo el arrastre"):
+        return false
+    slot = find_named(screen,"LineupSlot_gk")
+    slot.emit_signal("pressed")
+    await process_frame
+    var reserve: Node
+    for row in find_marked_nodes(screen,"eligibility"):
+        if row.get_meta("assignment") == "Reserve" and row.get_meta("eligibility") == 0:
+            reserve = row
+            break
+    if not require(reserve != null,"Falta reserva elegible para comprobar el arrastre"):
+        return false
+    var reserve_id = reserve.get_meta("player_id")
+    var goalkeeper_id = slot.get_meta("player_id")
+    find_named(screen,"LineupCandidateScroll").ensure_control_visible(reserve)
+    await process_frame
+    await process_frame
+    await drag_mouse(slot.get_global_rect().position+Vector2(18,14),reserve.get_global_rect().get_center())
+    if not require(find_named(screen,"LineupSlot_gk").get_meta("player_id") == reserve_id,"Titular → reserva no funciona"):
+        return false
+    reserve = find_named(screen,"LineupCandidate_"+goalkeeper_id)
+    find_named(screen,"LineupCandidateScroll").ensure_control_visible(reserve)
+    await process_frame
+    await process_frame
+    slot = find_named(screen,"LineupSlot_gk")
+    await drag_mouse(reserve.get_global_rect().get_center(),slot.get_global_rect().position+Vector2(18,14))
+    if not require(find_named(screen,"LineupSlot_gk").get_meta("player_id") == goalkeeper_id,"Reserva → titular no funciona"):
+        return false
+    var central: Node
+    var attacker: Node
+    for circle in find_marked_nodes(screen,"slot_id"):
+        if circle.get_child(0).text == "DFC":
+            central = circle
+        if circle.get_child(0).text == "DC":
+            attacker = circle
+    var central_slot = central.get_meta("slot_id")
+    var attacker_slot = attacker.get_meta("slot_id")
+    var central_x = central.get_meta("tactical_x")
+    var central_y = central.get_meta("tactical_y")
+    var attacker_x = attacker.get_meta("tactical_x")
+    var attacker_y = attacker.get_meta("tactical_y")
+    var central_id = central.get_meta("player_id")
+    var attacker_id = attacker.get_meta("player_id")
+    await drag_mouse(central.get_global_rect().position+Vector2(18,14),attacker.get_global_rect().position+Vector2(18,14))
+    if not require(find_named(screen,"LineupSlot_"+central_slot).get_meta("player_id") == central_id and find_named(screen,"LineupSlot_"+attacker_slot).get_meta("player_id") == attacker_id and absf(find_named(screen,"LineupSlot_"+central_slot).get_meta("tactical_x")-attacker_x) < .001 and absf(find_named(screen,"LineupSlot_"+central_slot).get_meta("tactical_y")-attacker_y) < .001 and absf(find_named(screen,"LineupSlot_"+attacker_slot).get_meta("tactical_x")-central_x) < .001 and absf(find_named(screen,"LineupSlot_"+attacker_slot).get_meta("tactical_y")-central_y) < .001,"Arrastre entre titulares no intercambia posiciones"):
+        return false
+    print("FURVO_DRAG_OK: ratón nativo en ambos sentidos, cancelación fuera y Escape")
+    return true
+
+func check_tactics(screen: Node) -> bool:
+    if not await check_dragging(screen):
+        return false
+    await choose_control(screen,"TacticsMentality",4)
+    for index in [1,2,3]:
+        find_named(screen,"TacticTab_"+str(index)).emit_signal("pressed")
+        await process_frame
+        var form = find_named(screen,"TacticsFormationRow")
+        var mental = find_named(screen,"TacticsMentalityRow")
+        if not require(form.get_global_rect().end.y <= mental.get_global_rect().position.y and find_named(screen,"LineupFormation") == null,"Formación no es informativa o está fuera de sitio"):
+            return false
+        if index == 1:
+            if not require(find_named(screen,"Instruction_passing") != null and find_named(screen,"Instruction_pressing") == null,"Con balón mezcla controles"):
+                return false
+            await choose_control(screen,"Instruction_passing",3)
+            await choose_control(screen,"TacticalPhaseSelector",1)
+            await process_frame
+            if not require(find_named(screen,"Instruction_passing") == null and find_named(screen,"Instruction_pressing") != null,"Sin balón no filtra controles"):
+                return false
+            await choose_control(screen,"Instruction_pressing",3)
+            await choose_control(screen,"TacticalPhaseSelector",0)
+            await process_frame
+            if not require(find_named(screen,"Instruction_passing").selected == 3,"Cambiar de fase pierde instrucciones"):
+                return false
+        elif index == 2:
+            await choose_control(screen,"Instruction_recovery",1)
+            if not require(find_named(screen,"TacticsPreview").get_meta("preview_focus") == "recovery","Recuperación mezclada"):
+                return false
+            await choose_control(screen,"Instruction_loss",3)
+        else:
+            # Marcajes reales y barrera: sin inventar asignaciones.
+            await choose_control(screen,"SetPieceKind",4)
+            await choose_control(screen,"SetPieceRoutine",3) # man
+            await choose_control(screen,"SetPieceWall",3) # dos jugadores
+            await choose_control(screen,"SetPieceLying",1)
+            for role in ["Marker1","Marker2","Marker3","Wall1","Wall2","Prone"]:
+                await choose_control(screen,"SetPieceRole_"+role,1)
+            await process_frame
+            if not require(find_named(screen,"TacticsPreview").get_meta("diagram_marked") == 3 and find_named(screen,"TacticsPreview").get_meta("diagram_lying") == 1,"No representa marcas y tumbado"):
+                return false
+            await capture_economy_screen("career-tactics-defensive-wall")
+            await choose_control(screen,"SetPieceRoutine",1)
+            if not require(find_named(screen,"TacticsPreview").get_meta("diagram_zones") > 0 and find_named(screen,"TacticsPreview").get_meta("diagram_marked") == 0,"Zonal no cambia la representación"):
+                return false
+            await capture_economy_screen("career-tactics-defensive-zonal")
+            await choose_control(screen,"SetPieceRoutine",2)
+            if not require(find_named(screen,"TacticsPreview").get_meta("diagram_zones") > 0 and find_named(screen,"TacticsPreview").get_meta("diagram_marked") == 2,"Mixto no combina zonas y marcas"):
+                return false
+            await capture_economy_screen("career-tactics-defensive-mixed")
+            await choose_control(screen,"SetPieceRoutine",3)
+            await choose_control(screen,"SetPieceKind",2)
+            await choose_control(screen,"FreeKickLocation",0)
+            await choose_control(screen,"SetPieceRoutine",1) # centro lateral
+            await choose_control(screen,"SetPieceCrossTarget",2)
+            await choose_control(screen,"SetPieceMovement",3)
+            for role in ["SetPieceTaker","SetPieceRole_Finisher","SetPieceRole_Receiver","SetPieceRole_StayBack"]:
+                await choose_control(screen,role,1)
+            await capture_economy_screen("career-tactics-attacking-cross")
+            await choose_control(screen,"SetPieceKind",5)
+            if not require(find_named(screen,"SetPieceRoutine") == null and find_named(screen,"SetPieceTaker") == null,"Penaltis conserva instrucciones de disparo"):
+                return false
+            for ordinal in range(1,6):
+                await choose_control(screen,"PenaltyTaker_"+str(ordinal),1)
+            await capture_economy_screen("career-tactics-five-takers")
+            await choose_control(screen,"SetPieceKind",6)
+            for routine in range(1,7):
+                await choose_control(screen,"SetPieceRoutine",routine)
+                if find_named(screen,"SetPieceVariant") != null:
+                    await choose_control(screen,"SetPieceVariant",1)
+                await process_frame
+                if not require(find_named(screen,"TacticsPreview").get_meta("diagram_arrows") > 0,"Estrategia de banda sin trayectorias"):
+                    return false
+            await capture_economy_screen("career-tactics-rehearsed-throw")
+        for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+            root.size = resolution
+            await create_timer(.2).timeout
+            var preview = find_named(screen,"TacticsPreview")
+            var controls = find_named(screen,"TacticsInstructionScroll")
+            if not require(not preview.get_global_rect().intersects(controls.get_global_rect()) and controls.get_global_rect().end.x <= root.size.x+1 and controls.get_global_rect().end.y <= root.size.y+1,"Paneles solapados"):
+                return false
+            await capture_economy_screen("career-tactics-iter2-"+str(index)+"-"+str(resolution.x)+"x"+str(resolution.y))
+        root.size = Vector2i(1280,720)
+    find_named(screen,"NavPage_OwnSquad").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_Lineup").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TacticsMentality").selected == 4 and find_marked_nodes(screen,"slot_id").size() == 11,"Reapertura pierde estado"):
+        return false
+    find_named(screen,"TacticTab_3").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"SetPieceKind",5)
+    for ordinal in range(1,6):
+        if not require(find_named(screen,"PenaltyTaker_"+str(ordinal)).selected > 0,"No se recupera el orden de lanzadores"):
+            return false
+    find_named(screen,"TacticTab_0").emit_signal("pressed")
+    await process_frame
+    for formation_index in range(find_named(screen,"LineupFormation").item_count):
+        await choose_control(screen,"LineupFormation",formation_index)
+        var ids: Array = []
+        for circle in find_marked_nodes(screen,"slot_id"):
+            if not require(not ids.has(circle.get_meta("player_id")),"Cambio de formación duplica titulares"):
+                return false
+            ids.append(circle.get_meta("player_id"))
+        if not require(ids.size() == 11,"Una formación pierde titulares"):
+            return false
+    if not await check_plan_editor(screen):
+        return false
+    if not await check_instruction_expansion(screen):
+        return false
+    print("FURVO_TACTICS_ITER2_OK: fases, asignaciones reales, barrera/tumbado, cinco lanzadores, banda y reapertura")
+    return true
+
+func move_free(screen: Node, slot: String, advance: float, width: float) -> void:
+    find_named(screen,"LineupSlot_"+slot).emit_signal("pressed")
+    await process_frame
+    await process_frame
+    var field = find_named(screen,"LineupPitch")
+    var rect: Rect2 = field.get_meta("field_rect")
+    var destination = field.global_position+rect.position+rect.size*Vector2(width,1.0-advance)
+    var player = find_named(screen,"LineupSlot_"+slot)
+    if DisplayServer.get_name() != "headless":
+        root.warp_mouse(destination)
+        await process_frame
+        await process_frame
+    await drag_mouse(player.global_position+Vector2(18,14),destination)
+    if not require(find_named(screen,"TacticalRoleDialog") == null and find_named(screen,"ProposedTacticalRole") == null,"Arrastrar abrió un diálogo de demarcación"):
+        return
+
+func confirm_overwrite(screen: Node, accept: bool) -> bool:
+    var dialog = find_named(screen,"PlanOverwriteDialog")
+    if not require(dialog != null,"Falta confirmación de sobrescritura"):
+        return false
+    dialog.emit_signal("confirmed" if accept else "canceled")
+    await process_frame
+    await process_frame
+    return true
+
+func check_plan_editor(screen: Node) -> bool:
+    await choose_control(screen,"TacticalPlanSelector",0)
+    await choose_control(screen,"TacticalPhaseSelector",1)
+    if OS.get_cmdline_user_args().has("--manual-plans"):
+        root.title = "Furvo · Planes QA"
+        print("FURVO_MANUAL_PLANS_READY")
+        await create_timer(300).timeout
+        return true
+    var original_ids: Array = []
+    for circle in find_marked_nodes(screen,"slot_id"):
+        original_ids.append(circle.get_meta("player_id"))
+    var before_x = find_named(screen,"LineupSlot_s1").get_meta("tactical_x")
+    await move_free(screen,"s1",.91,.3)
+    if not require(absf(find_named(screen,"LineupSlot_s1").get_meta("tactical_x")-.91) < .015 and find_named(screen,"LineupSlot_s1").get_meta("tactical_role") == "Striker" and find_named(screen,"CustomFormation") != null,"Movimiento libre o demarcación automática fallidos"):
+        return false
+    await choose_control(screen,"TacticalPhaseSelector",0)
+    if not require(absf(find_named(screen,"LineupSlot_s1").get_meta("tactical_x")-before_x) < .015,"Mover Sin balón alteró Con balón"):
+        return false
+    var with_ball_x = find_named(screen,"LineupSlot_s1").get_meta("tactical_x")
+    var phase_ids: Array = []
+    for circle in find_marked_nodes(screen,"slot_id"):
+        phase_ids.append(circle.get_meta("player_id"))
+    phase_ids.sort()
+    original_ids.sort()
+    if not require(phase_ids == original_ids,"Las fases tienen distintos futbolistas"):
+        return false
+    await choose_control(screen,"TacticalPhaseSelector",1)
+    await choose_control(screen,"TacticsMentality",2)
+    await choose_control(screen,"TacticalPlanSelector",1)
+    if not require(find_named(screen,"TacticsMentality").selected == 0,"Ganando heredó una edición posterior de Inicial"):
+        return false
+    await choose_control(screen,"TacticsMentality",5)
+    find_named(screen,"TacticTab_1").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"TacticalPhaseSelector",0)
+    await choose_control(screen,"Instruction_passing",1)
+    await choose_control(screen,"TacticalPlanSelector",0)
+    if not require(find_named(screen,"TacticsMentality").selected == 2 and find_named(screen,"Instruction_passing").selected == 3,"Las instrucciones o mentalidad se comparten entre planes"):
+        return false
+    find_named(screen,"TacticTab_0").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"TacticalPhaseSelector",1)
+    await choose_control(screen,"TacticalPlanSelector",2)
+    var copy = find_named(screen,"CopyTacticalPlan")
+    copy.select(1)
+    copy.emit_signal("item_selected",1)
+    await process_frame
+    if not await confirm_overwrite(screen,false):
+        return false
+    if not require(find_named(screen,"TacticsMentality").selected == 0,"Cancelar copia sobrescribió el plan"):
+        return false
+    copy = find_named(screen,"CopyTacticalPlan")
+    copy.select(1)
+    copy.emit_signal("item_selected",1)
+    await process_frame
+    if not await confirm_overwrite(screen,true):
+        return false
+    if not require(find_named(screen,"TacticsMentality").selected == 2 and absf(find_named(screen,"LineupSlot_s1").get_meta("tactical_x")-.91) < .015,"Copiar plan no copia ambas disposiciones y mentalidad"):
+        return false
+    await move_free(screen,"s1",.83,.8)
+    if not require(absf(find_named(screen,"LineupSlot_s1").get_meta("tactical_x")-.83) < .015,"La copia no admite edición independiente"):
+        return false
+    await choose_control(screen,"TacticalPlanSelector",0)
+    if not require(absf(find_named(screen,"LineupSlot_s1").get_meta("tactical_x")-.91) < .015,"Editar copia alteró el origen"):
+        return false
+    # La formación personalizada exige confirmación y cancelar preserva las coordenadas.
+    var formation = find_named(screen,"LineupFormation")
+    var index = 0
+    for i in range(formation.item_count):
+        if formation.get_item_text(i) == "4-4-2":
+            index = i
+    formation.select(index)
+    formation.emit_signal("item_selected",index)
+    await process_frame
+    if not await confirm_overwrite(screen,false):
+        return false
+    if not require(absf(find_named(screen,"LineupSlot_s1").get_meta("tactical_x")-.91) < .015,"Cancelar formación perdió personalización"):
+        return false
+    await choose_control(screen,"LineupFormation",index)
+    if not require(find_named(screen,"CustomFormation") == null,"Cambiar plantilla no restablece su geometría"):
+        return false
+    await move_free(screen,"s1",.91,.28)
+    find_named(screen,"ResetDisposition").emit_signal("pressed")
+    await process_frame
+    if not await confirm_overwrite(screen,true):
+        return false
+    if not require(find_named(screen,"CustomFormation") == null,"Restablecer no recupera la plantilla"):
+        return false
+    await choose_control(screen,"TacticalPlanSelector",2)
+    var disposition = find_named(screen,"CopyDisposition")
+    disposition.select(1)
+    disposition.emit_signal("item_selected",1)
+    await process_frame
+    if not await confirm_overwrite(screen,true):
+        return false
+    if not require(absf(find_named(screen,"LineupSlot_s1").get_meta("tactical_x")-with_ball_x) < .015,"Copia de disposición incorrecta"):
+        return false
+    find_named(screen,"ShowPhaseReference").emit_signal("toggled",true)
+    await process_frame
+    if not require(find_named(screen,"LineupPitch").get_meta("reference_positions") == 11,"No muestra las posiciones de referencia"):
+        return false
+    for plan in range(3):
+        await choose_control(screen,"TacticalPlanSelector",plan)
+        for phase in range(2):
+            await choose_control(screen,"TacticalPhaseSelector",phase)
+            for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+                root.size = resolution
+                await create_timer(.15).timeout
+                if not require(find_marked_nodes(screen,"slot_id").size() == 11 and find_named(screen,"TacticalPlanSelector").selected == plan and find_named(screen,"TacticalPhaseSelector").selected == phase,"Selector no corresponde a la disposición"):
+                    return false
+                var viewport = find_named(screen,"TacticLineupScroll").get_global_rect()
+                for circle in find_marked_nodes(screen,"slot_id"):
+                    if not require(circle.get_global_rect().position.y >= viewport.position.y-1 and circle.get_global_rect().end.y <= viewport.end.y+1,"Redimensionar deja titulares fuera del editor"):
+                        return false
+                await capture_economy_screen("career-plan-"+str(plan)+"-phase-"+str(phase)+"-"+str(resolution.x)+"x"+str(resolution.y))
+    root.size = Vector2i(1280,720)
+    await choose_control(screen,"TacticalPlanSelector",0)
+    await choose_control(screen,"TacticalPhaseSelector",1)
+    find_named(screen,"SaveTacticalPlans").emit_signal("pressed")
+    await process_frame
+    if not await check_auto_position_drop(screen):
+        return false
+    print("FURVO_PLANS_OK: seis disposiciones, arrastre libre, demarcación, independencia, copia/cancelación, restablecimiento y referencia")
     return true
 
 func return_career_main_menu(screen: Node) -> void:
@@ -895,3 +1294,583 @@ func run_test() -> void:
     await process_frame
     print("FURVO_UI_SMOKE_OK: club Información/Plantilla/Historia/Economía, estados pendientes, 24 jugadores, 51 atributos y navegación")
     quit(0)
+
+func check_instruction_expansion(screen: Node) -> bool:
+    find_named(screen,"TacticTab_1").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"TacticalPhaseSelector",0)
+    if not require(find_named(screen,"TacticStylePhases") == null,"Selector de fase duplicado"):
+        return false
+    for mode in range(1,4):
+        await choose_control(screen,"Instruction_movement",mode)
+        await capture_economy_screen("tactics-movement-"+str(mode))
+    await choose_control(screen,"TacticalPhaseSelector",1)
+    for mode in range(1,4):
+        await choose_control(screen,"Instruction_marking",mode)
+        await capture_economy_screen("tactics-marking-"+str(mode))
+    find_named(screen,"TacticTab_2").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"Instruction_recovery",2)
+    if not require(find_named(screen,"Instruction_counter_route") == null,"Vía visible sin contraatacar"):
+        return false
+    await choose_control(screen,"Instruction_recovery",1)
+    if not require(find_named(screen,"Instruction_counter_route").item_count == 6,"Faltan vías de contraataque"):
+        return false
+    for route in range(1,6):
+        await choose_control(screen,"Instruction_counter_route",route)
+        if not require(find_named(screen,"TacticsPreview").get_meta("diagram_arrows") > 0,"Vía sin trayectorias"):
+            return false
+        await capture_economy_screen("tactics-counter-"+str(route))
+    await choose_control(screen,"Instruction_keeper_target",0)
+    await choose_control(screen,"Instruction_keeper",2)
+    await capture_economy_screen("tactics-keeper-mixed")
+    find_named(screen,"TacticTab_3").emit_signal("pressed")
+    await process_frame
+    for kind in [2,4]:
+        await choose_control(screen,"SetPieceKind",kind)
+        for location in range(4):
+            await choose_control(screen,"FreeKickLocation",location)
+            var expected = 4 if kind == 4 or location != 2 else 5
+            if not require(find_named(screen,"SetPieceRoutine").item_count == expected,"Opciones no contextuales"):
+                return false
+            await choose_control(screen,"SetPieceRoutine",1)
+            if kind == 4:
+                await choose_control(screen,"SetPieceWall",3)
+                if location < 2:
+                    if not require(find_named(screen,"SetPieceLying") == null,"Tumbado disponible en lateral"):
+                        return false
+                else:
+                    await choose_control(screen,"SetPieceLying",1)
+                    if not require(find_named(screen,"SetPieceRole_Prone") != null,"Falta selector de tumbado"):
+                        return false
+            var assignment_grid = find_named(screen,"SetPieceAssignments")
+            var instruction_scroll = find_named(screen,"TacticsInstructionScroll")
+            if assignment_grid != null:
+                instruction_scroll.scroll_vertical = int(instruction_scroll.get_v_scroll_bar().max_value)
+                await process_frame
+                await process_frame
+                if not require(assignment_grid.get_global_rect().end.x <= root.size.x - 10,"Asignaciones recortadas horizontalmente"):
+                    return false
+                await capture_economy_screen("tactics-assignments-"+str(kind)+"-"+str(location))
+                instruction_scroll.scroll_vertical = 0
+                await process_frame
+            await capture_economy_screen("tactics-free-"+str(kind)+"-"+str(location))
+    await choose_control(screen,"SetPieceKind",2)
+    await choose_control(screen,"FreeKickLocation",0)
+    if not require(find_named(screen,"SetPieceRoutine").selected == 1,"Ubicación no conserva jugada propia"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080),Vector2i(1280,720)]:
+        root.size = resolution
+        await create_timer(.2).timeout
+        var preview = find_named(screen,"TacticsPreview")
+        var controls = find_named(screen,"TacticsInstructionScroll")
+        if not require(not preview.get_global_rect().intersects(controls.get_global_rect()),"Nuevos controles solapados"):
+            return false
+        await capture_economy_screen("tactics-expansion-"+str(resolution.x)+"x"+str(resolution.y))
+    print("FURVO_INSTRUCTIONS_OK: movimientos, marcajes, cinco vías, portero mixto, ocho contextos de faltas y selectores dependientes")
+    return true
+
+func check_auto_position_drop(screen: Node) -> bool:
+    await choose_control(screen,"TacticalPlanSelector",0)
+    await choose_control(screen,"TacticalPhaseSelector",1)
+    var midfielder: Node = null
+    for circle in find_marked_nodes(screen,"slot_id"):
+        if circle.get_meta("tactical_role") == "CentralMidfielder":
+            midfielder = circle
+            break
+    if not require(midfielder != null,"Falta MC para verificar arrastre automático"):
+        return false
+    var slot: String = midfielder.get_meta("slot_id")
+    var player: String = midfielder.get_meta("player_id")
+    var natural: String = midfielder.get_meta("natural_role")
+    var secondaries = midfielder.get_meta("secondary_roles")
+    var expected = 0 if natural == "AttackingMidfielder" else (1 if secondaries.has("AttackingMidfielder") else 2)
+    var colors = ["27754e","9a601f","a33644"]
+    var previous_revision = find_named(screen,"LineupPage").get_meta("lineup_revision")
+    await move_free(screen,slot,.70,.46)
+    var updated = find_named(screen,"LineupSlot_"+slot)
+    if not require(find_named(updated,"TacticalRoleLabel").text == "MP" and updated.get_meta("compatibility") == expected and updated.get_meta("suitability_color") == colors[expected],"No actualiza MP y adecuación automáticamente"):
+        return false
+    if not require(updated.get_meta("player_id") == player and updated.get_meta("natural_role") == natural and find_named(screen,"LineupPage").get_meta("lineup_revision") == previous_revision+1,"El arrastre cambia identidad o guarda en dos pasos"):
+        return false
+    if not require(find_named(screen,"EditTacticalRole") == null and find_named(screen,"LineupSwap") == null,"Persisten controles retirados"):
+        return false
+    await choose_control(screen,"TacticalPhaseSelector",0)
+    await choose_control(screen,"TacticalPhaseSelector",1)
+    if not require(find_named(screen,"LineupSlot_"+slot).get_meta("tactical_role") == "AttackingMidfielder","Cambio de fase pierde demarcación"):
+        return false
+    find_named(screen,"SaveTacticalPlans").emit_signal("pressed")
+    await process_frame
+    screen.ReopenIsolatedCareerForValidation()
+    await process_frame
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_Lineup").emit_signal("pressed")
+    await process_frame
+    updated = find_named(screen,"LineupSlot_"+slot)
+    if not require(absf(updated.get_meta("tactical_x")-.70)<.015 and absf(updated.get_meta("tactical_y")-.46)<.015 and updated.get_meta("tactical_role") == "AttackingMidfielder","Reabrir el editor no recupera el cambio guardado"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080),Vector2i(1280,720)]:
+        root.size = resolution
+        await create_timer(.2).timeout
+        var heading = find_named(screen,"TacticsHeading")
+        var tabs = find_named(screen,"TacticsTabs")
+        var config = find_named(screen,"TacticsFormationRow")
+        var mentality = find_named(screen,"TacticsMentalityRow")
+        var content = find_named(screen,"LineupPage")
+        if not require(heading.get_global_rect().position.y-find_named(screen,"CareerContextNavigation").get_global_rect().end.y>=19 and tabs.get_global_rect().position.y-heading.get_global_rect().end.y>=15 and config.get_global_rect().position.y-tabs.get_global_rect().end.y>=19 and mentality.get_global_rect().position.y-config.get_global_rect().end.y>=15 and content.get_global_rect().position.y-mentality.get_global_rect().end.y>=23,"Separación entre niveles insuficiente"):
+            return false
+        for group in ["TacticalPlanGroup","TacticalPhaseGroup","TacticalFormationGroup"]:
+            if not require(find_named(screen,group).get_global_rect().end.x<=root.size.x-15,"Configuración fuera del ancho visible"):
+                return false
+        if not require(find_named(screen,"TacticalRoleDialog") == null,"Apareció un popup tras reabrir"):
+            return false
+        await capture_economy_screen("career-auto-position-"+str(resolution.x)+"x"+str(resolution.y))
+    print("FURVO_AUTO_POSITION_OK: MC a MP sin popup, abreviatura/color, guardado atómico, fases, reapertura de carrera desde SQLite y espaciado en tres resoluciones")
+    return true
+
+func open_academy_by_id(screen: Node, team_id: String) -> void:
+    find_named(screen,"NavPage_Academy").emit_signal("pressed")
+    await process_frame
+    var table = find_trees(find_named(screen,"AcademyTeamsTable"))[0]
+    for row in table.get_root().get_children():
+        if row.get_metadata(0) == team_id:
+            row.select(0)
+            table.emit_signal("item_selected")
+            find_named(screen,"OpenAcademyTeam").emit_signal("pressed")
+            await process_frame
+            return
+
+func check_academy(screen: Node) -> bool:
+    root.size = Vector2i(1920,1080)
+    find_named(screen,"NavPage_Lineup").emit_signal("pressed")
+    await process_frame
+    var primary_players: Array = []
+    var primary_positions: Dictionary = {}
+    for plan in range(3):
+        await choose_control(screen,"TacticalPlanSelector",plan)
+        for phase in range(2):
+            await choose_control(screen,"TacticalPhaseSelector",phase)
+            var positions: Dictionary = {}
+            for circle in find_marked_nodes(screen,"slot_id"):
+                positions[circle.get_meta("slot_id")] = [circle.get_meta("tactical_x"),circle.get_meta("tactical_y"),circle.get_meta("tactical_role")]
+                if not primary_players.has(circle.get_meta("player_id")):
+                    primary_players.append(circle.get_meta("player_id"))
+            primary_positions[str(plan)+":"+str(phase)] = positions
+    find_named(screen,"NavPage_Academy").emit_signal("pressed")
+    await process_frame
+    var teams = find_trees(find_named(screen,"AcademyTeamsTable"))[0]
+    if not require(teams.get_root().get_child_count() == 4,"Mosaico no conserva sus cuatro equipos verificados"):
+        return false
+    var selected_team: String = teams.get_root().get_first_child().get_metadata(0)
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(.2).timeout
+        if not require(find_named(screen,"OpenAcademyTeam").get_global_rect().end.y <= root.size.y-10,"Cantera oculta navegación"):
+            return false
+        await capture_economy_screen("career-academy-list-"+str(resolution.x)+"x"+str(resolution.y))
+    await open_academy_by_id(screen,selected_team)
+    var coach = find_named(screen,"AcademyCoachValue").text
+    await choose_control(screen,"AcademyManagementSelector",0)
+    find_named(screen,"AcademySection_1").emit_signal("pressed")
+    await process_frame
+    var squad = find_trees(find_named(screen,"AcademyRosterTable"))[0]
+    if not require(squad.get_root().get_child_count() == 22,"El filial no tiene 22 futbolistas propios"):
+        return false
+    for row in squad.get_root().get_children():
+        if not require(not primary_players.has(row.get_metadata(0)),"La cantera copió identificadores del primer equipo"):
+            return false
+    squad.get_root().get_first_child().select(0)
+    squad.emit_signal("item_selected")
+    find_named(screen,"ViewAcademyPlayer").emit_signal("pressed")
+    await process_frame
+    if not require(find_attribute_rows(screen).size() == 51,"Ficha de cantera incompleta o filtra ocultos"):
+        return false
+    await capture_economy_screen("career-academy-player")
+    find_named(screen,"BackAcademyPlayer").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AcademySection_3").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AcademyDevelopmentNotice") != null and find_trees(find_named(screen,"AcademyRosterTable"))[0].columns == 5,"Seguimiento sin situación ni aviso de sistemas pendientes"):
+        return false
+    find_named(screen,"AcademySection_2").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TacticsMentality").disabled and find_named(screen,"LineupFormation").disabled,"La sincronizada permite editar esquema heredado"):
+        return false
+    for plan in range(3):
+        await choose_control(screen,"TacticalPlanSelector",plan)
+        for phase in range(2):
+            await choose_control(screen,"TacticalPhaseSelector",phase)
+            for circle in find_marked_nodes(screen,"slot_id"):
+                var expected = primary_positions[str(plan)+":"+str(phase)][circle.get_meta("slot_id")]
+                if not require(absf(circle.get_meta("tactical_x")-expected[0])<.001 and absf(circle.get_meta("tactical_y")-expected[1])<.001 and circle.get_meta("tactical_role")==expected[2] and not primary_players.has(circle.get_meta("player_id")),"No sincroniza seis disposiciones con futbolistas propios"):
+                    return false
+    await choose_control(screen,"TacticalPlanSelector",0)
+    await choose_control(screen,"TacticalPhaseSelector",1)
+    await choose_control(screen,"AcademyTacticSelector",1)
+    if not require(not find_named(screen,"LineupFormation").disabled and not find_named(screen,"TacticsMentality").disabled,"Propia no habilita editor reutilizado"):
+        return false
+    var scroll = find_named(screen,"AcademyTacticsScroll") as ScrollContainer
+    scroll.ensure_control_visible(find_named(screen,"LineupPitch"))
+    await create_timer(.2).timeout
+    await move_free(screen,"s1",.94,.21)
+    if not require(absf(find_named(screen,"LineupSlot_s1").get_meta("tactical_x")-.94)<.015 and find_named(screen,"TacticalRoleDialog")==null,"Cantera propia no admite arrastre directo sin popup"):
+        return false
+    await choose_control(screen,"TacticsMentality",5)
+    find_named(screen,"TacticTab_1").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"TacticalPhaseSelector",0)
+    await choose_control(screen,"Instruction_passing",1)
+    find_named(screen,"TacticTab_2").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"Instruction_recovery",1)
+    await choose_control(screen,"Instruction_counter_route",3)
+    await choose_control(screen,"AcademyTacticSelector",0)
+    if not require(find_named(screen,"PlanOverwriteDialog") != null,"Reactivar sincronización no pide confirmación"):
+        return false
+    if not await confirm_overwrite(screen,false):
+        return false
+    if not require(find_named(screen,"AcademyTacticSelector").selected==1,"Cancelar deja selector táctico incoherente"):
+        return false
+    await choose_control(screen,"AcademyTacticSelector",0)
+    if not await confirm_overwrite(screen,true):
+        return false
+    if not require(find_named(screen,"TacticsMentality").disabled,"Reactivar no restablece relación de lectura"):
+        return false
+    # Volver al primer equipo y modificar una coordenada; el vínculo debe leerla al regresar.
+    find_named(screen,"NavPage_Lineup").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"TacticalPlanSelector",0)
+    await choose_control(screen,"TacticalPhaseSelector",1)
+    if not require(absf(find_named(screen,"LineupSlot_s1").get_meta("tactical_x")-primary_positions["0:1"]["s1"][0])<.001,"Editar cantera alteró primer equipo"):
+        return false
+    await move_free(screen,"s1",.92,.29)
+    await open_academy_by_id(screen,selected_team)
+    find_named(screen,"AcademySection_2").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"TacticalPlanSelector",0)
+    await choose_control(screen,"TacticalPhaseSelector",1)
+    if not require(absf(find_named(screen,"LineupSlot_s1").get_meta("tactical_x")-.92)<.015,"La sincronización no refleja una edición posterior del primer equipo"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(.2).timeout
+        var back = find_named(screen,"BackAcademy")
+        if not require(back.get_global_rect().end.y<=root.size.y-10,"Editor de cantera recorta el botón de regreso"):
+            return false
+        await capture_economy_screen("career-academy-tactics-"+str(resolution.x)+"x"+str(resolution.y))
+        var viewport = find_named(screen,"AcademyTacticsScroll") as ScrollContainer
+        viewport.ensure_control_visible(find_named(screen,"LineupPitch"))
+        await create_timer(.2).timeout
+        await capture_economy_screen("career-academy-field-"+str(resolution.x)+"x"+str(resolution.y))
+    find_named(screen,"AcademySection_0").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AcademyCoachValue").text==coach,"Una política sustituyó al entrenador responsable"):
+        return false
+    await choose_control(screen,"AcademyManagementSelector",1)
+    screen.ReopenIsolatedCareerForValidation()
+    await process_frame
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    await open_academy_by_id(screen,selected_team)
+    if not require(find_named(screen,"AcademyManagementSelector").selected==1 and find_named(screen,"AcademyTacticSelector").selected==0 and find_named(screen,"AcademyCoachValue").text==coach,"La reapertura pierde políticas de cantera"):
+        return false
+    find_named(screen,"BackAcademy").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_OwnSquad").emit_signal("pressed")
+    await process_frame
+    if not require(find_trees(find_named(screen,"SquadTable"))[0].get_root().get_child_count()==24,"La cantera contaminó la plantilla principal"):
+        return false
+    root.size = Vector2i(1280,720)
+    print("FURVO_ACADEMY_OK: cuatro equipos de Mosaico, plantillas propias, 51 atributos, seis disposiciones sincronizadas, editor propio, confirmación, actualización continua, políticas, reapertura y tres resoluciones")
+    return true
+
+func check_advanced_tactics(screen: Node) -> bool:
+    find_named(screen,"NavPage_Lineup").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TacticTab_0").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"TacticalPlanSelector",0)
+    await choose_control(screen,"TacticalPhaseSelector",0)
+    var keeper: Node = null
+    for circle in find_marked_nodes(screen,"slot_id"):
+        if circle.get_meta("tactical_role") == "Goalkeeper":
+            keeper = circle
+    if not require(keeper != null,"No hay portero para revisar roles"):
+        return false
+    var keeper_slot: String = keeper.get_meta("slot_id")
+    var keeper_id: String = keeper.get_meta("player_id")
+    keeper.emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"IndividualRole").item_count == 3,"Faltan roles de portero"):
+        return false
+    await choose_control(screen,"IndividualRole",2)
+    find_named(screen,"IndividualExpand").set_pressed(true)
+    await process_frame
+    if not require(find_named(screen,"Individual_shooting") == null and find_named(screen,"Individual_risk") != null,"Órdenes absurdas de portero o editor ausente"):
+        return false
+    await choose_control(screen,"Individual_risk",0)
+    if not require(find_named(screen,"IndividualRoleLabel").text.contains("personalizado"),"No identifica personalización"):
+        return false
+    await choose_control(screen,"IndividualRole",1)
+    if not require(find_named(screen,"PlanOverwriteDialog") != null,"Reemplaza personalización sin confirmación"):
+        return false
+    if not await confirm_overwrite(screen,false):
+        return false
+    if not require(find_named(screen,"IndividualRole").selected==2,"Cancelar no conserva rol"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        var field=find_named(screen,"LineupPitch") as Control
+        var side=find_named(screen,"LineupCandidateScroll") as Control
+        if not require(not field.get_global_rect().intersects(side.get_global_rect()) and side.get_global_rect().end.x<=root.size.x+1 and field.size.x>200,"Panel individual solapado o pizarra recortada"):
+            return false
+        await capture_economy_screen("career-individual-"+str(resolution.x)+"x"+str(resolution.y))
+    if not require(find_named(screen,"LineupSlot_"+keeper_slot).get_meta("player_id")==keeper_id,"Cambiar rol altera el once"):
+        return false
+    find_named(screen,"TacticTab_1").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"TacticalPhaseSelector",1)
+    for instruction in ["press_direction","opponent_keeper","offside_trap","press_beaten"]:
+        await choose_control(screen,"Instruction_"+instruction,2)
+        await process_frame
+        var preview=find_named(screen,"TacticsPreview")
+        if not require(preview.get_meta("diagram_arrows")>0 or preview.get_meta("diagram_zones")>0,"Falta representación de "+instruction):
+            return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        find_named(screen,"TacticsInstructionScroll").ensure_control_visible(find_named(screen,"Instruction_press_beaten"))
+        await capture_economy_screen("career-advanced-defence-"+str(resolution.x)+"x"+str(resolution.y))
+    find_named(screen,"TacticTab_0").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"PersonnelExpand").set_pressed(true)
+    await process_frame
+    await choose_control(screen,"Personnel_Captain_0",1)
+    var captain=find_named(screen,"Personnel_Captain_0").get_item_text(1)
+    screen.ReopenIsolatedCareerForValidation()
+    await process_frame
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_Lineup").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TacticTab_0").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"Personnel_Captain_0").selected==1 and find_named(screen,"Personnel_Captain_0").get_item_text(1)==captain,"Reapertura pierde capitán"):
+        return false
+    root.size=Vector2i(1280,720)
+    print("FURVO_ADVANCED_TACTICS_OK: roles, personalización, cancelación segura, once intacto, cuatro diagramas defensivos, capitanes persistentes y tres resoluciones")
+    return true
+
+func check_sports_modules(screen: Node) -> bool:
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    for name in ["OwnSquad","Lineup","Training","Analysis","Academy"]:
+        if not require(find_named(screen,"NavPage_"+name)!=null,"Falta navegación Equipo "+name):
+            return false
+    find_named(screen,"NavPage_Lineup").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"LineupSlot_gk").emit_signal("pressed")
+    await process_frame
+    var left=find_named(screen,"IndividualSideScroll") as Control
+    var field=find_named(screen,"LineupPitch") as Control
+    var right=find_named(screen,"LineupCandidateScroll") as Control
+    if not require(left.get_global_rect().end.x<=field.get_global_rect().position.x and field.get_global_rect().end.x<=right.get_global_rect().position.x,"Roles no están a la izquierda o se solapan"):
+        return false
+    if not require(find_named(screen,"Personnel_Captain_0")!=null and find_named(screen,"Personnel_Captain_1")!=null and find_named(screen,"Personnel_Captain_2")==null,"No hay exactamente dos puestos de capitán"):
+        return false
+    find_named(screen,"NavPage_Training").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TrainingPage")!=null,"Entrenamiento no abre"):
+        return false
+    find_named(screen,"TrainingObjective").text="Práctica técnica de QA"
+    find_named(screen,"TrainingSaveSession").emit_signal("pressed")
+    await process_frame
+    if not require(find_marked_nodes(screen,"attribute_code").size()==0 and find_named(screen,"TrainingStatus").text.contains("experimental"),"No guarda planificación o mezcla atributos internos"):
+        return false
+    find_named(screen,"TrainingEditSession").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TrainingTime").text="15:00"
+    find_named(screen,"TrainingSaveSession").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TrainingTime").text=="09:00","No termina la edición de sesión"):
+        return false
+    find_named(screen,"TrainingGroupName").text="Grupo QA"
+    find_named(screen,"TrainingGroupObjective").text="Pase coordinado"
+    find_named(screen,"TrainingGroupMembers").select(0,false)
+    find_named(screen,"TrainingGroupMembers").select(1,false)
+    find_named(screen,"TrainingSaveGroup").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TrainingGroup").item_count==1,"No persiste grupo de entrenamiento"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        if not require(find_named(screen,"TrainingScroll").size.y>100,"Entrenamiento sin espacio utilizable"):
+            return false
+        await capture_economy_screen("career-training-"+str(resolution.x)+"x"+str(resolution.y))
+    for tab in range(1,6):
+        find_named(screen,"TrainingTab_"+str(tab)).emit_signal("pressed")
+        await process_frame
+        if not require(find_named(screen,"TrainingExercise").item_count>0,"Modalidad de entrenamiento vacía"):
+            return false
+    await choose_control(screen,"SportsTeamSelector",1)
+    find_named(screen,"TrainingTab_0").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"TrainingDelegate_Collective",1)
+    if not require(find_named(screen,"TrainingManagement").text.contains("mixta"),"No guarda delegación parcial de cantera"):
+        return false
+    await choose_control(screen,"SportsTeamSelector",0)
+    find_named(screen,"NavPage_Analysis").emit_signal("pressed")
+    await process_frame
+    for tab in range(4):
+        find_named(screen,"AnalysisTab_"+str(tab)).emit_signal("pressed")
+        await process_frame
+        if not require(find_named(screen,"SportsAnalysisPage")!=null,"Análisis pierde navegación"):
+            return false
+    await choose_control(screen,"AnalysisReportStaff",1)
+    find_named(screen,"AnalysisCreateSnapshot").emit_signal("pressed")
+    await process_frame
+    var reports: Array[Node]=[]
+    for child in find_named(screen,"SportsAnalysisScroll").get_child(0).get_children():
+        if str(child.name).begins_with("AnalysisReport_"):
+            reports.append(child)
+    if not require(reports.size()==1,"No crea informe de datos actuales"):
+        return false
+    if not await check_analysis_reports(screen):
+        return false
+    find_named(screen,"NavArea_Club").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_Facilities").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"FacilityOwnershipValue").text.contains("verificar"),"Inventa posesión inicial de Footbonaut"):
+        return false
+    find_named(screen,"FootbonautRequestQuote").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"FootbonautRequestQuote").disabled,"No registra presupuesto pendiente"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        await capture_economy_screen("career-sports-technology-"+str(resolution.x)+"x"+str(resolution.y))
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_Academy").emit_signal("pressed")
+    await process_frame
+    var academy_tree=find_trees(find_named(screen,"AcademyTeamsTable"))[0]
+    var academy_team: String=academy_tree.get_root().get_first_child().get_metadata(0)
+    await open_academy_by_id(screen,academy_team)
+    find_named(screen,"AcademySection_1").emit_signal("pressed")
+    await process_frame
+    var roster_tree=find_trees(find_named(screen,"AcademyRosterTable"))[0]
+    roster_tree.get_root().get_first_child().select(0)
+    roster_tree.emit_signal("item_activated")
+    await process_frame
+    find_named(screen,"MovePlayerTeam").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"MovementExecute").disabled and find_named(screen,"MovementStatus").text.contains("licencia"),"Permite movimiento sin licencia verificada"):
+        return false
+    find_named(screen,"MovementRecommendationReason").text="Propuesta QA basada en datos disponibles"
+    find_named(screen,"MovementRecommend").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"MovementStatus").text.contains("pendiente"),"No registra propuesta sin mover jugador"):
+        return false
+    screen.ReopenIsolatedCareerForValidation()
+    await process_frame
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_Training").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TrainingGroup").item_count==2,"La reapertura pierde grupos compartidos"):
+        return false
+    root.size=Vector2i(1280,720)
+    print("FURVO_SPORTS_OK: roles izquierda, dos capitanes, planificación, grupos, seis áreas, delegación parcial, informes actuales, tecnología pendiente, persistencia y tres resoluciones")
+    return true
+
+# Contrasta geometría real, ámbitos, grupos compartidos y persistencia de prioridades.
+func check_analysis_reports(screen: Node) -> bool:
+    if not require(find_named(screen,"AnalysisReportPlayer")==null,"El informe colectivo muestra selector individual"):
+        return false
+    for scope in [1,2]:
+        await choose_control(screen,"AnalysisReportScope",scope)
+        if scope==1:
+            if not require(find_named(screen,"AnalysisReportPlayer").item_count==24,"Selector individual ajeno a plantilla"):
+                return false
+        find_named(screen,"AnalysisCreateSnapshot").emit_signal("pressed")
+        await process_frame
+        if not require(find_named(screen,"AnalysisStatus").text=="","Error al generar ámbito "+str(scope)):
+            return false
+    await choose_control(screen,"AnalysisReportScope",3)
+    find_named(screen,"AnalysisManageGroups").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TrainingGroupName").text="Grupo análisis QA"
+    find_named(screen,"TrainingGroupObjective").text="Seguimiento observado"
+    find_named(screen,"TrainingGroupMembers").select(0,false)
+    find_named(screen,"TrainingGroupMembers").select(1,false)
+    find_named(screen,"TrainingSaveGroup").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AnalysisReportGroup").item_count>0,"No comparte grupos de entrenamiento"):
+        return false
+    find_named(screen,"AnalysisManageGroups").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AnalysisCreateSnapshot").emit_signal("pressed")
+    await process_frame
+    var report_table=find_named(screen,"AnalysisReportPlayers")
+    var tree=find_trees(report_table)[0]
+    if not require(tree.get_root().get_child_count()==2,"El grupo no conserva sus integrantes"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        var scroll=find_named(screen,"SportsAnalysisScroll") as ScrollContainer
+        scroll.scroll_vertical=0
+        await process_frame
+        await capture_economy_screen("career-analysis-controls-"+str(resolution.x)+"x"+str(resolution.y))
+        scroll.scroll_vertical+=int(report_table.global_position.y-scroll.global_position.y)-45
+        await process_frame
+        var item=tree.get_root().get_first_child()
+        var expected=[HORIZONTAL_ALIGNMENT_LEFT,HORIZONTAL_ALIGNMENT_LEFT,HORIZONTAL_ALIGNMENT_CENTER,HORIZONTAL_ALIGNMENT_RIGHT,HORIZONTAL_ALIGNMENT_CENTER]
+        for column in range(5):
+            if not require(tree.get_column_title_alignment(column)==expected[column] and item.get_text_alignment(column)==expected[column],"Encabezado y celda no coinciden"):
+                return false
+        if not require(item.get_text(3).contains(","),"Carga sin formato decimal español"):
+            return false
+        await capture_economy_screen("career-analysis-result-"+str(resolution.x)+"x"+str(resolution.y))
+        var priorities=find_named(screen,"AnalysisPriorityHeading").get_parent()
+        for child in priorities.get_children():
+            if child.get_child_count()==2 and child.get_child(0) is CheckBox:
+                var check=child.get_child(0) as CheckBox
+                var label=child.get_child(1) as Label
+                if not require(check.get_global_rect().end.x<=label.get_global_rect().position.x,"Checkbox solapado con texto"):
+                    return false
+                check.disabled=true
+                await process_frame
+                await capture_economy_screen("career-analysis-disabled-"+str(resolution.x)+"x"+str(resolution.y))
+                check.disabled=false
+                check.button_pressed=true
+                check.grab_focus()
+                break
+        scroll.scroll_vertical=int(scroll.get_v_scroll_bar().max_value)
+        await process_frame
+        await capture_economy_screen("career-analysis-priorities-"+str(resolution.x)+"x"+str(resolution.y))
+    find_named(screen,"AnalysisSavePriorities").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AnalysisReportHistory").item_count==4,"Se pierde histórico entre ámbitos"):
+        return false
+    await choose_control(screen,"AnalysisReportScope",0)
+    if not require(find_named(screen,"AnalysisReportPlayer")==null and find_named(screen,"AnalysisReportPlayers")!=null,"Filtros alteran histórico"):
+        return false
+    find_named(screen,"AnalysisTab_1").emit_signal("pressed")
+    await process_frame
+    var players=find_trees(find_named(screen,"AnalysisPlayers"))[0]
+    var last=players.get_root().get_first_child()
+    while last.get_next()!=null:
+        last=last.get_next()
+    players.scroll_to_item(last)
+    await process_frame
+    if not require(players.get_root().get_child_count()==24,"Tabla pierde jugadores al desplazar"):
+        return false
+    find_named(screen,"AnalysisTab_3").emit_signal("pressed")
+    await process_frame
+    return true

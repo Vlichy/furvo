@@ -2,7 +2,7 @@ using System.Text.Json;
 using Furvo.Core.Domain;
 using Furvo.Core.Queries;
 namespace Furvo.Core.Lineups;
-public sealed record FormationSlot(string Id,PlayerRole Role,double X,double Y);
+public sealed record FormationSlot(string Id,PlayerRole Role,double X,double Y,string? TacticalCode=null);
 public sealed record FormationDefinition(string Id,IReadOnlyList<FormationSlot> Slots);
 public enum LineupRole { Starter=1,Substitute=2,Reserve=3 }
 public sealed record LineupMember(PlayerId PlayerId,LineupRole Role,string? SlotId);

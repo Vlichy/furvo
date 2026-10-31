@@ -65,6 +65,7 @@ public sealed class SqliteCareerStore : ICareerStore
                     ("$id",request.Id.ToString()),("$coach",request.CoachId.ToString()),("$season",season.Id.ToString()),("$date",Date(date)),("$mode",(int)request.Mode),
                     ("$employment",employed?2:1),("$club",employed?request.Offer!.ClubId.ToString():null),("$contract",request.ContractId?.ToString()),("$hash",hash)))state.ExecuteNonQuery();
                 SqliteLineupStore.Initialize(target,t,world,request.Id,employed?request.Offer!.ClubId:null,date);
+                SqliteAcademyStore.Initialize(target,t,world);
                 using(var check=WorldDatabase.Command(target,t,"PRAGMA foreign_key_check;"))using(var rows=check.ExecuteReader())if(rows.Read())throw new InvalidDataException("Referencias incoherentes en la carrera.");
                 t.Commit();
             });

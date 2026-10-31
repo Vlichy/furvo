@@ -1,3 +1,17 @@
+Inventario de la ampliación de instrucciones: [TACTICAL_INSTRUCTIONS.md](TACTICAL_INSTRUCTIONS.md).
+
+## Estado vigente — planes tácticos y seis disposiciones
+
+Inicial, Ganando y Perdiendo tienen dos disposiciones propias y un único once por plan; mentalidad e instrucciones independientes y balón parado común. Se conserva una fuente canónica de composición, con lectura compatible y conversión transaccional al guardar. [Modelo, migración, archivos y comprobación](TACTICAL_PLANS.md). Las descripciones anteriores de una táctica única se conservan como historial.
+
+## Segunda iteración de Táctica
+
+Arrastre nativo, formación reubicada, selector Con balón/Sin balón, diagramas enlazados y nuevas asignaciones de balón parado. Extensión táctica versión 2 bajo guardado explícito, compatible con lecturas v1. [Informe e inventario de esta iteración](TACTICS_ITERATION_2.md). Este apartado actualiza el alcance descrito a continuación, que se conserva como historial.
+
+## Estado vigente — Equipo → Táctica
+
+La alineación existente se integra en Táctica junto con Estilo de juego, Transiciones y Balón parado. Mentalidad común y configuración estructurada persistente por carrera. Extensión SQLite independiente versión 1, creada al guardar; lecturas sin migraciones. [Decisiones, archivos y comprobación](TACTICS.md). Los apartados siguientes conservan el historial; las referencias a Equipo → Alineación se entienden ahora como Táctica → Alineación.
+
 ## Estado vigente — plantilla de seguimiento e Inicio simplificado (28/10/2026)
 
 Equipo > Plantilla tiene doce columnas: Rol, Posición, Jugador, Calidad, Estado físico, Ritmo, Moral, Forma (últimos 5), PJ, G, A y Media. Indicadores reutilizables sin valoraciones inventadas; los atributos individuales siguen en la ficha. En el estado inicial confirmado sin partidos: PJ/G/A=0, Media — y cinco círculos de forma inactivos. Calidad, condición, ritmo y moral continúan sin datos. La distribución inicial de roles está aprobada pero pendiente de reglas y persistencia: se mantiene Sin asignar. Inicio abre directamente el escritorio; Bandeja se abre desde la cabecera y tiene regreso al escritorio, sin submenú redundante.
@@ -328,3 +342,22 @@ Creado docs/UI_LAYOUT_FIX.md con el inventario de este encargo. Modificados Main
 ## Alineaciones — 28/10/2026
 
 La entrega de alineaciones añade Equipo → Plantilla / Alineación, selección inicial reproducible y persistencia independiente por carrera. La apertura de carreras antiguas no migra ni genera alineaciones automáticamente. Véanse [arquitectura, reglas e inventario de archivos](LINEUPS.md) y [formaciones iniciales de los veinte clubes](INITIAL_FORMATIONS.md). Esta sección actualiza las referencias anteriores a roles sin asignar y al orden inicial por rol: ahora las carreras nuevas tienen once y se ordenan por posición futbolística.
+
+
+## Roles e instrucciones tácticas individuales
+
+Se amplía el editor existente con 35 presets por demarcación, personalización por puesto/plan/fase, presión avanzada, capitanes y jerarquías de especialistas propias de cada equipo. Cantera hereda los comportamientos por puesto sin copiar futbolistas. Rival y familiaridad quedan como modelos preparatorios sin simular partidos ni entrenamiento.
+
+Catálogo, reglas, inventario de archivos, migraciones y límites: [Sistema táctico ampliado](TACTICAL_BEHAVIOURS.md).
+
+
+## Desarrollo deportivo integrado
+
+Equipo incorpora Plantilla, Táctica, Entrenamiento, Análisis y Cantera; Club añade Instalaciones y Tecnología deportiva. Hay planificación persistente, grupos, configuración de delegación, dos capitanes, movilidad con normativa explícita e informes de datos existentes. La ejecución temporal, normativa incompleta, personal especializado y compras sin aprobación permanecen bloqueados o preparados, sin simular su disponibilidad.
+
+[Informe, archivos, migraciones y límites](SPORTS_DELIVERY.md) · [Fuentes](SPORTS_RESEARCH.md).
+
+
+## Corrección de Análisis → Informes — 31/10/2026
+
+Cuatro ámbitos independientes del contenido, empleados reales, grupos compartidos e histórico inmutable; componente PriorityChoice y columnas restringidas en Análisis. [Inventario de este encargo y compatibilidad](ANALYSIS_REPORTS.md). Sin nuevas dependencias ni migraciones SQL.

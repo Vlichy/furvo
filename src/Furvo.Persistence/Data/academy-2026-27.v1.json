@@ -1,0 +1,617 @@
+{
+  "Version": "academy-2026-v1",
+  "Teams": [
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000001",
+      "Code": "b",
+      "Name": "Club Deportivo Horizonte de Madrid B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000001",
+      "Code": "c",
+      "Name": "Club Deportivo Horizonte de Madrid C",
+      "Category": "Senior",
+      "Level": 2,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000001",
+      "Code": "juvenil-a",
+      "Name": "Club Deportivo Horizonte de Madrid Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 5"
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000001",
+      "Code": "juvenil-b",
+      "Name": "Club Deportivo Horizonte de Madrid Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000001",
+      "Code": "juvenil-c",
+      "Name": "Club Deportivo Horizonte de Madrid Juvenil C",
+      "Category": "Juvenil",
+      "Level": 3,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000002",
+      "Code": "b",
+      "Name": "Unión Deportiva Brisa de Barcelona B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000002",
+      "Code": "juvenil-a",
+      "Name": "Unión Deportiva Brisa de Barcelona Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 3"
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000002",
+      "Code": "juvenil-b",
+      "Name": "Unión Deportiva Brisa de Barcelona Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000003",
+      "Code": "b",
+      "Name": "Club Atlético Azahar de Sevilla B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000003",
+      "Code": "juvenil-a",
+      "Name": "Club Atlético Azahar de Sevilla Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 4"
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000004",
+      "Code": "b",
+      "Name": "Club Deportivo Lumbre de Valencia B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000004",
+      "Code": "juvenil-a",
+      "Name": "Club Deportivo Lumbre de Valencia Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 7"
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000004",
+      "Code": "juvenil-b",
+      "Name": "Club Deportivo Lumbre de Valencia Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000005",
+      "Code": "b",
+      "Name": "Club Deportivo Ferrería de Bilbao B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000005",
+      "Code": "c",
+      "Name": "Club Deportivo Ferrería de Bilbao C",
+      "Category": "Senior",
+      "Level": 2,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000005",
+      "Code": "juvenil-a",
+      "Name": "Club Deportivo Ferrería de Bilbao Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 2"
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000005",
+      "Code": "juvenil-b",
+      "Name": "Club Deportivo Ferrería de Bilbao Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000006",
+      "Code": "b",
+      "Name": "Unión del Faro de A Coruña B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000006",
+      "Code": "juvenil-a",
+      "Name": "Unión del Faro de A Coruña Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 1"
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000006",
+      "Code": "juvenil-b",
+      "Name": "Unión del Faro de A Coruña Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000008",
+      "Code": "b",
+      "Name": "Atlético Mosaico de Málaga B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000008",
+      "Code": "c",
+      "Name": "Atlético Mosaico de Málaga C",
+      "Category": "Senior",
+      "Level": 2,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000008",
+      "Code": "juvenil-a",
+      "Name": "Atlético Mosaico de Málaga Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 4"
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000008",
+      "Code": "juvenil-b",
+      "Name": "Atlético Mosaico de Málaga Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000019",
+      "Code": "b",
+      "Name": "Club Deportivo Senda de Pamplona B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000019",
+      "Code": "juvenil-a",
+      "Name": "Club Deportivo Senda de Pamplona Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 3"
+    },
+    {
+      "ClubId": "72026027-0001-4000-8000-000000000019",
+      "Code": "juvenil-b",
+      "Name": "Club Deportivo Senda de Pamplona Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000001",
+      "Code": "b",
+      "Name": "Club Atlético Pedernal de Madrid B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000001",
+      "Code": "c",
+      "Name": "Club Atlético Pedernal de Madrid C",
+      "Category": "Senior",
+      "Level": 2,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000001",
+      "Code": "juvenil-a",
+      "Name": "Club Atlético Pedernal de Madrid Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 5"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000001",
+      "Code": "juvenil-b",
+      "Name": "Club Atlético Pedernal de Madrid Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000002",
+      "Code": "b",
+      "Name": "Unión Deportiva Ensenada de Vigo B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000002",
+      "Code": "juvenil-a",
+      "Name": "Unión Deportiva Ensenada de Vigo Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 1"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000002",
+      "Code": "juvenil-b",
+      "Name": "Unión Deportiva Ensenada de Vigo Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000003",
+      "Code": "b",
+      "Name": "Club Deportivo Robledal de Vitoria B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000003",
+      "Code": "juvenil-a",
+      "Name": "Club Deportivo Robledal de Vitoria Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 2"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000004",
+      "Code": "b",
+      "Name": "Unión Deportiva Palmeral de Elche B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000004",
+      "Code": "juvenil-a",
+      "Name": "Unión Deportiva Palmeral de Elche Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 7"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000005",
+      "Code": "b",
+      "Name": "Club Deportivo Fragua del Sur B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000005",
+      "Code": "juvenil-a",
+      "Name": "Club Deportivo Fragua del Sur Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 5"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000005",
+      "Code": "juvenil-b",
+      "Name": "Club Deportivo Fragua del Sur Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000006",
+      "Code": "b",
+      "Name": "Unión Deportiva Acequia de Valencia B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000006",
+      "Code": "juvenil-a",
+      "Name": "Unión Deportiva Acequia de Valencia Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 7"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000007",
+      "Code": "b",
+      "Name": "Unión Deportiva Abra de Santander B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000007",
+      "Code": "juvenil-a",
+      "Name": "Unión Deportiva Abra de Santander Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 1"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000007",
+      "Code": "juvenil-b",
+      "Name": "Unión Deportiva Abra de Santander Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000008",
+      "Code": "b",
+      "Name": "Club Deportivo Umbral de Vallecas B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000008",
+      "Code": "juvenil-a",
+      "Name": "Club Deportivo Umbral de Vallecas Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 5"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000008",
+      "Code": "juvenil-b",
+      "Name": "Club Deportivo Umbral de Vallecas Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000008",
+      "Code": "juvenil-c",
+      "Name": "Club Deportivo Umbral de Vallecas Juvenil C",
+      "Category": "Juvenil",
+      "Level": 3,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000009",
+      "Code": "b",
+      "Name": "Unión Deportiva Litoral de Cornellà B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000009",
+      "Code": "juvenil-a",
+      "Name": "Unión Deportiva Litoral de Cornellà Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 3"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000009",
+      "Code": "juvenil-b",
+      "Name": "Unión Deportiva Litoral de Cornellà Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000010",
+      "Code": "b",
+      "Name": "Club Deportivo Mareal de Donostia B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000010",
+      "Code": "c",
+      "Name": "Club Deportivo Mareal de Donostia C",
+      "Category": "Senior",
+      "Level": 2,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000010",
+      "Code": "juvenil-a",
+      "Name": "Club Deportivo Mareal de Donostia Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 2"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000010",
+      "Code": "juvenil-b",
+      "Name": "Club Deportivo Mareal de Donostia Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000011",
+      "Code": "b",
+      "Name": "Unión Deportiva Aljarafe de Sevilla B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000011",
+      "Code": "c",
+      "Name": "Unión Deportiva Aljarafe de Sevilla C",
+      "Category": "Senior",
+      "Level": 2,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000011",
+      "Code": "juvenil-a",
+      "Name": "Unión Deportiva Aljarafe de Sevilla Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 4"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000011",
+      "Code": "juvenil-b",
+      "Name": "Unión Deportiva Aljarafe de Sevilla Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000011",
+      "Code": "juvenil-c",
+      "Name": "Unión Deportiva Aljarafe de Sevilla Juvenil C",
+      "Category": "Juvenil",
+      "Level": 3,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000011",
+      "Code": "juvenil-d",
+      "Name": "Unión Deportiva Aljarafe de Sevilla Juvenil D",
+      "Category": "Juvenil",
+      "Level": 4,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000012",
+      "Code": "b",
+      "Name": "Club Deportivo Ceramista de Vila-real B",
+      "Category": "Senior",
+      "Level": 1,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000012",
+      "Code": "c",
+      "Name": "Club Deportivo Ceramista de Vila-real C",
+      "Category": "Senior",
+      "Level": 2,
+      "Size": 22,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000012",
+      "Code": "juvenil-a",
+      "Name": "Club Deportivo Ceramista de Vila-real Juvenil A",
+      "Category": "Juvenil",
+      "Level": 1,
+      "Size": 20,
+      "Competition": "Nacional juvenil · Grupo 7"
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000012",
+      "Code": "juvenil-b",
+      "Name": "Club Deportivo Ceramista de Vila-real Juvenil B",
+      "Category": "Juvenil",
+      "Level": 2,
+      "Size": 20,
+      "Competition": null
+    },
+    {
+      "ClubId": "72026027-0003-4000-8000-000000000012",
+      "Code": "juvenil-c",
+      "Name": "Club Deportivo Ceramista de Vila-real Juvenil C",
+      "Category": "Juvenil",
+      "Level": 3,
+      "Size": 20,
+      "Competition": null
+    }
+  ]
+}

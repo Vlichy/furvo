@@ -6,7 +6,7 @@ using Furvo.Core.Worlds;
 using Microsoft.Data.Sqlite;
 namespace Furvo.Persistence;
 /// <summary>Lectura sin migraciones automáticas y edición transaccional con revisión optimista. Nunca escribe mundos iniciales.</summary>
-public sealed class SqliteLineupStore(string databasePath)
+public sealed class SqliteLineupStore(string databasePath):ILineupEditorStore
 {
     private readonly string _path=WorldDatabase.PathFor(databasePath);
     private static bool HasSchema(SqliteConnection c,SqliteTransaction t)
@@ -16,14 +16,16 @@ public sealed class SqliteLineupStore(string databasePath)
         cmd.CommandText="SELECT version FROM lineup_schema_version WHERE singleton=1;";
         if(Convert.ToInt32(cmd.ExecuteScalar())!=1)throw new NotSupportedException("Versión de alineación no compatible.");return true;
     }
-    private static (SaveId Save,ClubId? Club,DateOnly Date) Owner(SqliteConnection c,SqliteTransaction t)
+    internal static (SaveId Save,ClubId? Club,DateOnly Date) Owner(SqliteConnection c,SqliteTransaction t)
     {
         var info=WorldDatabase.Info(c,t);if(info.Kind!=WorldFileKind.Save)throw new InvalidOperationException("Las alineaciones pertenecen a carreras, no al mundo inicial.");
-        using var cmd=WorldDatabase.Command(c,t,"SELECT employment,club_id,current_date FROM career_state WHERE singleton=1;");using var r=cmd.ExecuteReader();
+        using var cmd=WorldDatabase.Command(c,t,"SELECT s.employment,s.club_id,s.current_date FROM career_state s WHERE s.singleton=1;");using var r=cmd.ExecuteReader();
         if(!r.Read())throw new InvalidDataException("Falta carrera.");return(info.SaveId!.Value,r.GetInt32(0)==2?new ClubId(Guid.Parse(r.GetString(1))):null,DateOnly.ParseExact(r.GetString(2),"yyyy-MM-dd"));
     }
+    internal static CareerLineup? ReadLegacy(SqliteConnection c,SqliteTransaction t)=>Read(c,t);
     private static CareerLineup? Read(SqliteConnection c,SqliteTransaction t)
     {
+        if(SqliteTacticalPlanStore.ReadPersisted(c,t) is {} book)return book.Get(Furvo.Core.Tactics.TacticalPlanKind.Initial).View(book.ClubId,book.Revision,Furvo.Core.Tactics.PossessionPhase.WithoutBall);
         var owner=Owner(c,t);if(!HasSchema(c,t)||owner.Club is null)return null;
         using var cmd=WorldDatabase.Command(c,t,"SELECT formation_json,bench_limit,revision,(SELECT seed FROM career_lineup_seed WHERE singleton=1) FROM career_lineups WHERE club_id=$club;",("$club",owner.Club.Value.ToString()));
         FormationDefinition formation;int bench,revision;string seed;
@@ -41,6 +43,7 @@ public sealed class SqliteLineupStore(string databasePath)
     {
         using var c=WorldDatabase.Open(_path);using var t=c.BeginTransaction(deferred:true);var owner=Owner(c,t);
         if(owner.Club is null)throw new InvalidOperationException("El entrenador no tiene club.");
+        if(SqliteSportsStore.HasAssignments(_path))return new SqliteClubSquadStore(_path).LineupPlayers(owner.Club.Value.Value);
         var q=new WorldQueries(new SqliteWorldStore(_path).Load(),owner.Date);
         return Array.AsReadOnly(q.GetSquad(owner.Club.Value).Select(p=>LineupPlayer.From(q.GetPlayer(owner.Club.Value,p.Id))).ToArray());
     }
@@ -65,6 +68,7 @@ public sealed class SqliteLineupStore(string databasePath)
     }
     public CareerLineup Save(CareerLineup proposed)
     {
+        if(new SqliteTacticalPlanStore(_path).IsPersisted)return new SqlitePlanLineupStore(_path,Furvo.Core.Tactics.TacticalPlanKind.Initial,Furvo.Core.Tactics.PossessionPhase.WithoutBall).Save(proposed);
         var players=Players();LineupSelection.Validate(proposed,players);
         using var c=WorldDatabase.Open(_path,SqliteOpenMode.ReadWrite);using var t=c.BeginTransaction();var owner=Owner(c,t);var previous=Read(c,t)??throw new InvalidOperationException("Inicializa la alineación primero.");
         if(owner.Club!=proposed.ClubId||previous.Seed!=proposed.Seed||previous.BenchLimit!=proposed.BenchLimit)throw new InvalidOperationException("Identidad o semilla incompatible.");

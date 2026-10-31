@@ -24,6 +24,14 @@ public partial class Main
         if(IsInsideTree() || !Path.IsPathFullyQualified(directory))throw new InvalidOperationException("Configura una ruta absoluta antes de iniciar la escena.");
         _careerDataRoot=Path.GetFullPath(directory);
     }
+#if DEBUG
+    /// <summary>Solo QA con almacenamiento aislado: recarga la carrera desde SQLite y reconstruye su espacio de trabajo.</summary>
+    public void ReopenIsolatedCareerForValidation()
+    {
+        if(_careerDataRoot is null||_workspace is null)throw new InvalidOperationException("La reapertura de QA requiere una carrera aislada.");
+        EnterCareer(_careers!.Load(_workspace.Career.Id));
+    }
+#endif
     private void EnsureCareerServices()
     {
         var root=_careerDataRoot??ProjectSettings.GlobalizePath("user://");

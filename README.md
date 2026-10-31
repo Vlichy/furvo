@@ -1,3 +1,17 @@
+Ampliación actual de Equipo → Táctica: [instrucciones y pizarra contextual](docs/TACTICAL_INSTRUCTIONS.md).
+
+## Planes y formaciones personalizadas
+
+Equipo → Táctica incorpora Inicial, Ganando y Perdiendo, cada uno con Con balón y Sin balón. Movimiento libre, demarcaciones confirmadas, copias independientes, restablecimiento y referencia visual. [Informe técnico e inventario](docs/TACTICAL_PLANS.md).
+
+## Táctica — segunda iteración
+
+Intercambios por arrastre real, fases Con balón/Sin balón, barreras y funciones explícitas, cinco lanzadores ordenados y seis estrategias de banda. Configuración persistente por carrera, sin efectos simulados. [Alcance, compatibilidad, archivos y comprobación](docs/TACTICS_ITERATION_2.md).
+
+## Equipo → Táctica
+
+Cuatro pestañas: Alineación, Estilo de juego, Transiciones y Balón parado. Mentalidad e instrucciones persistentes por carrera, campos explicativos y alineación vertical con adecuación posicional. Sin efectos simulados ni calidad ficticia. [Alcance, inventario y validación local](docs/TACTICS.md).
+
 ## Alineaciones de carrera — 28/10/2026
 
 Equipo dispone de Plantilla y Alineación: once inicial reproducible, candidatos naturales/secundarios, edición y cambio de formación guardados en cada carrera. Sin motor de partidos ni calidad oficial. Las carreras antiguas requieren inicialización explícita. [Reglas e inventario](docs/LINEUPS.md) · [Formaciones](docs/INITIAL_FORMATIONS.md).
@@ -129,3 +143,17 @@ El inicio actual ofrece Nueva partida (selección de entrenador y explorador), C
 Nueva partida → seleccionar o crear entrenador → explorar clubes → consultar oferta → confirmar inicio. Se puede comenzar directamente en paro o rechazar una oferta y comenzar sin club. Elegir o volver no crea partida. Firmar contrato permanece bloqueado mientras no haya reglas aprobadas; su operación se valida solo con condiciones sintéticas de pruebas. Cada carrera tiene un archivo independiente y su entrenador tiene ID propio, con copia del perfil.
 
 Perfiles y carreras se guardan en user://coach-profiles y user://careers; por defecto en Windows bajo %APPDATA%/Godot/app_userdata/Furvo. Cargar desde el menú queda para una entrega posterior; el almacén ya recupera carreras y se prueba la reapertura. No se modifican las cuatro publicaciones SQLite ni partidas existentes. Debug/Release: 179 pruebas y compilación sin errores/advertencias. [Guía, inventario y validación](docs/CAREER_CREATION.md).
+
+
+## Roles e instrucciones tácticas individuales
+
+Se amplía el editor existente con 35 presets por demarcación, personalización por puesto/plan/fase, presión avanzada, capitanes y jerarquías de especialistas propias de cada equipo. Cantera hereda los comportamientos por puesto sin copiar futbolistas. Rival y familiaridad quedan como modelos preparatorios sin simular partidos ni entrenamiento.
+
+Catálogo, reglas, inventario de archivos, migraciones y límites: [Sistema táctico ampliado](docs/TACTICAL_BEHAVIOURS.md).
+
+
+## Desarrollo deportivo integrado
+
+Equipo incorpora Plantilla, Táctica, Entrenamiento, Análisis y Cantera; Club añade Instalaciones y Tecnología deportiva. Hay planificación persistente, grupos, configuración de delegación, dos capitanes, movilidad con normativa explícita e informes de datos existentes. La ejecución temporal, normativa incompleta, personal especializado y compras sin aprobación permanecen bloqueados o preparados, sin simular su disponibilidad.
+
+[Informe, archivos, migraciones y límites](docs/SPORTS_DELIVERY.md) · [Fuentes](docs/SPORTS_RESEARCH.md).
