@@ -7,7 +7,7 @@ public enum TrainingLoad { Rest=0,VeryLow=1,Low=2,Medium=3,High=4,VeryHigh=5 }
 public enum TrainingScope { Team=1,Individual=2,Position=3,Group=4 }
 public enum TrainingResponsibility { Weekly=1,Collective=2,Individual=3,Position=4,Group=5,Gym=6,Goalkeepers=7,SetPieces=8,Recovery=9 }
 public enum TrainingManagement { Manual=1,Delegated=2,Mixed=3 }
-public sealed record TrainingStaff(Guid Id,string Name,Guid Team,IReadOnlyList<TrainingResponsibility> Responsibilities);
+public sealed record TrainingStaff(Guid Id,string Name,Guid Team,IReadOnlyList<TrainingResponsibility> Responsibilities,string Role="HeadCoach");
 /// <summary>Candidato público para planificar: identidad y demarcaciones, sin atributos internos.</summary>
 public sealed record TrainingCandidate(PlayerId Id,string Name,DateOnly? BirthDate,PlayerPositions? Positions);
 public sealed record TrainingGroup(Guid Id,string Name,IReadOnlyList<PlayerId> Members,string Objective,Guid? Responsible);
@@ -15,13 +15,13 @@ public sealed record TrainingDelegation(TrainingResponsibility Area,Guid? Respon
 public sealed record TrainingTarget(TrainingScope Scope,PlayerId? Player=null,PlayerRole? Position=null,Guid? Group=null,IReadOnlyList<PlayerId>? Excluded=null);
 public sealed record RoutineReference(SetPieceKind Kind,FreeKickLocation? Location=null);
 public sealed record TrainingSession(Guid Id,Guid Team,DateOnly Date,TimeOnly Start,int Minutes,string Exercise,TrainingLoad Load,
-    TrainingTarget Target,IReadOnlyList<PlayerId> Participants,Guid? Responsible=null,bool Opposition=false,RoutineReference? Routine=null,Guid? Facility=null,string? Objective=null,int FrequencyWeeks=1)
+    TrainingTarget Target,IReadOnlyList<PlayerId> Participants,Guid? Responsible=null,bool Opposition=false,RoutineReference? Routine=null,Guid? Facility=null,string? Objective=null,int FrequencyWeeks=1,TrainingTurn? Turn=null)
 {
     public decimal MinutesPerPlayer=>TrainingCatalog.Get(Exercise).Area==TrainingArea.Technology?Minutes/(decimal)Math.Max(1,Participants.Count):Minutes;
     public DateTime Begins=>Date.ToDateTime(Start);
     public DateTime Ends=>Begins.AddMinutes(Minutes);
 }
-public sealed record TrainingPlan(Guid Team,int Revision,IReadOnlyList<TrainingSession> Sessions,IReadOnlyList<TrainingGroup> Groups,IReadOnlyList<TrainingDelegation> Delegations,bool RequiresReview=false)
+public sealed record TrainingPlan(Guid Team,int Revision,IReadOnlyList<TrainingSession> Sessions,IReadOnlyList<TrainingGroup> Groups,IReadOnlyList<TrainingDelegation> Delegations,bool RequiresReview=false,IReadOnlyList<TrainingDayPlan>? Days=null)
 {
     public static TrainingPlan Empty(Guid team)=>new(team,0,Array.Empty<TrainingSession>(),Array.Empty<TrainingGroup>(),Array.Empty<TrainingDelegation>());
     public TrainingManagement Management=>Delegations.Count==0?TrainingManagement.Manual:Delegations.Select(d=>d.Area).Distinct().Count()==Enum.GetValues<TrainingResponsibility>().Length?TrainingManagement.Delegated:TrainingManagement.Mixed;
@@ -59,7 +59,7 @@ public static class TrainingRules
         foreach(var d in plan.Delegations)if(!Enum.IsDefined(d.Area)||d.Responsible is not {} id||!staff.Any(p=>p.Id==id&&p.Responsibilities.Contains(d.Area)))throw new InvalidDataException("No existe personal disponible y competente para delegar esa área.");
         foreach(var s in plan.Sessions)
         {
-            var exercise=TrainingCatalog.Get(s.Exercise);if(s.Id==Guid.Empty||s.Team!=plan.Team||s.Date==default||s.Minutes is <5 or >180||s.Start.ToTimeSpan().TotalMinutes+s.Minutes>1440||!Enum.IsDefined(s.Load)||s.FrequencyWeeks is <1 or >52||string.IsNullOrWhiteSpace(s.Objective))throw new InvalidDataException("Fecha, duración, frecuencia u objetivo no válido.");
+            var exercise=TrainingCatalog.Get(s.Exercise);if(s.Id==Guid.Empty||s.Team!=plan.Team||s.Date==default||s.Minutes<1||s.Start.ToTimeSpan().TotalMinutes+s.Minutes>1440||!Enum.IsDefined(s.Load)||s.FrequencyWeeks is <1 or >52||string.IsNullOrWhiteSpace(s.Objective))throw new InvalidDataException("Fecha, duración, frecuencia u objetivo no válido.");
             var expected=Resolve(s.Target,players,plan.Groups);if(!expected.ToHashSet().SetEquals(s.Participants)||s.Participants.Distinct().Count()!=s.Participants.Count)throw new InvalidDataException("Participantes desactualizados o duplicados; vuelve a confirmar la sesión.");
             if(exercise.Area==TrainingArea.Technology&&s.MinutesPerPlayer<5)throw new InvalidDataException("La rotación secuencial de Footbonaut necesita al menos cinco minutos por participante.");
             if(s.Routine is {} routine&&!((s.Exercise=="penalty_practice"&&routine.Kind==SetPieceKind.Penalty)||(s.Exercise=="corner_practice"&&routine.Kind is SetPieceKind.AttackingCorner or SetPieceKind.DefendingCorner)||(s.Exercise=="free_kick_practice"&&routine.Kind is SetPieceKind.DirectFreeKick or SetPieceKind.IndirectFreeKick or SetPieceKind.DefendingFreeKick)||(s.Exercise=="throw_practice"&&routine.Kind==SetPieceKind.ThrowIn)))throw new InvalidDataException("La jugada no corresponde al ejercicio seleccionado.");

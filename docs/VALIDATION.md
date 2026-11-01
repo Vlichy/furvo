@@ -532,3 +532,18 @@ Compilaciones Debug y Release correctas, cero errores y cero advertencias. **422
 Godot 4.7.2 .NET: modo enfocado y recorrido completo final con código 0. Se comprobaron cuatro ámbitos, técnico real, grupos compartidos, alineación, desplazamiento, persistencia y capturas de 1280×720, 1600×900 y 1920×1080; también pasó la regresión nativa de arrastre/tácticas/cantera. Se inspeccionaron capturas de resultados y prioridades. El primer recorrido se detuvo en un arrastre previo y la repetición completa pasó.
 
 Cinco publicaciones SQLite intactas por SHA-256. Sin migraciones SQL nuevas ni dependencias añadidas. Furvo se lanzó de nuevo en una ventana normal de 1280×720 y se dejó en ejecución. [Informe, archivos, decisiones y límites](ANALYSIS_REPORTS.md).
+
+
+## Análisis → Jugadores: atributos interactivos — 01/11/2026
+
+Debug y Release compilan sin errores ni advertencias. **431 pruebas superadas en cada configuración**, ninguna fallida ni omitida; se conservan las 422 anteriores. Nueve casos específicos validan selección, comparación, orden, ocultos, historial real y ausencia de escrituras por consulta. Godot nativo enfocado termina con código 0; selección, 51 atributos, cuatro categorías, barras, contracción y tres resoluciones comprobadas. Capturas inspeccionadas en 1280×720, 1600×900 y 1920×1080. Cinco publicaciones iniciales intactas por SHA-256. Sin migraciones ni dependencias nuevas. Furvo se dejó abierto tras validar. [Archivos, reglas, resultados y límites](PLAYER_ATTRIBUTE_ANALYSIS.md).
+
+
+## Calendario semanal de Entrenamiento — 01/11/2026
+
+Antes: 431 pruebas Debug superadas. Después: **445 Debug y 445 Release**, sin fallos ni omisiones. Catorce casos nuevos conservan los anteriores; compilaciones finales sin errores ni advertencias. Godot nativo enfocado termina con código 0, incluyendo calendario, borradores, siete columnas, filtros, iconos, +N, carga/edición, confirmaciones y regresiones de Análisis/navegación. Capturas revisadas en 1280×720, 1600×900 y 1920×1080. Cinco publicaciones iniciales intactas por SHA-256; no hay migraciones nuevas. Furvo se dejó abierto tras la validación. [Archivos, decisiones, resultados y límites](TRAINING_WEEK_CALENDAR.md).
+
+
+## Jornadas, turnos, bloques y delegación — 01/11/2026
+
+Antes: 445 pruebas correctas. Después: **465 Debug y 465 Release**, sin fallos ni omisiones; veinte casos nuevos conservan los anteriores. Compilaciones finales sin errores ni advertencias. Migración SportsTraining003_Days.sql probada con horarios antiguos no redondeados y delegación preservada. Godot nativo enfocado termina con código 0; se comprueban horarios, duración efectiva, responsables, cambios de jornada con confirmación, calendario y delegación en tres resoluciones. Se corrigió un recorte horizontal a 1280 y se verificaron los límites de cabecera y controles. Cinco publicaciones iniciales intactas por SHA-256. [Archivos, reglas, migración, evidencias y límites](TRAINING_DAYS_BLOCKS.md).

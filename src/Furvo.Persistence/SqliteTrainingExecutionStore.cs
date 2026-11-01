@@ -5,6 +5,15 @@ namespace Furvo.Persistence;
 /// <summary>Ejecutor preparado para el futuro reloj de carrera. No existe botón que fabrique asistencias o avance el tiempo.</summary>
 public sealed class SqliteTrainingExecutionStore(string path)
 {
+    /// <summary>Solo evidencias ya registradas: consultar el calendario no ejecuta sesiones ni crea el esquema.</summary>
+    public IReadOnlySet<Guid> CompletedSessions(Guid team)
+    {
+        if(!new SqliteClubSquadStore(path).Teams().Any(t=>t.Id==team))throw new InvalidOperationException("Equipo ajeno.");
+        using var c=WorldDatabase.Open(path);using var t=c.BeginTransaction(deferred:true);
+        var result=new HashSet<Guid>();if(!SqliteSportsStore.HasSchema(c,t))return result;
+        using var q=WorldDatabase.Command(c,t,"SELECT session_id FROM training_attendance WHERE team_id=$team;",("$team",team.ToString("D")));
+        using var r=q.ExecuteReader();while(r.Read())result.Add(Guid.Parse(r.GetString(0)));return result;
+    }
     public PhysicalObservation? ObservedPhysical(PlayerId player)=>State(player).Physical;
     public DevelopmentState State(PlayerId player)
     {using var c=WorldDatabase.Open(path);using var t=c.BeginTransaction(deferred:true);var all=new SqliteClubSquadStore(path).All();if(!all.ContainsKey(player))throw new InvalidOperationException("Futbolista ajeno.");if(!SqliteSportsStore.HasSchema(c,t))return DevelopmentState.Empty(player);using var q=WorldDatabase.Command(c,t,"SELECT data_json FROM training_development WHERE player_id=$id",("$id",player.ToString()));return q.ExecuteScalar() is string json?CareerJson.Read<DevelopmentState>(json):DevelopmentState.Empty(player);}

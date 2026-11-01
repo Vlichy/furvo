@@ -361,3 +361,18 @@ Equipo incorpora Plantilla, Táctica, Entrenamiento, Análisis y Cantera; Club a
 ## Corrección de Análisis → Informes — 31/10/2026
 
 Cuatro ámbitos independientes del contenido, empleados reales, grupos compartidos e histórico inmutable; componente PriorityChoice y columnas restringidas en Análisis. [Inventario de este encargo y compatibilidad](ANALYSIS_REPORTS.md). Sin nuevas dependencias ni migraciones SQL.
+
+
+## Análisis interactivo de atributos — 31/10/2026
+
+Panel de selección/comparación por jugador, cuatro categorías públicas y barras 1–20, con reglas de consulta en Core. [Archivos, decisiones e historial real](PLAYER_ATTRIBUTE_ANALYSIS.md). Sin persistencia nueva.
+
+
+## Calendario semanal de Entrenamiento — 01/11/2026
+
+Siete columnas y un formulario compacto compartidos por todas las categorías, iconos vectoriales, filtro común y borradores de interfaz. [Inventario de archivos, decisiones y validación](TRAINING_WEEK_CALENDAR.md). Sin migraciones ni publicaciones nuevas.
+
+
+## Jornadas, turnos y bloques — 01/11/2026
+
+Horarios seleccionables, duración efectiva, responsables reales y delegación por área. Nueva migración SportsTraining003_Days.sql para configuraciones de jornada; bloques y delegaciones anteriores conservados. [Archivos, decisiones, compatibilidad y validación](TRAINING_DAYS_BLOCKS.md).

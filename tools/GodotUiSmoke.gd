@@ -1689,12 +1689,14 @@ func check_sports_modules(screen: Node) -> bool:
     await process_frame
     if not require(find_marked_nodes(screen,"attribute_code").size()==0 and find_named(screen,"TrainingStatus").text.contains("experimental"),"No guarda planificación o mezcla atributos internos"):
         return false
-    find_named(screen,"TrainingEditSession").emit_signal("pressed")
+    find_marked_nodes(screen,"session_id")[0].emit_signal("pressed")
     await process_frame
-    find_named(screen,"TrainingTime").text="15:00"
+    await choose_clock(screen,"TrainingTurn","Tarde")
+    await choose_clock(screen,"TrainingTime","15:00")
+    await choose_clock(screen,"TrainingEndTime","15:45")
     find_named(screen,"TrainingSaveSession").emit_signal("pressed")
     await process_frame
-    if not require(find_named(screen,"TrainingTime").text=="09:00","No termina la edición de sesión"):
+    if not require(find_named(screen,"TrainingTime").text=="16:00","No termina la edición de sesión"):
         return false
     find_named(screen,"TrainingGroupName").text="Grupo QA"
     find_named(screen,"TrainingGroupObjective").text="Pase coordinado"
@@ -1704,13 +1706,15 @@ func check_sports_modules(screen: Node) -> bool:
     await process_frame
     if not require(find_named(screen,"TrainingGroup").item_count==1,"No persiste grupo de entrenamiento"):
         return false
+    if not await check_training_calendar(screen):
+        return false
     for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
         root.size=resolution
         await create_timer(.2).timeout
         if not require(find_named(screen,"TrainingScroll").size.y>100,"Entrenamiento sin espacio utilizable"):
             return false
         await capture_economy_screen("career-training-"+str(resolution.x)+"x"+str(resolution.y))
-    for tab in range(1,6):
+    for tab in range(1,7):
         find_named(screen,"TrainingTab_"+str(tab)).emit_signal("pressed")
         await process_frame
         if not require(find_named(screen,"TrainingExercise").item_count>0,"Modalidad de entrenamiento vacía"):
@@ -1718,9 +1722,27 @@ func check_sports_modules(screen: Node) -> bool:
     await choose_control(screen,"SportsTeamSelector",1)
     find_named(screen,"TrainingTab_0").emit_signal("pressed")
     await process_frame
-    await choose_control(screen,"TrainingDelegate_Collective",1)
+    await choose_control(screen,"TrainingDelegationArea",1)
+    await choose_control(screen,"TrainingDelegateResponsible",1)
+    find_named(screen,"TrainingApplyDelegation").emit_signal("pressed")
+    await process_frame
     if not require(find_named(screen,"TrainingManagement").text.contains("mixta"),"No guarda delegación parcial de cantera"):
         return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        var delegation_scroll=find_named(screen,"TrainingScroll") as ScrollContainer
+        delegation_scroll.scroll_vertical+=int(find_named(screen,"TrainingManagement").global_position.y-delegation_scroll.global_position.y)-8
+        await process_frame
+        for key in ["TrainingDelegateResponsible","TrainingApplyDelegation","CareerGameMenu"]:
+            var control=find_named(screen,key) as Control
+            if control.get_global_rect().end.x>root.size.x+1:
+                print("FURVO_OVERFLOW: ",key," rect=",control.get_global_rect()," root=",root.size)
+                await capture_economy_screen("career-training-delegation-overflow")
+                debug_training_widths(screen)
+            if not require(control.get_global_rect().end.x<=root.size.x+1,"Delegación o cabecera se sale de la pantalla: "+key):
+                return false
+        await capture_economy_screen("career-training-delegation-"+str(resolution.x)+"x"+str(resolution.y))
     await choose_control(screen,"SportsTeamSelector",0)
     find_named(screen,"NavPage_Analysis").emit_signal("pressed")
     await process_frame
@@ -1863,6 +1885,8 @@ func check_analysis_reports(screen: Node) -> bool:
         return false
     find_named(screen,"AnalysisTab_1").emit_signal("pressed")
     await process_frame
+    if not await check_analysis_players(screen):
+        return false
     var players=find_trees(find_named(screen,"AnalysisPlayers"))[0]
     var last=players.get_root().get_first_child()
     while last.get_next()!=null:
@@ -1874,3 +1898,250 @@ func check_analysis_reports(screen: Node) -> bool:
     find_named(screen,"AnalysisTab_3").emit_signal("pressed")
     await process_frame
     return true
+
+# Solo consultas: categorías completas, comparación sin informe, selección por ID y geometría real.
+func check_analysis_players(screen: Node) -> bool:
+    var tree=find_trees(find_named(screen,"AnalysisPlayers"))[0]
+    if not require(find_named(screen,"AnalysisPlayerPrompt")!=null and find_named(screen,"AnalysisAttributeRows")==null,"Atributos desplegados sin selección"):
+        return false
+    var first=tree.get_root().get_first_child()
+    var selected_id=first.get_metadata(0)
+    first.select(0)
+    tree.emit_signal("item_selected")
+    await process_frame
+    if not require(find_named(screen,"AnalysisPlayerDetail").get_meta("selected_player")==selected_id,"Panel no corresponde a ID seleccionado"):
+        return false
+    if not require(find_named(screen,"AnalysisSelectedIdentity").text.contains(first.get_text(0)),"Panel sin identidad seleccionada"):
+        return false
+    if not require(find_named(screen,"AnalysisComparePlayer").item_count==24,"Comparación no excluye jugador seleccionado"):
+        return false
+    await choose_control(screen,"AnalysisComparePlayer",1)
+    var count=0
+    for entry in [["Technical",17],["Mental",16],["Physical",8],["Goalkeeper",10]]:
+        find_named(screen,"AnalysisCategory_"+entry[0]).emit_signal("pressed")
+        await process_frame
+        var rows=find_named(screen,"AnalysisAttributeRows")
+        count+=rows.get_child_count()
+        if not require(rows.get_child_count()==entry[1],"Número de atributos incorrecto en "+entry[0]):
+            return false
+        for row in rows.get_children():
+            if not require(row.get_child_count()==3,"Comparación sin ambas barras"):
+                return false
+            for side in ["Selected","Comparison"]:
+                var bar=find_named(row,side).get_node("Bar")
+                if not require(bar.value>=1 and bar.value<=20 and bar.max_value==20,"Barra fuera de escala"):
+                    return false
+    if not require(count==51,"No se conservan los 51 atributos visibles"):
+        return false
+    for sort in range(3):
+        await choose_control(screen,"AnalysisAttributeSort",sort)
+    find_named(screen,"AnalysisRecordedHistory").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AnalysisNoRecordedHistory")!=null,"Se inventa evolución a partir de instantáneas de un solo día"):
+        return false
+    find_named(screen,"AnalysisCategory_Technical").emit_signal("pressed")
+    await process_frame
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        var scroll=find_named(screen,"SportsAnalysisScroll") as ScrollContainer
+        var detail=find_named(screen,"AnalysisPlayerDetail")
+        scroll.scroll_vertical+=int(detail.global_position.y-scroll.global_position.y)
+        await process_frame
+        for row in find_named(screen,"AnalysisAttributeRows").get_children():
+            if not require(row.get_global_rect().position.x>=0 and row.get_global_rect().end.x<root.size.x,"Atributos fuera de pantalla"):
+                return false
+            var label=row.get_node("AttributeName")
+            var bar=row.get_node("Selected")
+            if not require(label.get_global_rect().end.x<=bar.get_global_rect().position.x,"Nombre solapado con barra"):
+                return false
+        await capture_economy_screen("career-player-analysis-"+str(resolution.x)+"x"+str(resolution.y))
+    find_named(screen,"AnalysisCollapsePlayer").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AnalysisAttributeRows")==null,"No contrae panel de atributos"):
+        return false
+    find_named(screen,"AnalysisExpandPlayer").emit_signal("pressed")
+    await process_frame
+    tree=find_trees(find_named(screen,"AnalysisPlayers"))[0]
+    tree.get_root().get_first_child().get_next().select(0)
+    tree.emit_signal("item_selected")
+    await process_frame
+    if not require(find_named(screen,"AnalysisPlayerDetail").get_meta("selected_player")!=selected_id,"Selección mantiene jugador anterior"):
+        return false
+    print("FURVO_PLAYER_ANALYSIS_OK: selección por ID, comparación, 51 atributos, cuatro categorías, ordenación, sin evolución inventada, contraer y tres resoluciones")
+    return true
+
+# Calendario compartido: una sola sesión por ID, borradores seguros y acciones reales.
+func check_training_calendar(screen: Node) -> bool:
+    var calendar=find_named(screen,"TrainingWeeklyCalendar")
+    if not require(calendar.columns==7 and calendar.get_child_count()==7,"Calendario sin siete columnas"):
+        return false
+    if not require(find_named(screen,"TrainingSessionForm").get_global_rect().end.y<=find_named(screen,"TrainingWeekNavigation").global_position.y and find_named(screen,"TrainingWeekNavigation").get_global_rect().end.y<=calendar.global_position.y,"Formulario o navegación en orden incorrecto"):
+        return false
+    # El borrador sobrevive a semanas, categorías y contracción.
+    find_named(screen,"TrainingObjective").text="Borrador seguro QA"
+    find_named(screen,"TrainingObjective").emit_signal("text_changed","Borrador seguro QA")
+    find_named(screen,"TrainingNextWeek").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TrainingObjective").text=="Borrador seguro QA","La semana pierde el borrador"):
+        return false
+    find_named(screen,"TrainingPreviousWeek").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TrainingCollapseForm").emit_signal("pressed")
+    await process_frame
+    if not require(not find_named(screen,"TrainingFormFields").visible,"Formulario no se contrae"):
+        return false
+    find_named(screen,"TrainingExpandForm").emit_signal("pressed")
+    await process_frame
+    find_marked_nodes(screen,"session_id")[0].emit_signal("pressed")
+    await process_frame
+    var dialog=find_named(screen,"TrainingConfirmDialog")
+    if not require(dialog!=null,"Abrir otra sesión descarta cambios sin confirmar"):
+        return false
+    dialog.emit_signal("canceled")
+    await process_frame
+    if not require(find_named(screen,"TrainingObjective").text=="Borrador seguro QA","Cancelar confirmación pierde cambios"):
+        return false
+    find_named(screen,"TrainingCancelSession").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TrainingConfirmDialog").emit_signal("confirmed")
+    await process_frame
+    # Gimnasio, campo y descanso; se añaden a la sesión ya existente, sin duplicarla.
+    for entry in [[2,"10:00",3],[1,"11:00",3],[5,"12:00",0]]:
+        find_named(screen,"TrainingTab_"+str(entry[0])).emit_signal("pressed")
+        await process_frame
+        await choose_control(screen,"TrainingDayKind",2)
+        await choose_clock(screen,"TrainingTurn","Mañana")
+        await choose_clock(screen,"TrainingTime",entry[1])
+        await choose_clock(screen,"TrainingEndTime",entry[1].substr(0,3)+"15")
+        await choose_control(screen,"TrainingIntensity",entry[2])
+        find_named(screen,"TrainingObjective").text="Calendario QA "+entry[1]
+        find_named(screen,"TrainingSaveSession").emit_signal("pressed")
+        await process_frame
+    find_named(screen,"TrainingTab_0").emit_signal("pressed")
+    await process_frame
+    if not require(find_marked_nodes(screen,"session_id").size()==4,"Sesiones duplicadas o perdidas entre categorías"):
+        return false
+    var more=find_named(screen,"TrainingMoreSessions")
+    if not require(more!=null and more.text=="+1","No indica exceso de sesiones"):
+        return false
+    more.emit_signal("pressed")
+    await process_frame
+    var ids: Dictionary={}
+    var last_time=""
+    for icon in find_marked_nodes(screen,"session_id"):
+        var id=icon.get_meta("session_id")
+        if not require(not ids.has(id) and icon.tooltip_text.contains("min") and icon.tooltip_text.contains("Participantes") and icon.tooltip_text.contains("\n"),"Identidad o tooltip incorrectos"):
+            return false
+        ids[id]=true
+    # Eliminar requiere confirmación; cancelar conserva la sesión.
+    find_marked_nodes(screen,"session_id")[0].emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TrainingDeleteSession").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TrainingConfirmDialog")!=null,"Elimina sin confirmación"):
+        return false
+    find_named(screen,"TrainingConfirmDialog").emit_signal("canceled")
+    await process_frame
+    find_named(screen,"TrainingCancelSession").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TrainingTab_2").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"TrainingCalendarFilter",1)
+    if not require(find_marked_nodes(screen,"session_id").size()==1,"Filtro de gimnasio no usa la misma planificación"):
+        return false
+    find_named(screen,"TrainingNextWeek").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TrainingCalendarFilter").selected==1 and find_marked_nodes(screen,"session_id").size()==0,"Filtro no se conserva entre semanas"):
+        return false
+    find_named(screen,"TrainingPreviousWeek").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"TrainingCalendarFilter",0)
+    find_named(screen,"TrainingTab_0").emit_signal("pressed")
+    await process_frame
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        var scroll=find_named(screen,"TrainingScroll") as ScrollContainer
+        scroll.scroll_vertical=0
+        await process_frame
+        await capture_economy_screen("career-training-form-"+str(resolution.x)+"x"+str(resolution.y))
+        calendar=find_named(screen,"TrainingWeeklyCalendar")
+        scroll.scroll_vertical+=int(calendar.global_position.y-scroll.global_position.y)-75
+        await process_frame
+        var start=calendar.get_child(0).global_position.y
+        for day in calendar.get_children():
+            if not require(absf(day.global_position.y-start)<1 and day.get_global_rect().end.x<=root.size.x and day.global_position.x>=0,"Días fuera de cuadrícula"):
+                return false
+        await capture_economy_screen("career-training-calendar-"+str(resolution.x)+"x"+str(resolution.y))
+    if not await check_training_blocks(screen):
+        return false
+    print("FURVO_TRAINING_CALENDAR_OK: siete columnas, formulario superior, iconos, +N, borradores, confirmación, edición, filtros y tres resoluciones")
+    return true
+
+func choose_clock(screen: Node, name: String, text: String) -> void:
+    var control=find_named(screen,name) as OptionButton
+    for index in range(control.item_count):
+        if control.get_item_text(index)==text:
+            control.select(index)
+            control.emit_signal("item_selected",index)
+            await process_frame
+            return
+    require(false,"No existe horario o turno "+text+" en "+name)
+
+func check_training_blocks(screen: Node) -> bool:
+    if not require(find_named(screen,"TrainingTime") is OptionButton and find_named(screen,"TrainingEndTime") is OptionButton and find_named(screen,"TrainingMinutes")==null,"Persisten controles libres de duración"):
+        return false
+    var icons=find_marked_nodes(screen,"session_id")
+    icons[1].emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TrainingCalculatedDuration").text=="15 min","Duración no calculada desde fechas"):
+        return false
+    var staff=find_named(screen,"TrainingResponsible") as OptionButton
+    if not require(staff.item_count==2 and staff.get_item_text(1).contains("Prueba Interfaz") and staff.get_item_text(1).contains("Entrenador principal"),"Responsable sin nombre o cargo real"):
+        return false
+    await choose_clock(screen,"TrainingEndTime","12:30")
+    if not require(find_named(screen,"TrainingCalculatedDuration").text=="90 min","El hueco o el fin no actualiza duración"):
+        return false
+    find_named(screen,"TrainingCancelSession").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TrainingConfirmDialog").emit_signal("confirmed")
+    await process_frame
+    var calendar=find_named(screen,"TrainingWeeklyCalendar")
+    var day=find_named(calendar,"TrainingDay_20260701")
+    find_named(day,"TrainingDateHeading").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TrainingSelectedDayTitle")!=null and find_named(screen,"TrainingDayKind").selected==2,"El día no abre la planificación completa con ambos turnos"):
+        return false
+    await choose_control(screen,"TrainingDayKind",0)
+    find_named(screen,"TrainingSaveSession").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TrainingConfirmDialog")!=null,"Descanso elimina bloques sin confirmación"):
+        return false
+    find_named(screen,"TrainingConfirmDialog").emit_signal("canceled")
+    await process_frame
+    if not require(find_marked_nodes(screen,"session_id").size()==4,"Cancelar cambio de jornada elimina bloques"):
+        return false
+    find_named(screen,"TrainingCancelSession").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TrainingConfirmDialog").emit_signal("confirmed")
+    await process_frame
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        var scroll=find_named(screen,"TrainingScroll") as ScrollContainer
+        scroll.scroll_vertical=0
+        await process_frame
+        await capture_economy_screen("career-training-blocks-form-"+str(resolution.x)+"x"+str(resolution.y))
+        var overview=find_named(screen,"TrainingSelectedDayTitle")
+        scroll.scroll_vertical+=int(overview.global_position.y-scroll.global_position.y)-8
+        await process_frame
+        await capture_economy_screen("career-training-day-overview-"+str(resolution.x)+"x"+str(resolution.y))
+    print("FURVO_TRAINING_BLOCKS_OK: inicio/fin por selección, duración, nombre/cargo real, doble turno, consulta completa y cambio a descanso con confirmación")
+    return true
+
+func debug_training_widths(node: Node) -> void:
+    if node is Control and node.get_combined_minimum_size().x>1150:
+        print("FURVO_MINIMUM_WIDTH: ",node.name," minimum=",node.get_combined_minimum_size()," rect=",node.get_global_rect())
+    for child in node.get_children():
+        debug_training_widths(child)
