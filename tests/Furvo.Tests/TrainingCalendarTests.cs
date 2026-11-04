@@ -35,7 +35,7 @@ public sealed partial class CareerCreationTests
     [Fact] public void CalendarDistinguishesEmptyRestPlannedAndExecutionEvidence()
     {
         var team=Guid.NewGuid();var date=new DateOnly(2026,7,1);var session=new TrainingSession(Guid.NewGuid(),team,date,new(9,0),5,"technical",TrainingLoad.Low,new(TrainingScope.Team),Array.Empty<Furvo.Core.Domain.PlayerId>());var rest=session with{Id=Guid.NewGuid(),Exercise="rest",Load=TrainingLoad.Rest,Start=new(11,0)};var plan=TrainingPlan.Empty(team) with{Sessions=new[]{session,rest}};
-        var pending=TrainingCalendarWeek.Create(plan,date,date);Assert.Equal(6,pending.Days.Count(d=>d.Entries.Count==0));Assert.Equal(new[]{TrainingCalendarState.Planned,TrainingCalendarState.Rest},pending.Days.SelectMany(d=>d.Entries).Select(e=>e.State));
+        var pending=TrainingCalendarWeek.Create(plan,date,date);Assert.Equal(6,pending.Days.Count(d=>d.Entries.Count==0));Assert.Equal(TrainingCalendarState.Planned,Assert.Single(pending.Days.SelectMany(d=>d.Entries)).State);Assert.Equal(1,pending.Days.Single(d=>d.Date==date).LegacyRestReviewCount);
         var done=TrainingCalendarWeek.Create(plan,date,date,completed:new HashSet<Guid>{session.Id});Assert.Equal(TrainingCalendarState.Completed,done.Days.SelectMany(d=>d.Entries).Single(e=>e.Session.Id==session.Id).State);
     }
     [Fact] public void CalendarReadIsCompatibleWithCareerWithoutSportsSchemaAndDoesNotWrite()

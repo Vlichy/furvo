@@ -22,16 +22,16 @@ public sealed partial class CareerCreationTests
     [Theory]
     [InlineData(14)]
     [InlineData(121)]
-    public void NewBlockDurationLimitsAreEnforced(int minutes)
-    {var team=Guid.NewGuid();var old=TrainingPlan.Empty(team);Assert.Throws<InvalidDataException>(()=>TrainingSchedule.ValidateChanges(old with{Sessions=new[]{Block(team,new(2026,7,1),9,minutes,TrainingTurn.Morning)}},old));}
-    [Fact] public void BlockDurationPolicyIsConfigurable()
-    {var old=TrainingPlan.Empty(Guid.NewGuid());var next=old with{Sessions=new[]{Block(old.Team,new(2026,7,1),9,10,TrainingTurn.Morning)}};TrainingSchedule.ValidateChanges(next,old,new(MinimumBlockMinutes:10));Assert.Throws<InvalidDataException>(()=>TrainingSchedule.ValidateChanges(next,old));}
-    [Fact] public void MaximumEffectiveTurnAndDayAreIndependentLimits()
+    public void PositiveBlockDurationsAreNotBoundedByPreviousCaps(int minutes)
+    {var team=Guid.NewGuid();var old=TrainingPlan.Empty(team);TrainingSchedule.ValidateChanges(old with{Sessions=new[]{Block(team,new(2026,7,1),9,minutes,TrainingTurn.Morning)}},old);}
+    [Fact] public void SchedulingStepIsConfigurableWithoutSportingDurationCaps()
+    {var plan=TrainingPlan.Empty(Guid.NewGuid());var date=new DateOnly(2026,7,1);plan=plan with{Sessions=new[]{Block(plan.Team,date,9,30,TrainingTurn.Morning) with{Start=new(9,7)}}};var proposal=TrainingDailyPlanning.Suggest(plan,date,TrainingTurn.Morning,150,new(TimeStepMinutes:30));Assert.NotNull(proposal);Assert.Equal(new TimeOnly(10,0),proposal.Start);}
+    [Fact] public void LongWorkDoesNotUsePreviousTurnOrDayCaps()
     {
         var old=TrainingPlan.Empty(Guid.NewGuid());var date=new DateOnly(2026,7,1);
-        var morning=new[]{Block(old.Team,date,9,120,TrainingTurn.Morning),Block(old.Team,date,11,90,TrainingTurn.Morning)};Assert.Throws<InvalidDataException>(()=>TrainingSchedule.ValidateChanges(old with{Sessions=morning},old));
+        var morning=new[]{Block(old.Team,date,9,120,TrainingTurn.Morning),Block(old.Team,date,11,90,TrainingTurn.Morning)};TrainingSchedule.ValidateChanges(old with{Sessions=morning},old);Assert.Equal(210,TrainingSchedule.EffectiveMinutes(morning));
         var all=new[]{Block(old.Team,date,9,90,TrainingTurn.Morning),Block(old.Team,date,11,90,TrainingTurn.Morning),Block(old.Team,date,15,75,TrainingTurn.Afternoon),Block(old.Team,date,17,75,TrainingTurn.Afternoon)};
-        Assert.Throws<InvalidDataException>(()=>TrainingSchedule.ValidateChanges(old with{Sessions=all},old));TrainingSchedule.ValidateChanges(old with{Sessions=all},old,new(MaximumDayMinutes:330));
+        TrainingSchedule.ValidateChanges(old with{Sessions=all},old);Assert.Equal(330,TrainingSchedule.EffectiveMinutes(all));
     }
     [Fact] public void SingleAndDoubleDaysPreserveBlocksUntilRemovalIsConfirmed()
     {

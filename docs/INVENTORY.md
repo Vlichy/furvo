@@ -376,3 +376,46 @@ Siete columnas y un formulario compacto compartidos por todas las categorías, i
 ## Jornadas, turnos y bloques — 01/11/2026
 
 Horarios seleccionables, duración efectiva, responsables reales y delegación por área. Nueva migración SportsTraining003_Days.sql para configuraciones de jornada; bloques y delegaciones anteriores conservados. [Archivos, decisiones, compatibilidad y validación](TRAINING_DAYS_BLOCKS.md).
+
+
+## Lista diaria interactiva de Entrenamiento — 01/11/2026
+
+Calendario inicial, selección de día, filas editables, totales globales y formulario inferior con fecha fija. Proyección del mismo plan, sin esquema nuevo. [Archivos, reglas y validación](TRAINING_DAILY_PLANNING.md).
+
+
+## Duración libre y descanso completo — 01/11/2026
+
+Política temporal sin topes arbitrarios y descanso como estado de jornada, con archivo histórico versionado y confirmación transaccional. [Inventario y compatibilidad](TRAINING_REST_CORRECTION.md).
+
+
+## Entrenamiento: Resumen y agenda compartida — 01/11/2026
+
+Calendario global, indicadores reales, vistas por categoría, edición cruzada por ID y navegación protegida. Sin migraciones ni almacenamiento nuevo. [Archivos, decisiones y evidencia](TRAINING_SHARED_SUMMARY.md).
+
+
+## Calendario global en todas las pestañas — 01/11/2026
+
+Retirado el filtro por categoría del calendario y la lista diaria. Formularios especializados y agenda única conservados. [Archivos y validación](TRAINING_GLOBAL_CALENDAR.md).
+
+
+## Presentación de Entrenamiento — 03/11/2026
+
+Pestañas con estado activo destacado, horarios compactos con popup desplazable y participantes con posición real e identificador estable. [Archivos, decisiones y validación](TRAINING_VISUAL_CONTROLS.md).
+
+
+Porteros: modalidades Individual y Por demarcación, selección de porteros reales, enlace explícito de TrainingScope y conservación de registros anteriores hasta edición expresa. Véase la corrección en TRAINING_VISUAL_CONTROLS.md.
+
+
+## Gestión y delegación de Entrenamiento — 03/11/2026
+
+Panel transversal desplegable bajo las pestañas, nueve responsabilidades reales y tabla única de modalidad/responsable. Modo mixto compatible en el JSON existente, sin migración SQL. [Archivos, compatibilidad y validación](TRAINING_DELEGATION_PANEL.md).
+
+
+## Correcciones funcionales de Entrenamiento — Entrega 1, 04/11/2026
+
+Borradores protegidos por carrera/equipo, eliminación por ID sin cascadas, instantáneas históricas conservadas y faltas por ubicación real. Sin nuevas migraciones SQL. [Inventario, compatibilidad, pruebas y límites](TRAINING_FUNCTIONAL_FIXES_1.md).
+
+
+## Cierre base de Entrenamiento — Entrega 2 (04/11/2026)
+
+Modelo TrainingAvailability, almacén SqliteTrainingAvailabilityStore, migración TrainingAvailability001_Initial, panel Main.TrainingAvailability y 30 pruebas nuevas. Integración en planificación y consumidor existente; textos y prueba nativa ampliados. [Inventario detallado y cierre](TRAINING_BASE_CLOSURE.md). Sin cambios en las publicaciones iniciales ni dependencias nuevas.

@@ -1036,7 +1036,7 @@
   <data name="CaptainTitle" xml:space="preserve"><value>Primer y segundo capitán</value></data>
   <data name="TrainingClockNotice" xml:space="preserve"><value>Planificación por equipo. La carrera aún no dispone de avance temporal: las sesiones no se ejecutan al guardarlas.</value></data>
   <data name="TrainingReviewRequired" xml:space="preserve"><value>La plantilla ha cambiado: revisa y confirma la planificación antes de ejecutarla.</value></data>
-  <data name="TrainingProvisional" xml:space="preserve"><value>Carga de planificación experimental. Calendario de partidos, observaciones físicas y personal especializado pendientes; no equivale a fatiga observada.</value></data>
+  <data name="TrainingProvisional" xml:space="preserve"><value>Planificación de entrenamiento: guardar no ejecuta actividades ni calcula fatiga observada.</value></data>
   <data name="TrainingLoadError" xml:space="preserve"><value>No se ha podido cargar la planificación de entrenamiento.</value></data>
   <data name="TrainingPreviousWeek" xml:space="preserve"><value>Semana anterior</value></data>
   <data name="TrainingNextWeek" xml:space="preserve"><value>Semana siguiente</value></data>
@@ -1048,7 +1048,7 @@
   <data name="TrainingUnassignedResponsible" xml:space="preserve"><value>Responsable pendiente de asignación</value></data>
   <data name="TrainingHeadCoach" xml:space="preserve"><value>Entrenador principal</value></data>
   <data name="TrainingOpposition" xml:space="preserve"><value>Con oposición</value></data>
-  <data name="TrainingSaveSession" xml:space="preserve"><value>Guardar bloque / jornada</value></data>
+  <data name="TrainingSaveSession" xml:space="preserve"><value>Guardar ejercicio</value></data>
   <data name="TrainingEditSession" xml:space="preserve"><value>Editar</value></data>
   <data name="TrainingDeleteSession" xml:space="preserve"><value>Eliminar bloque</value></data>
   <data name="TrainingGroups" xml:space="preserve"><value>Grupos de entrenamiento</value></data>
@@ -1063,7 +1063,7 @@
   <data name="TrainingObservedFatigue" xml:space="preserve"><value>Fatiga observada</value></data>
   <data name="SportsDateFormat" xml:space="preserve"><value>AAAA-MM-DD</value></data>
   <data name="SportsTimeFormat" xml:space="preserve"><value>HH:mm</value></data>
-  <data name="TrainingTab_0" xml:space="preserve"><value>Planificación</value></data>
+  <data name="TrainingTab_0" xml:space="preserve"><value>Resumen</value></data>
   <data name="TrainingTab_1" xml:space="preserve"><value>Campo</value></data>
   <data name="TrainingTab_2" xml:space="preserve"><value>Gimnasio</value></data>
   <data name="TrainingTab_3" xml:space="preserve"><value>Porteros</value></data>
@@ -1253,14 +1253,14 @@
 <data name="TrainingRoutineLabel" xml:space="preserve"><value>Jugada diseñada en Táctica</value></data>
 <data name="TrainingToggleExclusions" xml:space="preserve"><value>Excepciones individuales: mostrar u ocultar</value></data>
 <data name="TrainingCancelSession" xml:space="preserve"><value>Cancelar edición / nuevo bloque</value></data>
-<data name="TrainingDiscardChanges" xml:space="preserve"><value>Hay cambios sin guardar. ¿Quieres descartarlos y abrir otra sesión?</value></data>
+<data name="TrainingDiscardChanges" xml:space="preserve"><value>Hay cambios sin guardar. ¿Quieres descartarlos para continuar?</value></data>
 <data name="TrainingConfirmDelete" xml:space="preserve"><value>¿Quieres eliminar este bloque planificado? La operación no ejecuta actividades.</value></data>
 <data name="TrainingMissingSession" xml:space="preserve"><value>La sesión ya no existe. Cancela la edición y vuelve a consultar la planificación.</value></data>
 <data name="TrainingAllSessions" xml:space="preserve"><value>Todas las sesiones</value></data>
 <data name="TrainingCategorySessions" xml:space="preserve"><value>Solo esta categoría</value></data>
 <data name="TrainingEmptyDaysNotice" xml:space="preserve"><value>Los días sin sesiones programadas no se consideran automáticamente días de descanso</value></data>
 <data name="TrainingSessionState_Planned" xml:space="preserve"><value>Planificada</value></data>
-<data name="TrainingSessionState_Rest" xml:space="preserve"><value>Descanso programado</value></data>
+<data name="TrainingSessionState_Rest" xml:space="preserve"><value>Descanso completo</value></data>
 <data name="TrainingSessionState_Completed" xml:space="preserve"><value>Realizada (con evidencia)</value></data>
 <data name="TrainingArea_Field" xml:space="preserve"><value>Campo</value></data>
 <data name="TrainingArea_Gym" xml:space="preserve"><value>Gimnasio</value></data>
@@ -1285,13 +1285,115 @@
 <data name="TrainingApplyDelegation" xml:space="preserve"><value>Aplicar al área</value></data>
 <data name="TrainingAllManual" xml:space="preserve"><value>Control manual en todas las áreas</value></data>
 <data name="TrainingConfirmManual" xml:space="preserve"><value>¿Quieres retirar las delegaciones y asumir el control manual de todas las áreas?</value></data>
-<data name="TrainingDelegationNotice" xml:space="preserve"><value>La gestión es mixta si se delegan algunas áreas y delegada cuando todas tienen responsable. La delegación no impide consultar o editar la planificación.</value></data>
+<data name="TrainingDelegationNotice" xml:space="preserve"><value>Manual: control del entrenador. Delegada: área asignada al staff. Mixta: colaboración con control del entrenador. Estas opciones no ejecutan decisiones automáticas.</value></data>
 <data name="TrainingWarning_LegacyTurnPending" xml:space="preserve"><value>Hay bloques antiguos cuyo turno no puede determinarse con el horario. Revísalos sin alterar sus horas.</value></data>
 <data name="TrainingWarning_ShortTurnBreak" xml:space="preserve"><value>El intervalo entre mañana y tarde es inferior al mínimo orientativo configurado.</value></data>
 <data name="TrainingEffectiveElapsed" xml:space="preserve"><value>{0} · Trabajo: {1} min · Intervalo transcurrido: {2} min</value></data>
 <data name="TrainingShowDay" xml:space="preserve"><value>Planificación completa del día</value></data>
 <data name="TrainingBlockLabel" xml:space="preserve"><value>Bloque</value></data>
-<data name="TrainingNoBlocks" xml:space="preserve"><value>No hay bloques programados en este turno.</value></data>
+<data name="TrainingNoBlocks" xml:space="preserve"><value>No hay ejercicios programados</value></data>
 <data name="TrainingLegacyDayPending" xml:space="preserve"><value>Jornada pendiente de revisión</value></data>
 <data name="TrainingLegacyNotice" xml:space="preserve"><value>Horario histórico sin turno verificable. El tipo y turno son una propuesta de edición; guardar sin reclasificar conserva el estado pendiente y sus horas.</value></data>
+<data name="TrainingDailyTitle" xml:space="preserve"><value>Planificación — {0}</value></data>
+<data name="TrainingDailyCount" xml:space="preserve"><value>Mostrando {0} de {1} ejercicios guardados del día</value></data>
+<data name="TrainingDailyEmpty" xml:space="preserve"><value>No hay ejercicios programados para este día</value></data>
+<data name="TrainingDailyPlayers" xml:space="preserve"><value>{0} participantes</value></data>
+<data name="TrainingDailyStaffUnavailable" xml:space="preserve"><value>Responsable asignado no disponible en el cuerpo técnico actual</value></data>
+<data name="TrainingDailyEdit" xml:space="preserve"><value>Editar</value></data>
+<data name="TrainingDailyDelete" xml:space="preserve"><value>Eliminar</value></data>
+<data name="TrainingDailyGlobalNotice" xml:space="preserve"><value>Totales globales: incluyen todas las categorías. Suman minutos de actividades, no fatiga observada.</value></data>
+<data name="TrainingDailyMorning" xml:space="preserve"><value>Trabajo de mañana</value></data>
+<data name="TrainingDailyAfternoon" xml:space="preserve"><value>Trabajo de tarde</value></data>
+<data name="TrainingDailyTotal" xml:space="preserve"><value>Total del día</value></data>
+<data name="TrainingDailyPending" xml:space="preserve"><value>Pendiente de clasificar por turno: {0} min</value></data>
+<data name="TrainingDailyIndividual" xml:space="preserve"><value>Tiempo efectivo global sin duplicar intervalos simultáneos: {0} min · Máximo individual planificado: {1} min. Son minutos previstos, no una observación física.</value></data>
+<data name="TrainingDailyAddAnother" xml:space="preserve"><value>+ Añadir otro ejercicio</value></data>
+<data name="TrainingDailyAddExercise" xml:space="preserve"><value>Añadir ejercicio</value></data>
+<data name="TrainingDailyInvalidRange" xml:space="preserve"><value>La hora de finalización debe ser posterior a la de inicio.</value></data>
+<data name="TrainingDailyDateFixed" xml:space="preserve"><value>La fecha pertenece al día seleccionado. Selecciona otra fecha desde el calendario.</value></data>
+<data name="TrainingDailyProposal" xml:space="preserve"><value>Horario propuesto: {0}–{1}. Puedes modificarlo antes de guardar.</value></data>
+<data name="TrainingDailyNoProposal" xml:space="preserve"><value>No hay un hueco común disponible para esta duración. Revisa el turno, los participantes y los horarios; no se guardará ninguna actividad automáticamente.</value></data>
+<data name="TrainingConfirmRestDay" xml:space="preserve"><value>Confirmar día de descanso</value></data>
+<data name="TrainingConfirmRestReplacement" xml:space="preserve"><value>Este día tiene ejercicios programados. Para establecer un descanso completo es necesario retirar la planificación existente. ¿Confirmas la sustitución?</value></data>
+<data name="TrainingRestConfirmed" xml:space="preserve"><value>Descanso completo confirmado. No hay ejercicios programados.</value></data>
+<data name="TrainingChangeRestToTraining" xml:space="preserve"><value>Cambiar a entrenamiento</value></data>
+<data name="TrainingLegacyRestReview" xml:space="preserve"><value>Registro antiguo de descanso {0}–{1}, conservado para revisión. No se cuenta como ejercicio ni se ejecuta.</value></data>
+<data name="TrainingRestReviewMarker" xml:space="preserve"><value>Descanso antiguo: revisar</value></data>
+<data name="TrainingAgendaMetrics" xml:space="preserve"><value>Semana: {0} ejercicios · {1} jornadas planificadas · {2} min de actividades · {3} días de descanso confirmado</value></data>
+<data name="TrainingAgendaTurns" xml:space="preserve"><value>Mañana: {0} min · Tarde: {1} min</value></data>
+<data name="TrainingSummaryOpenCategory" xml:space="preserve"><value>Planificar en esta categoría</value></data>
+<data name="TrainingBackSummary" xml:space="preserve"><value>Volver a Resumen</value></data>
+<data name="TrainingConfirmRestEmpty" xml:space="preserve"><value>¿Confirmar esta jornada como descanso completo, sin ejercicios ni sesiones?</value></data>
+<data name="TrainingConflictDetail" xml:space="preserve"><value>Sesiones solapadas: {0} ({1}–{2}) y {3} ({4}–{5}). Coinciden futbolistas, responsable o instalación.</value></data>
+<data name="TrainingChooseKeeperScope" xml:space="preserve"><value>Selecciona Individual o Por demarcación para guardar este ejercicio de porteros. El registro anterior todavía no se ha modificado.</value></data>
+<data name="TrainingDelegationTitle" xml:space="preserve"><value>Gestión y delegación</value></data>
+<data name="TrainingDelegationModeLabel" xml:space="preserve"><value>Modalidad</value></data>
+<data name="TrainingDelegationMode_Manual" xml:space="preserve"><value>Manual</value></data>
+<data name="TrainingDelegationMode_Delegated" xml:space="preserve"><value>Delegada</value></data>
+<data name="TrainingDelegationMode_Mixed" xml:space="preserve"><value>Mixta</value></data>
+<data name="TrainingDelegationState_Manual" xml:space="preserve"><value>Control manual</value></data>
+<data name="TrainingDelegationState_Delegated" xml:space="preserve"><value>Delegada</value></data>
+<data name="TrainingDelegationState_Mixed" xml:space="preserve"><value>Gestión mixta</value></data>
+<data name="TrainingDelegationPending" xml:space="preserve"><value>Cambios pendientes de guardar</value></data>
+<data name="TrainingDelegationNoStaff" xml:space="preserve"><value>No hay un miembro del staff disponible para delegar esta área</value></data>
+<data name="TrainingDelegationOwnerRequired" xml:space="preserve"><value>Selecciona un responsable elegible para cada área delegada o mixta, o utiliza control manual.</value></data>
+<data name="TrainingDelegationConflict" xml:space="preserve"><value>Las asignaciones guardadas han cambiado. Descarta el borrador para consultar la configuración actual antes de editarla.</value></data>
+<data name="TrainingDelegationSaved" xml:space="preserve"><value>Configuración de gestión y delegación guardada.</value></data>
+<data name="TrainingSaveDelegation" xml:space="preserve"><value>Guardar cambios</value></data>
+<data name="TrainingDiscardDelegation" xml:space="preserve"><value>Descartar cambios</value></data>
+<data name="TrainingGroupWrongCareer" xml:space="preserve"><value>El borrador pertenece a otra carrera.</value></data>
+<data name="TrainingGroupMissing" xml:space="preserve"><value>El grupo ya no existe. Vuelve a cargar el editor.</value></data>
+<data name="TrainingGroupChanged" xml:space="preserve"><value>El grupo ha cambiado en otra operación. Cancela la edición y vuelve a abrirlo.</value></data>
+<data name="TrainingGroupLeaveQuestion" xml:space="preserve"><value>El grupo tiene cambios sin guardar. Puedes guardarlos, descartarlos o continuar editando.</value></data>
+<data name="TrainingGroupSaveChanges" xml:space="preserve"><value>Guardar cambios</value></data>
+<data name="TrainingGroupKeepEditing" xml:space="preserve"><value>Cancelar y seguir editando</value></data>
+<data name="TrainingGroupDiscard" xml:space="preserve"><value>Descartar cambios</value></data>
+<data name="TrainingGroupNewDirty" xml:space="preserve"><value>Grupo nuevo — cambios sin guardar</value></data>
+<data name="TrainingGroupExistingDirty" xml:space="preserve"><value>Grupo guardado — edición con cambios sin guardar</value></data>
+<data name="TrainingGroupSavedState" xml:space="preserve"><value>Grupo guardado</value></data>
+<data name="TrainingCancelGroup" xml:space="preserve"><value>Cancelar edición de grupo</value></data>
+<data name="TrainingDeleteGroup" xml:space="preserve"><value>Eliminar grupo</value></data>
+<data name="TrainingGroupConfirmDelete" xml:space="preserve"><value>¿Eliminar el grupo «{0}»? No se eliminarán actividades.</value></data>
+<data name="TrainingGroupInUse" xml:space="preserve"><value>El grupo está en uso y no puede eliminarse. Referencias que lo impiden:</value></data>
+<data name="TrainingGroupReference_Activity" xml:space="preserve"><value>Actividad</value></data>
+<data name="TrainingGroupReference_Report" xml:space="preserve"><value>Informe</value></data>
+<data name="TrainingRoutinePending" xml:space="preserve"><value>Sin diseñar</value></data>
+<data name="TrainingRoutineLegacy" xml:space="preserve"><value>Referencia anterior (sin ubicación)</value></data>
+<data name="TrainingRoutineMissingLocation" xml:space="preserve"><value>No hay ninguna falta diseñada para esta ubicación. Configúrala primero en Táctica.</value></data>
+<data name="TrainingRoutineMissing" xml:space="preserve"><value>No hay ninguna jugada diseñada para este tipo. Configúrala primero en Táctica.</value></data>
+<data name="TrainingRoutinePenalty" xml:space="preserve"><value>Penaltis: se conserva la referencia sin rutina posicional del modelo actual.</value></data>
+<data name="TrainingRoutineDesigned" xml:space="preserve"><value>Jugada diseñada: {0}</value></data>
+<data name="TrainingGroupNameRequired" xml:space="preserve"><value>Escribe el nombre del grupo antes de guardar.</value></data>
+<data name="TrainingGroupObjectiveRequired" xml:space="preserve"><value>Indica el objetivo del grupo antes de guardar.</value></data>
+<data name="TrainingGroupMembersRequired" xml:space="preserve"><value>Selecciona al menos un futbolista para el grupo.</value></data>
+  <data name="TrainingAvailabilityOpen" xml:space="preserve"><value>Disponibilidad de futbolistas — Consultar y registrar restricciones</value></data>
+  <data name="TrainingAvailabilityTitle" xml:space="preserve"><value>Disponibilidad para entrenar</value></data>
+  <data name="TrainingAvailabilityNotice" xml:space="preserve"><value>Restricciones administrativas por fecha. No se simulan lesiones ni recuperación; una sanción de competición no impide entrenar por sí sola.</value></data>
+  <data name="TrainingAvailabilityWarnings" xml:space="preserve"><value>Participantes pendientes de revisión: una restricción posterior afecta a ejercicios guardados.</value></data>
+  <data name="TrainingAvailability_Available" xml:space="preserve"><value>Disponible</value></data>
+  <data name="TrainingAvailability_Unavailable" xml:space="preserve"><value>No disponible</value></data>
+  <data name="TrainingAvailability_Partial" xml:space="preserve"><value>Disponibilidad parcial</value></data>
+  <data name="TrainingRestriction_Injury" xml:space="preserve"><value>Lesión</value></data>
+  <data name="TrainingRestriction_Illness" xml:space="preserve"><value>Enfermedad</value></data>
+  <data name="TrainingRestriction_InternationalDuty" xml:space="preserve"><value>Convocatoria internacional</value></data>
+  <data name="TrainingRestriction_PersonalLeave" xml:space="preserve"><value>Permiso personal</value></data>
+  <data name="TrainingRestriction_MedicalRestriction" xml:space="preserve"><value>Restricción médica</value></data>
+  <data name="TrainingRestriction_Other" xml:space="preserve"><value>Otra causa</value></data>
+  <data name="TrainingAvailabilitySave" xml:space="preserve"><value>Guardar restricción</value></data>
+  <data name="TrainingAvailabilityRecords" xml:space="preserve"><value>Restricciones del futbolista</value></data>
+  <data name="TrainingAvailabilityNew" xml:space="preserve"><value>Nueva restricción</value></data>
+  <data name="TrainingAvailabilityNoEnd" xml:space="preserve"><value>Sin fecha final conocida</value></data>
+  <data name="TrainingAvailabilityState" xml:space="preserve"><value>Estado</value></data>
+  <data name="TrainingAvailabilityReason" xml:space="preserve"><value>Motivo administrativo</value></data>
+  <data name="TrainingAvailabilityStart" xml:space="preserve"><value>Inicio (AAAA-MM-DD, incluido)</value></data>
+  <data name="TrainingAvailabilityEnd" xml:space="preserve"><value>Final (AAAA-MM-DD, incluido; vacío si se desconoce)</value></data>
+  <data name="TrainingAvailabilityNotes" xml:space="preserve"><value>Observaciones (opcional)</value></data>
+  <data name="TrainingAvailabilityOrigin" xml:space="preserve"><value>Origen (opcional)</value></data>
+  <data name="TrainingAvailabilityAllowed" xml:space="preserve"><value>Actividades expresamente autorizadas (selección múltiple)</value></data>
+  <data name="TrainingAvailabilityPartialNotice" xml:space="preserve"><value>Sin autorización explícita de actividades, no se permite confirmar la participación. Estas autorizaciones no son una evaluación médica automática.</value></data>
+  <data name="TrainingAvailabilityFinish" xml:space="preserve"><value>Finalizar restricción en la fecha final indicada</value></data>
+  <data name="TrainingAvailabilityInvalidDate" xml:space="preserve"><value>Introduce una fecha válida con formato AAAA-MM-DD.</value></data>
+  <data name="TrainingAvailabilityExcluded" xml:space="preserve"><value>Exclusiones propuestas para este ejercicio:</value></data>
+  <data name="TrainingAvailabilityConfirmExclusions" xml:space="preserve"><value>Al guardar confirmarás estas exclusiones. La plantilla y los integrantes de los grupos se conservan.</value></data>
+  <data name="TrainingAvailabilityBlocked" xml:space="preserve"><value>No hay participantes autorizados para este ejercicio en esa fecha. Revisa las restricciones o la selección.</value></data>
 </root>

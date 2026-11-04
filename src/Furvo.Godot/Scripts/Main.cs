@@ -25,9 +25,12 @@ public partial class Main : Control
 
     public override void _Ready()
     {
+        GetTree().AutoAcceptQuit=false;
         Theme = BuildTheme();
         ShowHome();
     }
+
+    public override void _Notification(int what){if(what==NotificationWMCloseRequest)ExitGame();}
 
     public override void _ExitTree() => _loadRequest++;
 
@@ -106,6 +109,7 @@ public partial class Main : Control
 
     private void ShowHome()
     {
+        if(TrainingGroupDirty){TrainingGroupGuard(ShowHome);return;}
         _loadRequest++; _exploring = false;
         if(CareerActive){_workspace=null;_queries=_initialQueries;_careerFlow=null;_careers=null;_club=null;}
         var body = Frame("Version", UiText.Get("HomeTitle"), UiText.Get("HomeDescription"));
@@ -299,6 +303,7 @@ public partial class Main : Control
     }
     private void ExitGame()
     {
+        if(TrainingGroupDirty){TrainingGroupGuard(ExitGame);return;}
         _loadRequest++; GetTree().Quit();
     }
 

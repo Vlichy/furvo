@@ -14,9 +14,11 @@ public partial class Main
     private bool CareerActive=>_workspace is not null;
     private void EnterCareer(CareerSummary career)
     {
+        if(TrainingGroupDirty){TrainingGroupGuard(()=>EnterCareer(career));return;}
         var loaded=_careers!.Load(career.Id);
         var data=new SqliteWorldStore(_careers.PathFor(loaded.Id)).Load();
         _queries=new WorldQueries(data,loaded.CurrentDate,SqliteEconomyStore.ReadResources(_careers.PathFor(loaded.Id)));
+        _trainingGroupDrafts.Clear();_trainingDelegationDrafts.Clear();_trainingDrafts.Clear();_trainingSelectionContext=null;_trainingSelectedDay=null;_trainingChooseArea=false;
         _trainingWeek=null;_trainingTab=0;_analysisTab=0;_trainingTeam=null;_academyTeam=null;_academyTab=0;_planKind=Furvo.Core.Tactics.TacticalPlanKind.Initial;_layoutPhase=Furvo.Core.Tactics.PossessionPhase.WithoutBall;_lineupSlot=null;_lineupPinned=false;_tacticTab=0;_workspace=new CareerWorkspace(loaded);_careerSquadSort=SquadTrackingSort.Position;_careerSquadDescending=false;_club=null;_selectedPlayer=null;_sort=SquadSort.Position;_descending=false;
         _exploring=true;NavigateCareer(CareerPage.Desktop);
     }
@@ -24,7 +26,10 @@ public partial class Main
     {
         try
         {
+            if(TrainingGroupDirty&&page!=_workspace!.Page){TrainingGroupGuard(()=>NavigateCareer(page));return;}
+            if(_workspace?.Page==CareerPage.Training&&page!=CareerPage.Training&&((_trainingDrafts.TryGetValue(SportsPath+"|"+SportsTeam,out var draft)&&draft.Dirty)||TrainingDelegationDirty)){TrainingNavigate(()=>NavigateCareer(page),true);return;}
             if(page!=CareerPage.Academy){_academyTeam=null;_academyTab=0;}
+            if(page==CareerPage.Training&&_workspace!.Page!=CareerPage.Training)_trainingSelectedDay=null;
             _workspace!.Open(page);
             if(page==CareerPage.Training){ShowTraining();return;}
             if(page==CareerPage.Analysis){ShowSportsAnalysis();return;}

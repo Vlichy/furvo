@@ -63,9 +63,9 @@ public sealed partial class CareerCreationTests
     {
         var (_,file,_)=TacticalCareer();var store=new SqliteClubSquadStore(file);var team=store.Teams()[0].Id;var players=store.Players(team);var service=new SqliteSportsStore(file);Assert.Throws<InvalidDataException>(()=>service.SavePlan(service.Plan(team) with{Sessions=new[]{Session(team,players,"reflexes")}}));var session=Session(team,players,"reflexes",target:new(TrainingScope.Position,Position:PlayerRole.Goalkeeper));service.SavePlan(service.Plan(team) with{Sessions=new[]{session}});Assert.All(service.Plan(team).Sessions.Single().Participants,id=>Assert.Equal(PlayerRole.Goalkeeper,players.Single(p=>p.Id==id).Positions!.Primary));
     }
-    [Fact] public void YouthWorkloadUsesDifferentPlanningPolicyAndTacticsAreIndependent()
+    [Fact] public void PlanningIntensityDoesNotInventPhysicalRiskAndTacticsAreIndependent()
     {
-        var (_,file,_)=TacticalCareer();var store=new SqliteClubSquadStore(file);var team=store.Teams().First(t=>t.Category=="Juvenil").Id;var players=store.Players(team);var service=new SqliteSportsStore(file);var tactics=new SqliteAcademyStore(file).LoadPlans(team);Assert.Throws<InvalidDataException>(()=>service.SavePlan(service.Plan(team) with{Sessions=new[]{Session(team,players,load:TrainingLoad.High)}}));service.SavePlan(service.Plan(team) with{Sessions=new[]{Session(team,players)}});Assert.Equal(3,tactics.Plans.Count);Assert.Equal(PlanFingerprint(tactics.Plans[0]),PlanFingerprint(new SqliteAcademyStore(file).LoadPlans(team).Plans[0]));
+        var (_,file,_)=TacticalCareer();var store=new SqliteClubSquadStore(file);var team=store.Teams().First(t=>t.Category=="Juvenil").Id;var players=store.Players(team);var service=new SqliteSportsStore(file);var tactics=new SqliteAcademyStore(file).LoadPlans(team);service.SavePlan(service.Plan(team) with{Sessions=new[]{Session(team,players,load:TrainingLoad.High)}});service.SavePlan(service.Plan(team) with{Sessions=new[]{Session(team,players)}});Assert.Equal(3,tactics.Plans.Count);Assert.Equal(PlanFingerprint(tactics.Plans[0]),PlanFingerprint(new SqliteAcademyStore(file).LoadPlans(team).Plans[0]));
     }
     [Fact] public void DelegationIsAreaSpecificAndDoesNotInventSpecialists()
     {

@@ -4,7 +4,7 @@ namespace Furvo.Presentation.Components;
 /// <summary>Iconos vectoriales originales dibujados en Godot; no dependen de fuentes emoji ni recursos externos.</summary>
 public partial class TrainingActivityIcon(TrainingArea area,bool rest=false) : Control
 {
-    public override void _Ready(){CustomMinimumSize=new Vector2(28,28);MouseFilter=MouseFilterEnum.Ignore;}
+    public override void _Ready(){SetMeta("training_icon",rest?"Rest":area.ToString());CustomMinimumSize=new Vector2(28,28);MouseFilter=MouseFilterEnum.Ignore;}
     public override void _Draw()
     {
         var c=new Color("f1b96b");var white=new Color("e5ecf5");

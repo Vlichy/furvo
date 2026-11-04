@@ -547,3 +547,48 @@ Antes: 431 pruebas Debug superadas. Después: **445 Debug y 445 Release**, sin f
 ## Jornadas, turnos, bloques y delegación — 01/11/2026
 
 Antes: 445 pruebas correctas. Después: **465 Debug y 465 Release**, sin fallos ni omisiones; veinte casos nuevos conservan los anteriores. Compilaciones finales sin errores ni advertencias. Migración SportsTraining003_Days.sql probada con horarios antiguos no redondeados y delegación preservada. Godot nativo enfocado termina con código 0; se comprueban horarios, duración efectiva, responsables, cambios de jornada con confirmación, calendario y delegación en tres resoluciones. Se corrigió un recorte horizontal a 1280 y se verificaron los límites de cabecera y controles. Cinco publicaciones iniciales intactas por SHA-256. [Archivos, reglas, migración, evidencias y límites](TRAINING_DAYS_BLOCKS.md).
+
+
+## Lista diaria interactiva de Entrenamiento — 01/11/2026
+
+Antes: 465 pruebas Debug. Después: **484 Debug y 484 Release superadas**, sin fallos ni omisiones; diecinueve casos nuevos conservan los anteriores. Compilaciones sin errores ni advertencias. Godot nativo enfocado termina con código 0 y valida selección por fecha, lista, crear/editar/eliminar sin duplicar, totales globales, conflictos entre categorías, responsable real, fecha fija y horas 07–20. Capturas de calendario, lista y formulario revisadas en las tres resoluciones. El WARNING de solapamiento pertenece a una prueba negativa esperada. Cinco bases iniciales intactas por SHA-256; sin migraciones nuevas. [Archivos, decisiones, resultados y límites](TRAINING_DAILY_PLANNING.md).
+
+
+## Duración libre y descanso completo — 01/11/2026
+
+Antes: 484 pruebas Debug. Después: **503 Debug y 503 Release superadas**, sin fallos ni omisiones. Compilaciones Debug/Release sin errores ni advertencias. Godot nativo termina con código 0 y comprueba duración superior a 120, total diario superior a 300, descanso sin ejercicio ni intensidad, confirmación/cancelación, recuperación activa, navegación y persistencia aislada. Capturas revisadas a 1280×720, 1600×900 y 1920×1080. El aviso de solapamiento es un caso negativo esperado. Cinco bases iniciales intactas por SHA-256. Archivo histórico versionado de descansos con revisión de casos ambiguos y conservación de evidencias; ninguna migración automática de carreras personales. Furvo abierto normalmente y dejado en ejecución. [Inventario, compatibilidad y resultados](TRAINING_REST_CORRECTION.md).
+
+
+## Entrenamiento: Resumen y agenda compartida — 01/11/2026
+
+Antes: 503 pruebas Debug. Después: **512 Debug y 512 Release correctas**, sin fallos ni omisiones. Compilaciones de solución y ajuste visual final Debug/Release sin errores ni advertencias. Fases A/B/C validadas antes de continuar (9/10/5 pruebas seleccionadas). Godot nativo finaliza con código 0: agenda global, categoría especializada, edición cruzada conservando ID, eliminación sincronizada, conflicto identificable entre categorías, borradores protegidos al cambiar pestaña/equipo, descanso confirmado, persistencia y regresiones de navegación y Análisis. Capturas finales revisadas en las tres resoluciones. El WARNING de solapamiento es esperado. Cinco bases fundacionales intactas por SHA-256. Sin migraciones ni dependencias nuevas. Furvo lanzado normalmente y dejado en ejecución. [Archivos, decisiones y evidencia](TRAINING_SHARED_SUMMARY.md).
+
+
+## Calendario global en todas las pestañas — 01/11/2026
+
+Antes: 512 pruebas Debug. Después: **515 Debug y 515 Release superadas**, sin fallos ni omisiones. Compilaciones sin errores ni advertencias. Godot nativo termina con código 0: siete calendarios y listas idénticos, selector retirado, semana/fecha/jornada conservadas y edición de Campo desde Gimnasio por ID, además de las regresiones previas. Capturas revisadas en las tres resoluciones. El aviso de solapamiento pertenece a una prueba negativa esperada. Cinco bases iniciales intactas por SHA-256; sin migraciones, paquetes ni almacenamiento nuevos. Furvo abierto normalmente y dejado ejecutándose. [Inventario y evidencia](TRAINING_GLOBAL_CALENDAR.md).
+
+
+## Ajustes visuales de Entrenamiento — 03/11/2026
+
+Antes: 515 pruebas Release. Después: **515 Debug y 515 Release superadas**, sin fallos ni omisiones. Compilaciones finales Debug/Release sin errores ni advertencias. Godot nativo termina con código 0 y comprueba siete pestañas de altura estable, fondo/borde naranja/negrita de la activa, horas contiguas de 160 píxeles, popup de 160×216 con desplazamiento, selección horaria conservada, etiquetas de nombre/posición con ID y selección múltiple persistente al contraer. Capturas revisadas en las tres resoluciones. Se conserva la agenda global y no hay cambios en Core, persistencia ni dependencias. Furvo abierto normalmente y dejado en ejecución. [Archivos y evidencia](TRAINING_VISUAL_CONTROLS.md).
+
+
+## Participantes de Porteros — 03/11/2026
+
+Compilaciones Debug/Release sin errores ni advertencias; 515 pruebas Debug superadas, sin fallos ni omisiones. Godot nativo termina con código 0: únicamente Individual/Por demarcación, candidatos con posición principal Portero, única demarcación Portero y guardado de ambas modalidades conservando ID. No se cambia la persistencia ni las otras categorías. Furvo abierto normalmente y dejado ejecutándose. Evidencia: training-keeper-scope-debug.trx, training-keeper-scope-native.log y training-keeper-scope-final-run.log en artifacts.
+
+
+## Gestión y delegación de Entrenamiento — 03/11/2026
+
+Antes: 515 pruebas Debug. Después: **521 Debug y 521 Release superadas**, sin fallos ni omisiones; seis casos nuevos. Compilaciones finales sin errores ni advertencias. JSON antiguos sin Mode conservan la modalidad Delegada. Godot nativo finaliza con código 0: panel único bajo pestañas, nueve áreas existentes, edición directa, validación de técnico, Mixta, manual global con guardado explícito, confirmación al contraer/cambiar equipo y borradores conservados al navegar. Capturas finales revisadas en las tres resoluciones. El aviso de solapamiento pertenece a una prueba negativa esperada. Cinco bases iniciales intactas por SHA-256; sin migraciones SQL ni dependencias nuevas. Furvo abierto normalmente y dejado en ejecución. [Archivos y compatibilidad](TRAINING_DELEGATION_PANEL.md).
+
+
+## Correcciones funcionales de Entrenamiento — Entrega 1 — 04/11/2026
+
+Base: 521 pruebas Debug. Resultado final: **545 Debug y 545 Release superadas**, sin fallos ni omisiones; 24 casos nuevos. Compilaciones reales de solución Debug/Release y recompilación final de presentación correctas, sin errores ni advertencias. Godot nativo termina con código 0: borradores protegidos y tres decisiones de salida, guardado incompleto rechazado, eliminación por ID con referencias fechadas, reapertura y faltas por ubicación real. Capturas revisadas en 1280×720, 1600×900 y 1920×1080; corregida la superposición del mensaje de validación. Se mantienen las regresiones anteriores. El aviso de solapamiento corresponde a una prueba negativa esperada. Sin migraciones ni paquetes nuevos; las cinco bases fundacionales conservan su SHA-256. Validación realizada con carreras aisladas, sin usar partidas personales. [Inventario, evidencia, límites y comandos](TRAINING_FUNCTIONAL_FIXES_1.md).
+
+
+## Cierre base de Entrenamiento — Entrega 2 — 04/11/2026
+
+Referencia real anterior: 545 Debug. Resultado final: **575 Debug y 575 Release superadas**, 0 fallidas y 0 omitidas; 30 casos nuevos. Compilaciones Debug/Release y últimas recompilaciones de Godot correctas, sin errores ni advertencias. Pruebas con compilación habilitada. Godot nativo termina con código 0 y valida restricciones por fecha/ejercicio, conflictos sin reescritura, parcial explícita, reapertura y finalización inclusiva, además de las regresiones de Entrenamiento. Capturas finales revisadas en las tres resoluciones; acceso compactado para conservar el calendario. Una migración incremental por carrera, aplicada solo al guardar expresamente; lecturas antiguas sin cambios. Cinco bases fundacionales intactas por SHA-256, sin usar carreras personales. El aviso de solapamiento es una prueba negativa esperada. [Resultados, inventario, límites y conclusión SÍ](TRAINING_BASE_CLOSURE.md).
