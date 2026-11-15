@@ -22,6 +22,11 @@
     <None Include="../../docs/decisions/club-reputations-2026-27.json" Link="club-reputations.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../src/Furvo.Godot/Resources/UiStrings.resx" Link="UiStrings.resx" CopyToOutputDirectory="PreserveNewest" />
     <!-- Políticas puras de presentación: se prueba su fuente real sin cargar el motor ni añadir paquetes. -->
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/ReleaseClauseText.cs" Link="Presentation/ReleaseClauseText.cs" />
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/OfferConditionOptions.cs" Link="Presentation/OfferConditionOptions.cs" />
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/MarketColumnPreferences.cs" Link="Presentation/MarketColumnPreferences.cs" />
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/MarketSearchContext.cs" Link="Presentation/MarketSearchContext.cs" />
+    <Compile Include="../../src/Furvo.Godot/Scripts/Components/AcademyRosterContext.cs" Link="Presentation/AcademyRosterContext.cs" />
     <Compile Include="../../src/Furvo.Godot/Scripts/Components/TacticDiagram.cs" Link="Presentation/TacticDiagram.cs" />
     <Compile Include="../../src/Furvo.Godot/Scripts/Components/SquadTrackingRows.cs" Link="Presentation/SquadTrackingRows.cs" />
     <Compile Include="../../src/Furvo.Godot/Scripts/Components/CareerSquadRules.cs" Link="Presentation/CareerSquadRules.cs" />

@@ -11,6 +11,7 @@ public partial class Main
     {
         try{
             _workspace!.Open(CareerPage.Analysis);var service=Sports();var body=Frame("CareerSection",UiText.Get("NavPage_Analysis"),UiText.Get("AnalysisDataNotice"));body.Name="SportsAnalysisPage";SportsTeamSelector(body,ShowSportsAnalysis);var tabs=new HFlowContainer();body.AddChild(tabs);for(var i=0;i<4;i++){var index=i;var button=WindowUi.Button("AnalysisTab_"+i,()=>{_analysisTab=index;ShowSportsAnalysis();});if(i==_analysisTab)button.AddThemeColorOverride("font_color",_accent);tabs.AddChild(button);}
+            if(_academyAnalysisReturn is {} back)body.AddChild(WindowUi.Button("BackAcademyFollowup",back));
             var content=ClubUi.ScrollBody(body,"SportsAnalysisScroll");var status=ClubUi.Text("AnalysisStatus","",13,"f1b96b");content.AddChild(status);var team=SportsTeam;var players=new SqliteClubSquadStore(SportsPath).Details(team);var plan=service.Plan(team);
             if(_analysisTab==0){var summary=SportsCard(content,"AnalysisTeam");ClubUi.Field(summary,"TrainingPlayers",players.Count.ToString());ClubUi.Field(summary,"TrainingSessionsPlanned",plan.Sessions.Count.ToString());summary.AddChild(ClubUi.Text("AnalysisMatchPending",UiText.Get("AnalysisNoMatches"),16));foreach(var metric in new[]{"Possession","Chances","Shots","Goals","ExpectedGoals","Recoveries","Losses","Pressing","Zones"})ClubUi.Field(summary,"AnalysisMetric_"+metric,UiText.Get("NotAvailable"));}
             if(_analysisTab==1)RenderAnalysisPlayers(content,team,players,plan,service);

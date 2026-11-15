@@ -27,6 +27,11 @@ public sealed class SqliteWorldStore : IWorldStore
     {
         using var connection = WorldDatabase.Open(_path);
         using var transaction = connection.BeginTransaction(deferred: true);
+        return Load(connection,transaction);
+    }
+    // Permite a consultas compuestas compartir la misma instantánea, sin abrir otra base ni migrar.
+    internal static WorldData Load(SqliteConnection connection,SqliteTransaction transaction)
+    {
         _ = WorldDatabase.Info(connection, transaction);
         var values = Read(connection, transaction,
             "SELECT player_id, attribute_code, value FROM player_attributes ORDER BY player_id, attribute_code;",
@@ -38,10 +43,11 @@ public sealed class SqliteWorldStore : IWorldStore
             r => (PlayerId: Id(r, 0), Role: (PlayerRole)r.GetInt32(1), Primary: r.GetBoolean(2)))
             .GroupBy(x => x.PlayerId).ToDictionary(x => x.Key,
                 x => new PlayerPositions(x.Single(v => v.Primary).Role, x.Where(v => !v.Primary).Select(v => v.Role)));
+        var release=SqliteContractReleaseStore.Read(connection,transaction);
         return new WorldData(
             clubs: Read(connection, transaction, "SELECT id, name, city, country, reputation, short_name, region, foundation_year, sporting_identity, primary_color, secondary_color, stadium_name, stadium_capacity, initial_category FROM clubs ORDER BY id;", r => new Club(new ClubId(Id(r, 0)), r.GetString(1), Text(r, 2), Text(r, 3), Number(r, 4), r.IsDBNull(5) ? null : new ClubProfile(r.GetString(5), r.GetString(6), r.GetInt32(7), r.GetString(8), r.GetString(9), r.GetString(10), r.GetString(11), r.GetInt32(12), r.GetString(13)))),
             players: Read(connection, transaction, "SELECT id, name, birth_date, nationality, main_position FROM players ORDER BY id;", r => new Player(new PlayerId(Id(r, 0)), r.GetString(1), Day(r, 2), Text(r, 3), r.IsDBNull(4) ? null : (PlayerPosition)r.GetInt32(4), values.GetValueOrDefault(Id(r, 0), PlayerAttributes.Empty), roles.GetValueOrDefault(Id(r, 0)))),
-            contracts: Read(connection, transaction, "SELECT id, club_id, player_id, start_date, end_date FROM contracts ORDER BY id;", r => new Contract(new ContractId(Id(r, 0)), new ClubId(Id(r, 1)), new PlayerId(Id(r, 2)), Day(r, 3), Day(r, 4))),
+            contracts: Read(connection, transaction, "SELECT id, club_id, player_id, start_date, end_date FROM contracts ORDER BY id;", r => new Contract(new ContractId(Id(r, 0)), new ClubId(Id(r, 1)), new PlayerId(Id(r, 2)), Day(r, 3), Day(r, 4),release.GetValueOrDefault(new ContractId(Id(r,0))))),
             coaches: Read(connection, transaction, "SELECT id, name, club_id FROM coaches ORDER BY id;", r => new Coach(new CoachId(Id(r, 0)), r.GetString(1), new ClubId(Id(r, 2)))),
             competitions: Read(connection, transaction, "SELECT id, name, country FROM competitions ORDER BY id;", r => new Competition(new CompetitionId(Id(r, 0)), r.GetString(1), r.GetString(2))),
             seasons: Read(connection, transaction, "SELECT id, start_date, end_date, name FROM seasons ORDER BY id;", r => new Season(new SeasonId(Id(r, 0)), Day(r, 1)!.Value, Day(r, 2)!.Value, Text(r, 3))),
@@ -132,6 +138,7 @@ public sealed class SqliteWorldStore : IWorldStore
                 "INSERT INTO contracts (id, club_id, player_id, start_date, end_date) VALUES ($id, $club_id, $player_id, $start_date, $end_date) ON CONFLICT(id) DO UPDATE SET club_id = excluded.club_id, player_id = excluded.player_id, start_date = excluded.start_date, end_date = excluded.end_date;",
                 ("$id", x.Id.ToString()), ("$club_id", x.ClubId.ToString()), ("$player_id", x.PlayerId.ToString()), ("$start_date", Date(x.StartDate)), ("$end_date", Date(x.EndDate)));
             command.ExecuteNonQuery();
+            if(x.ReleaseClause is {} clause)SqliteContractReleaseStore.Write(connection,transaction,clause,x);
         }
 
         foreach (var x in changes.Coaches)

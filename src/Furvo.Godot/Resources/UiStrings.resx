@@ -1396,4 +1396,390 @@
   <data name="TrainingAvailabilityExcluded" xml:space="preserve"><value>Exclusiones propuestas para este ejercicio:</value></data>
   <data name="TrainingAvailabilityConfirmExclusions" xml:space="preserve"><value>Al guardar confirmarás estas exclusiones. La plantilla y los integrantes de los grupos se conservan.</value></data>
   <data name="TrainingAvailabilityBlocked" xml:space="preserve"><value>No hay participantes autorizados para este ejercicio en esa fecha. Revisa las restricciones o la selección.</value></data>
+  <data name="AcademyOpenFollowup" xml:space="preserve"><value>Seguimiento e historial</value></data>
+  <data name="AcademyFollowupTitle" xml:space="preserve"><value>Seguimiento del futbolista</value></data>
+  <data name="AcademyFollowupTab_0" xml:space="preserve"><value>Observaciones</value></data>
+  <data name="AcademyFollowupTab_1" xml:space="preserve"><value>Informes</value></data>
+  <data name="AcademyFollowupTab_2" xml:space="preserve"><value>Recomendaciones y movimientos</value></data>
+  <data name="AcademyFollowupBackPlayer" xml:space="preserve"><value>Volver a la ficha</value></data>
+  <data name="AcademyFollowupBackRoster" xml:space="preserve"><value>Volver a la plantilla de cantera</value></data>
+  <data name="AcademyFilterName" xml:space="preserve"><value>Filtrar por nombre</value></data>
+  <data name="AcademyAllPositions" xml:space="preserve"><value>Todas las posiciones</value></data>
+  <data name="AcademyObservationNew" xml:space="preserve"><value>Nueva observación</value></data>
+  <data name="AcademyObservationEdit" xml:space="preserve"><value>Editar observación</value></data>
+  <data name="AcademyObservationDelete" xml:space="preserve"><value>Eliminar observación</value></data>
+  <data name="AcademyObservationDeleteConfirm" xml:space="preserve"><value>¿Eliminar esta observación? No se modificarán informes ni movimientos.</value></data>
+  <data name="AcademyObservationSave" xml:space="preserve"><value>Guardar observación</value></data>
+  <data name="AcademyObservationSort" xml:space="preserve"><value>Alternar orden por fecha</value></data>
+  <data name="AcademyObservationDate" xml:space="preserve"><value>Fecha de registro</value></data>
+  <data name="AcademyObservationAuthor" xml:space="preserve"><value>Autor o responsable</value></data>
+  <data name="AcademyObservationText" xml:space="preserve"><value>Observación</value></data>
+  <data name="AcademyObservationModified" xml:space="preserve"><value>Última modificación</value></data>
+  <data name="AcademyObservationsEmpty" xml:space="preserve"><value>Este jugador todavía no tiene observaciones registradas.</value></data>
+  <data name="AcademyReportsEmpty" xml:space="preserve"><value>Este jugador todavía no tiene informes registrados.</value></data>
+  <data name="AcademyNotRecorded" xml:space="preserve"><value>No registrado</value></data>
+  <data name="AcademyOpenAnalysisReport" xml:space="preserve"><value>Abrir este informe en Análisis</value></data>
+  <data name="BackAcademyFollowup" xml:space="preserve"><value>Volver al seguimiento de Cantera</value></data>
+  <data name="AcademyReportCompareNone" xml:space="preserve"><value>Sin comparación entre informes</value></data>
+  <data name="AcademyReportCompareNotice" xml:space="preserve"><value>Comparación de instantáneas registradas. No representa una predicción de desarrollo ni una valoración global.</value></data>
+  <data name="AcademyReportAttribute" xml:space="preserve"><value>Atributo visible</value></data>
+  <data name="AcademyHistoryRecommendation" xml:space="preserve"><value>Recomendación</value></data>
+  <data name="AcademyHistoryMovement" xml:space="preserve"><value>Movimiento</value></data>
+  <data name="AcademyHistoryExecuted" xml:space="preserve"><value>Ejecutado</value></data>
+  <data name="AcademyHistoryNoDecision" xml:space="preserve"><value>Sin decisión registrada</value></data>
+  <data name="AcademyHistoryDecisionAuthorUnknown" xml:space="preserve"><value>Autor y fecha de la decisión: no registrados explícitamente.</value></data>
+  <data name="AcademyHistoryReference" xml:space="preserve"><value>Referencia del registro</value></data>
+  <data name="AcademyHistoryReadOnly" xml:space="preserve"><value>Consulta de registros existentes. Una recomendación no equivale a un movimiento ejecutado; los bloqueos normativos siguen vigentes.</value></data>
+  <data name="AcademyHistoryEmpty" xml:space="preserve"><value>Este jugador todavía no tiene recomendaciones ni movimientos registrados.</value></data>
+  <data name="AcademyHistoryType" xml:space="preserve"><value>Tipo de registro</value></data>
+  <data name="AcademyHistoryState" xml:space="preserve"><value>Estado</value></data>
+  <data name="AcademyHistoryRoute" xml:space="preserve"><value>Origen → destino</value></data>
+  <data name="NavPage_MarketSearch" xml:space="preserve"><value>Buscar jugadores</value></data>
+  <data name="MarketTitle" xml:space="preserve"><value>Mercado · Buscar jugadores</value></data>
+  <data name="MarketReadOnly" xml:space="preserve"><value>Consulta de clubes externos de la carrera actual. Excluye tu club, filiales y juveniles. Seguimiento, fichajes, cesiones, agentes y operaciones quedan pendientes.</value></data>
+  <data name="MarketWrongCareer" xml:space="preserve"><value>La consulta no corresponde a la carrera activa.</value></data>
+  <data name="MarketNameLabel" xml:space="preserve"><value>Nombre del futbolista</value></data>
+  <data name="MarketNamePlaceholder" xml:space="preserve"><value>Nombre o parte del nombre</value></data>
+  <data name="MarketClubLabel" xml:space="preserve"><value>Club actual registrado</value></data>
+  <data name="MarketAllClubs" xml:space="preserve"><value>Todos los clubes</value></data>
+  <data name="MarketPositionLabel" xml:space="preserve"><value>Posición principal</value></data>
+  <data name="MarketAllPositions" xml:space="preserve"><value>Todas las posiciones</value></data>
+  <data name="MarketMinimumAgeLabel" xml:space="preserve"><value>Edad mínima</value></data>
+  <data name="MarketMaximumAgeLabel" xml:space="preserve"><value>Edad máxima</value></data>
+  <data name="MarketAttributeLabel" xml:space="preserve"><value>Atributo público</value></data>
+  <data name="MarketAnyAttribute" xml:space="preserve"><value>Sin filtro de atributo</value></data>
+  <data name="MarketMinimumValueLabel" xml:space="preserve"><value>Valor mínimo (1–20)</value></data>
+  <data name="MarketMaximumValueLabel" xml:space="preserve"><value>Valor máximo (1–20)</value></data>
+  <data name="MarketSearch" xml:space="preserve"><value>Buscar</value></data>
+  <data name="MarketClear" xml:space="preserve"><value>Limpiar filtros</value></data>
+  <data name="MarketContractEnd" xml:space="preserve"><value>Fin de contrato</value></data>
+  <data name="MarketOpenPlayer" xml:space="preserve"><value>Ver futbolista</value></data>
+  <data name="MarketNoData" xml:space="preserve"><value>No hay datos de futbolistas disponibles en esta carrera.</value></data>
+  <data name="MarketNoResults" xml:space="preserve"><value>No se encontraron futbolistas con estos filtros.</value></data>
+  <data name="MarketResultsCount" xml:space="preserve"><value>{0} futbolistas encontrados · {1} externos disponibles</value></data>
+  <data name="MarketAgeInvalid" xml:space="preserve"><value>Introduce edades enteras o deja el campo vacío.</value></data>
+  <data name="MarketFiltersNotApplied" xml:space="preserve"><value>Filtros no aplicados. Se conservan los últimos resultados válidos.</value></data>
+  <data name="MarketLoadError" xml:space="preserve"><value>No se pudo consultar la base de datos de la carrera. Comprueba que el archivo existe y puede abrirse.</value></data>
+  <data name="MarketRetry" xml:space="preserve"><value>Reintentar consulta</value></data>
+  <data name="MarketPlayerError" xml:space="preserve"><value>No se pudo recuperar la ficha del futbolista en esta carrera.</value></data>
+  <data name="MarketBackSearch" xml:space="preserve"><value>Volver al buscador de Mercado</value></data>
+  <data name="MarketSportingTeam" xml:space="preserve"><value>Equipo asignado</value></data>
+  <data name="MarketCategory_First" xml:space="preserve"><value>Primer equipo</value></data>
+  <data name="MarketCategory_Senior" xml:space="preserve"><value>Filial sénior</value></data>
+  <data name="MarketCategory_Juvenil" xml:space="preserve"><value>Juvenil</value></data>
+  <data name="MarketCategory_Unknown" xml:space="preserve"><value>Categoría no disponible</value></data>
+  <data name="MarketContractToggle" xml:space="preserve"><value>Consultar datos contractuales registrados</value></data>
+  <data name="MarketContractId" xml:space="preserve"><value>Identificador de contrato</value></data>
+  <data name="MarketContractClub" xml:space="preserve"><value>Club del contrato registrado</value></data>
+  <data name="MarketContractStart" xml:space="preserve"><value>Inicio del contrato</value></data>
+  <data name="MarketContractActive" xml:space="preserve"><value>Contrato vigente en la fecha de carrera.</value></data>
+  <data name="MarketContractPastOrFuture" xml:space="preserve"><value>Último contrato registrado, no vigente en la fecha de carrera. No demuestra disponibilidad para negociar ni condición de libre.</value></data>
+  <data name="MarketContractUnknown" xml:space="preserve"><value>Vigencia contractual no confirmada. La ausencia de datos no demuestra que el futbolista sea libre.</value></data>
+  <data name="MarketContractUnavailable" xml:space="preserve"><value>Salario, cláusulas, primas, valor de mercado e interés para negociar: no disponibles. La gestión contractual pertenece a Equipo → Plantilla.</value></data>
+<data name="MarketConfigureColumns" xml:space="preserve"><value>Configurar columnas</value></data>
+<data name="MarketColumnsScope" xml:space="preserve"><value>Preferencias del usuario, independientes por posición. No modifican la carrera.</value></data>
+<data name="MarketColumnsAvailable" xml:space="preserve"><value>Atributos disponibles (51)</value></data>
+<data name="MarketColumnsSelected" xml:space="preserve"><value>Columnas en orden</value></data>
+<data name="MarketColumnsReset" xml:space="preserve"><value>Restablecer predeterminados</value></data>
+<data name="MarketColumnsApply" xml:space="preserve"><value>Aplicar y guardar</value></data>
+<data name="MarketColumnsCancel" xml:space="preserve"><value>Cancelar</value></data>
+<data name="MarketColumnUp" xml:space="preserve"><value>↑</value></data>
+<data name="MarketColumnDown" xml:space="preserve"><value>↓</value></data>
+<data name="MarketColumnsNone" xml:space="preserve"><value>Sin columnas de atributos. La identificación se mantiene.</value></data>
+<data name="MarketNoSelection" xml:space="preserve"><value>Selecciona un futbolista. La tabla admite desplazamiento horizontal.</value></data>
+<data name="MarketSelected" xml:space="preserve"><value>Seleccionado: {0} · {1}</value></data>
+<data name="MarketPreferencesLoadError" xml:space="preserve"><value>No se pudieron leer las preferencias de columnas. Se muestran los valores predeterminados.</value></data>
+<data name="MarketPreferencesSaveError" xml:space="preserve"><value>Las columnas se aplican a esta sesión, pero no se han podido guardar las preferencias.</value></data>
+<data name="NavPage_MarketOffers" xml:space="preserve"><value>Mis ofertas</value></data>
+<data name="NavPage_MarketNegotiations" xml:space="preserve"><value>Negociaciones</value></data>
+<data name="NavPage_MarketRights" xml:space="preserve"><value>Derechos económicos</value></data>
+<data name="TransferMakeOffer" xml:space="preserve"><value>Hacer oferta</value></data>
+<data name="TransferNoExecution" xml:space="preserve"><value>Propuesta entre clubes. No mueve jugadores, no modifica contratos ni reserva o descuenta dinero. La incorporación requerirá negociar con los futbolistas y validar las reglas.</value></data>
+<data name="TransferNoAutomaticResponses" xml:space="preserve"><value>Respuestas automáticas desactivadas: aún no existe un sistema fundamentado de decisiones de los clubes.</value></data>
+<data name="TransferNoClub" xml:space="preserve"><value>No hay club dirigido.</value></data>
+<data name="TransferNotEditable" xml:space="preserve"><value>Esta versión ya no puede editarse.</value></data>
+<data name="TransferCurrencyMissing" xml:space="preserve"><value>Falta configurar la moneda del club.</value></data>
+<data name="TransferInvalidDate" xml:space="preserve"><value>Introduce una fecha válida con formato AAAA-MM-DD.</value></data>
+<data name="TransferInvalidCount" xml:space="preserve"><value>Introduce un número entero positivo.</value></data>
+<data name="TransferPlayerTab" xml:space="preserve"><value>Futbolista y recursos</value></data>
+<data name="TransferValue" xml:space="preserve"><value>Valor estimado</value></data>
+<data name="TransferAskingPrice" xml:space="preserve"><value>Precio solicitado</value></data>
+<data name="TransferBudget" xml:space="preserve"><value>Presupuesto de fichajes disponible</value></data>
+<data name="TransferCash" xml:space="preserve"><value>Tesorería</value></data>
+<data name="TransferResourcesWarning" xml:space="preserve"><value>Los recursos conocidos no constituyen una validación presupuestaria completa ni una reserva. Faltan obligaciones y cierre económico; ningún importe se ejecuta en esta entrega.</value></data>
+<data name="TransferFixedTab" xml:space="preserve"><value>Importe fijo</value></data>
+<data name="TransferAmount" xml:space="preserve"><value>Importe fijo ofertado</value></data>
+<data name="TransferExplicitFree" xml:space="preserve"><value>Propuesta gratuita expresa (viabilidad pendiente de validar)</value></data>
+<data name="TransferPaymentsTab" xml:space="preserve"><value>Pagos</value></data>
+<data name="TransferPaymentAmount" xml:space="preserve"><value>Importe del plazo</value></data>
+<data name="TransferPaymentDate" xml:space="preserve"><value>Vencimiento (AAAA-MM-DD)</value></data>
+<data name="TransferRemove" xml:space="preserve"><value>Eliminar condición</value></data>
+<data name="TransferAddPayment" xml:space="preserve"><value>Añadir pago</value></data>
+<data name="TransferPaymentsHelp" xml:space="preserve"><value>Añade un pago único o varios plazos. Su suma debe coincidir con el importe fijo. El orden mostrado será el orden de pago. Ninguno se paga al enviar.</value></data>
+<data name="TransferPlayersTab" xml:space="preserve"><value>Jugadores incluidos</value></data>
+<data name="TransferInclude" xml:space="preserve"><value>Incluir futbolista propio</value></data>
+<data name="TransferBonusesTab" xml:space="preserve"><value>Variables</value></data>
+<data name="TransferBonusType" xml:space="preserve"><value>Objetivo</value></data>
+<data name="TransferThreshold" xml:space="preserve"><value>Umbral</value></data>
+<data name="TransferBonusAmount" xml:space="preserve"><value>Importe de la variable</value></data>
+<data name="TransferFrom" xml:space="preserve"><value>Inicio (AAAA-MM-DD)</value></data>
+<data name="TransferUntil" xml:space="preserve"><value>Final (AAAA-MM-DD)</value></data>
+<data name="TransferActivations" xml:space="preserve"><value>Máximo de activaciones</value></data>
+<data name="TransferCumulative" xml:space="preserve"><value>Acumulativa (si no, un único pago)</value></data>
+<data name="TransferScope" xml:space="preserve"><value>Competición de referencia</value></data>
+<data name="TransferAddBonus" xml:space="preserve"><value>Añadir variable</value></data>
+<data name="TransferBonusWarning" xml:space="preserve"><value>Condiciones pendientes de evaluación. No existen contadores deportivos ni pagos automáticos. Internacionalidades y competiciones no disponibles no pueden registrarse.</value></data>
+<data name="TransferFutureTab" xml:space="preserve"><value>Futura venta</value></data>
+<data name="TransferBasis" xml:space="preserve"><value>Base contractual</value></data>
+<data name="TransferPercentage" xml:space="preserve"><value>Porcentaje</value></data>
+<data name="TransferCalculation" xml:space="preserve"><value>Definición exacta de la base y deducciones</value></data>
+<data name="TransferActivation" xml:space="preserve"><value>Condición de activación</value></data>
+<data name="TransferAddFuture" xml:space="preserve"><value>Añadir derecho propuesto</value></data>
+<data name="TransferFutureWarning" xml:space="preserve"><value>Beneficiario: club vendedor. Cada base se mantiene separada. Son cláusulas propuestas, no derechos vigentes ni propiedad del jugador. No se calcula un importe garantizado.</value></data>
+<data name="TransferOptionsTab" xml:space="preserve"><value>Recompra y tanteo</value></data>
+<data name="TransferBuybackEnabled" xml:space="preserve"><value>Incluir opción de recompra a favor del vendedor</value></data>
+<data name="TransferBuybackAmount" xml:space="preserve"><value>Precio de recompra</value></data>
+<data name="TransferBuybackFrom" xml:space="preserve"><value>Inicio de recompra (AAAA-MM-DD)</value></data>
+<data name="TransferBuybackUntil" xml:space="preserve"><value>Final de recompra (AAAA-MM-DD)</value></data>
+<data name="TransferBuybackConditions" xml:space="preserve"><value>Condiciones de ejercicio</value></data>
+<data name="TransferMatchingEnabled" xml:space="preserve"><value>Incluir derecho de tanteo a favor del vendedor</value></data>
+<data name="TransferMatchingUntil" xml:space="preserve"><value>Vigencia del tanteo (AAAA-MM-DD)</value></data>
+<data name="TransferMatchingDays" xml:space="preserve"><value>Días para responder</value></data>
+<data name="TransferNotification" xml:space="preserve"><value>Condiciones de notificación</value></data>
+<data name="TransferMatchingCriteria" xml:space="preserve"><value>Criterios para igualar oferta</value></data>
+<data name="TransferDatesTab" xml:space="preserve"><value>Incorporación</value></data>
+<data name="TransferArrival" xml:space="preserve"><value>Modalidad solicitada</value></data>
+<data name="TransferIntendedDate" xml:space="preserve"><value>Fecha futura solicitada (AAAA-MM-DD)</value></data>
+<data name="TransferExpiry" xml:space="preserve"><value>Caducidad de la propuesta (AAAA-MM-DD)</value></data>
+<data name="TransferArrivalWarning" xml:space="preserve"><value>Fecha de acuerdo, intención de incorporación y ejecución son distintas. Las ventanas y elegibilidad no están validadas: no se fija fecha efectiva ni se cambia plantilla.</value></data>
+<data name="TransferReviewTab" xml:space="preserve"><value>Resumen</value></data>
+<data name="TransferPreviewButton" xml:space="preserve"><value>Actualizar resumen</value></data>
+<data name="TransferSaveDraft" xml:space="preserve"><value>Guardar borrador</value></data>
+<data name="TransferSend" xml:space="preserve"><value>Confirmar envío</value></data>
+<data name="TransferColumnsCancel" xml:space="preserve"><value>Cancelar</value></data>
+<data name="TransferDiscard" xml:space="preserve"><value>Descartar cambios sin guardar</value></data>
+<data name="TransferLoadError" xml:space="preserve"><value>No se pudo recuperar la negociación. Vuelve a Mercado e inténtalo de nuevo.</value></data>
+<data name="TransferAllStates" xml:space="preserve"><value>Todos los estados</value></data>
+<data name="TransferState" xml:space="preserve"><value>Estado</value></data>
+<data name="TransferRevision" xml:space="preserve"><value>Versión</value></data>
+<data name="TransferOpen" xml:space="preserve"><value>Consultar negociación</value></data>
+<data name="TransferEmpty" xml:space="preserve"><value>No hay propuestas registradas en esta carrera.</value></data>
+<data name="TransferDetail" xml:space="preserve"><value>Detalle e historial de la propuesta</value></data>
+<data name="TransferUnknown" xml:space="preserve"><value>Negociación desconocida</value></data>
+<data name="TransferVersion" xml:space="preserve"><value>Versión de oferta</value></data>
+<data name="TransferPendingEvaluation" xml:space="preserve"><value>Pendiente de evaluación</value></data>
+<data name="TransferDateNotResolved" xml:space="preserve"><value>Fecha efectiva no resuelta</value></data>
+<data name="TransferEdit" xml:space="preserve"><value>Editar propuesta</value></data>
+<data name="TransferWithdraw" xml:space="preserve"><value>Retirar oferta</value></data>
+<data name="TransferCancel" xml:space="preserve"><value>Cancelar propuesta</value></data>
+<data name="TransferBackList" xml:space="preserve"><value>Volver a mis ofertas</value></data>
+<data name="TransferRightsWarning" xml:space="preserve"><value>Solo derechos contractuales de cobro entre clubes. No se comparte la propiedad ni la inscripción deportiva del jugador.</value></data>
+<data name="TransferNoActiveRights" xml:space="preserve"><value>No hay derechos vigentes registrados por operaciones ejecutadas. Las cláusulas propuestas se consultan en sus negociaciones. Su activación y la compra posterior de derechos permanecen bloqueadas hasta disponer de un traspaso de origen válido, acuerdos verificables y ejecución económica transaccional.</value></data>
+<data name="TransferSummary" xml:space="preserve"><value>Pago previsto a fecha de propuesta: {0}
+Pagos aplazados: {1}
+Total fijo propuesto: {2}
+Máximo monetario de variables: {3} (contingente)
+Jugadores incluidos: {4}; cláusulas de futura venta/plusvalía: {5}. Sus porcentajes y valores estimados no se suman al dinero.</value></data>
+<data name="TransferState_Draft" xml:space="preserve"><value>Borrador</value></data>
+<data name="TransferState_Sent" xml:space="preserve"><value>Enviada</value></data>
+<data name="TransferState_PendingResponse" xml:space="preserve"><value>Pendiente de respuesta</value></data>
+<data name="TransferState_CounterReceived" xml:space="preserve"><value>Contraoferta recibida</value></data>
+<data name="TransferState_AcceptedBetweenClubs" xml:space="preserve"><value>Aceptada entre clubes</value></data>
+<data name="TransferState_Rejected" xml:space="preserve"><value>Rechazada</value></data>
+<data name="TransferState_Withdrawn" xml:space="preserve"><value>Retirada</value></data>
+<data name="TransferState_Expired" xml:space="preserve"><value>Caducada</value></data>
+<data name="TransferState_PendingPlayers" xml:space="preserve"><value>Pendiente de negociación con jugadores</value></data>
+<data name="TransferState_Cancelled" xml:space="preserve"><value>Cancelada</value></data>
+<data name="Transfer_OfficialAppearances" xml:space="preserve"><value>Partidos oficiales</value></data>
+<data name="Transfer_Starts" xml:space="preserve"><value>Titularidades</value></data>
+<data name="Transfer_Goals" xml:space="preserve"><value>Goles</value></data>
+<data name="Transfer_Assists" xml:space="preserve"><value>Asistencias</value></data>
+<data name="Transfer_CleanSheets" xml:space="preserve"><value>Porterías a cero</value></data>
+<data name="Transfer_InternationalCaps" xml:space="preserve"><value>Internacionalidades (no disponible)</value></data>
+<data name="Transfer_Promotion" xml:space="preserve"><value>Ascenso</value></data>
+<data name="Transfer_Survival" xml:space="preserve"><value>Permanencia</value></data>
+<data name="Transfer_EuropeanQualification" xml:space="preserve"><value>Clasificación europea (no disponible)</value></data>
+<data name="Transfer_LeagueTitle" xml:space="preserve"><value>Título de liga</value></data>
+<data name="Transfer_CupTitle" xml:space="preserve"><value>Título de copa (no disponible)</value></data>
+<data name="Transfer_InternationalTitle" xml:space="preserve"><value>Título internacional (no disponible)</value></data>
+<data name="Transfer_FutureTransferFee" xml:space="preserve"><value>Importe de futura transferencia</value></data>
+<data name="Transfer_ContractualProfit" xml:space="preserve"><value>Plusvalía definida por contrato</value></data>
+<data name="Transfer_Immediate" xml:space="preserve"><value>Inmediata, sujeta a validación</value></data>
+<data name="Transfer_NextWindow" xml:space="preserve"><value>Próxima ventana, pendiente de verificación</value></data>
+<data name="Transfer_FutureDate" xml:space="preserve"><value>Fecha futura solicitada</value></data>
+<data name="TransferUnavailablePlayers" xml:space="preserve"><value>Hay jugadores incluidos que ya no pertenecen al club comprador. Revisa la propuesta antes de guardarla o enviarla</value></data>
+<data name="TransferDropUnavailable" xml:space="preserve"><value>Excluir expresamente de esta revisión los jugadores no disponibles</value></data>
+<data name="TransferAgreedAmount" xml:space="preserve"><value>Importe fijo acordado entre clubes (sin ejecutar)</value></data>
+<data name="TransferFinalSend" xml:space="preserve"><value>Enviar propuesta entre clubes</value></data>
+<data name="TransferCancelSend" xml:space="preserve"><value>Volver sin enviar</value></data>
+<data name="TransferPaymentState_Proposed" xml:space="preserve"><value>Propuesto, sin ejecutar</value></data>
+<data name="OfferHeader" xml:space="preserve"><value>Hacer oferta</value></data>
+<data name="OfferSeller" xml:space="preserve"><value>Vendedor</value></data>
+<data name="OfferBuyer" xml:space="preserve"><value>Comprador</value></data>
+<data name="OfferPlayerResources" xml:space="preserve"><value>Información y recursos</value></data>
+<data name="OfferMoneyHint" xml:space="preserve"><value>Sin separadores de miles</value></data>
+<data name="OfferFinancial" xml:space="preserve"><value>Oferta económica y forma de pago</value></data>
+<data name="OfferPaymentMode" xml:space="preserve"><value>Forma de pago</value></data>
+<data name="OfferSingle" xml:space="preserve"><value>Pago único</value></data>
+<data name="OfferDeferred" xml:space="preserve"><value>Pago aplazado</value></data>
+<data name="OfferPaymentYears" xml:space="preserve"><value>Duración del aplazamiento</value></data>
+<data name="OfferYears" xml:space="preserve"><value>{0} años</value></data>
+<data name="OfferDays" xml:space="preserve"><value>{0} días</value></data>
+<data name="OfferDeferredYears" xml:space="preserve"><value>Pago aplazado a {0} años</value></data>
+<data name="OfferLegacySchedule" xml:space="preserve"><value>Calendario anterior personalizado; se conserva sin cambios</value></data>
+<data name="OfferReplaceSchedule" xml:space="preserve"><value>Sustituir expresamente por calendario automático</value></data>
+<data name="OfferNoFixedPayments" xml:space="preserve"><value>Sin desembolso fijo</value></data>
+<data name="OfferPlayers" xml:space="preserve"><value>Jugadores incluidos</value></data>
+<data name="OfferChoosePlayers" xml:space="preserve"><value>Seleccionar jugadores ▾</value></data>
+<data name="OfferPlayerSearchHint" xml:space="preserve"><value>Busca por nombre o apellidos; puedes seleccionar varios futbolistas</value></data>
+<data name="OfferAddSelected" xml:space="preserve"><value>Confirmar selección</value></data>
+<data name="OfferRemovePlayer" xml:space="preserve"><value>Quitar</value></data>
+<data name="OfferRecordedInterest" xml:space="preserve"><value>Interesa al club vendedor</value></data>
+<data name="OfferInterestHint" xml:space="preserve"><value>Orden alfabético. No existe un registro de interés del vendedor; no se muestran intereses supuestos.</value></data>
+<data name="OfferBonuses" xml:space="preserve"><value>Variables y objetivos</value></data>
+<data name="OfferBonusBuilder" xml:space="preserve"><value>Añadir o editar variable</value></data>
+<data name="OfferBonusPeriod" xml:space="preserve"><value>Periodo</value></data>
+<data name="OfferCurrentSeason" xml:space="preserve"><value>Temporada actual</value></data>
+<data name="OfferPreviousPeriod" xml:space="preserve"><value>Periodo anterior conservado</value></data>
+<data name="OfferMaximumActivations" xml:space="preserve"><value>Máximo {0} activaciones</value></data>
+<data name="OfferEditBonus" xml:space="preserve"><value>Editar</value></data>
+<data name="OfferAddBonus" xml:space="preserve"><value>Añadir / guardar condición</value></data>
+<data name="OfferNoScope" xml:space="preserve"><value>No existe una competición verificada para esta condición.</value></data>
+<data name="OfferPositiveBonus" xml:space="preserve"><value>El importe de la variable debe ser positivo.</value></data>
+<data name="OfferAddBonusFirst" xml:space="preserve"><value>Hay una variable en edición: añádela o guarda sus cambios antes de guardar la propuesta.</value></data>
+<data name="OfferFuture" xml:space="preserve"><value>Futura venta y plusvalía</value></data>
+<data name="OfferSale" xml:space="preserve"><value>Porcentaje de futura venta</value></data>
+<data name="OfferProfit" xml:space="preserve"><value>Porcentaje de futura plusvalía</value></data>
+<data name="OfferEnableSale" xml:space="preserve"><value>Incluir futura venta</value></data>
+<data name="OfferEnableProfit" xml:space="preserve"><value>Incluir futura plusvalía</value></data>
+<data name="OfferSalePercent" xml:space="preserve"><value>Porcentaje de venta</value></data>
+<data name="OfferProfitPercent" xml:space="preserve"><value>Porcentaje de plusvalía</value></data>
+<data name="OfferReplaceClause" xml:space="preserve"><value>Sustituir expresamente la cláusula anterior por una estándar</value></data>
+<data name="OfferSaleExplanation" xml:space="preserve"><value>Primera transferencia futura completada: porcentaje del importe fijo monetario bruto, sin deducciones. No incluye variables ni valoraciones de intercambios. Sin vencimiento temporal adicional.</value></data>
+<data name="OfferProfitExplanation" xml:space="preserve"><value>Primera transferencia futura completada: porcentaje de la diferencia positiva entre su importe fijo monetario bruto y el fijo de adquisición de esta operación. Sin otras deducciones ni vencimiento temporal adicional.</value></data>
+<data name="OfferOptions" xml:space="preserve"><value>Recompra y tanteo</value></data>
+<data name="OfferBuyback" xml:space="preserve"><value>Opción de recompra</value></data>
+<data name="OfferMatching" xml:space="preserve"><value>Derecho de tanteo</value></data>
+<data name="OfferBuybackYears" xml:space="preserve"><value>Duración de recompra</value></data>
+<data name="OfferMatchingYears" xml:space="preserve"><value>Duración del tanteo</value></data>
+<data name="OfferResponseDays" xml:space="preserve"><value>Plazo propuesto de respuesta</value></data>
+<data name="OfferReplaceBuyback" xml:space="preserve"><value>Sustituir expresamente la recompra anterior por condiciones estándar</value></data>
+<data name="OfferReplaceMatching" xml:space="preserve"><value>Sustituir expresamente el tanteo anterior por condiciones estándar</value></data>
+<data name="OfferBuybackHint" xml:space="preserve"><value>Precio fijo y vigencia propuestos. Su ejercicio futuro requerirá acuerdo del jugador e inscripción verificada; nunca se ejecuta automáticamente.</value></data>
+<data name="OfferMatchingHint" xml:space="preserve"><value>Notificación íntegra y verificable de la oferta futura. El plazo se cuenta en días naturales desde recepción; igualar exige todos los importes, plazos y contraprestaciones. No produce un fichaje automático.</value></data>
+<data name="OfferDates" xml:space="preserve"><value>Incorporación y validez</value></data>
+<data name="OfferArrivalDay" xml:space="preserve"><value>Día</value></data>
+<data name="OfferArrivalMonth" xml:space="preserve"><value>Mes</value></data>
+<data name="OfferArrivalYear" xml:space="preserve"><value>Año</value></data>
+<data name="OfferValidity" xml:space="preserve"><value>Validez de la propuesta</value></data>
+<data name="OfferSummary" xml:space="preserve"><value>Resumen de la oferta</value></data>
+<data name="OfferCompactSummary" xml:space="preserve"><value>Fijo: {0} · Jugadores incluidos: {1} · Variables: {2}</value></data>
+<data name="OfferIncomplete" xml:space="preserve"><value>Completa la oferta por secciones. Los errores se comprueban al guardar o enviar.</value></data>
+<data name="OfferNone" xml:space="preserve"><value>Ninguno</value></data>
+<data name="OfferZeroReason" xml:space="preserve"><value>Un importe cero requiere incluir un jugador o declarar expresamente una propuesta gratuita.</value></data>
+<data name="OfferScopeHint" xml:space="preserve"><value>Negociación entre clubes · Sin movimientos de plantilla ni pagos</value></data>
+  <data name="TransferPlayerColumn" xml:space="preserve"><value>Jugador</value></data>
+  <data name="TransferAmountColumn" xml:space="preserve"><value>Importe</value></data>
+  <data name="OfferCustomPlan" xml:space="preserve"><value>Plan personalizado</value></data>
+  <data name="OfferPaymentCount" xml:space="preserve"><value>Número de pagos</value></data>
+  <data name="OfferPaymentsCount" xml:space="preserve"><value>{0} pagos</value></data>
+  <data name="OfferInitialPayment" xml:space="preserve"><value>Inicial</value></data>
+  <data name="OfferPaymentNumber" xml:space="preserve"><value>Pago {0}</value></data>
+  <data name="OfferAtFormalization" xml:space="preserve"><value>Formalización</value></data>
+  <data name="OfferMonthsAfter" xml:space="preserve"><value>meses desde formalización</value></data>
+  <data name="OfferAfterMonths" xml:space="preserve"><value>{0} meses</value></data>
+  <data name="OfferLegacyAmountMismatch" xml:space="preserve"><value>El calendario anterior no coincide con el nuevo importe. Reemplázalo expresamente para cambiar el reparto.</value></data>
+  <data name="OfferPaymentTotals" xml:space="preserve"><value>Total: {0} · Anticipo: {1} · Pendiente: {2} · Pagos efectivos: {3}</value></data>
+  <data name="OfferFormalizationHint" xml:space="preserve"><value>Fechas orientativas desde la incorporación propuesta; el pago inicial solo se ejecutará al formalizar. Si la ventana no está resuelta, el calendario deberá confirmarse entonces. Los porcentajes se pueden ajustar; el último absorbe el redondeo.</value></data>
+  <data name="OfferFinancialPending" xml:space="preserve"><value>Viabilidad pendiente: compromisos futuros, situación económica completa y preferencias del vendedor. Registrar o enviar no reserva ni descuenta fondos.</value></data>
+  <data name="OfferFinancial_Pending" xml:space="preserve"><value>Pendiente de datos</value></data>
+  <data name="OfferFinancial_ConsistentWithKnownData" xml:space="preserve"><value>Compatible con el importe conocido; no es una aprobación</value></data>
+  <data name="OfferFinancial_ExceedsKnownAmount" xml:space="preserve"><value>Supera el importe conocido; requiere revisión</value></data>
+  <data name="OfferPickerTitle" xml:space="preserve"><value>Incluir jugadores en la oferta</value></data>
+  <data name="OfferPickerSubtitle" xml:space="preserve"><value>Selecciona futbolistas de tu club para incluirlos en la negociación.</value></data>
+  <data name="OfferFilterAll" xml:space="preserve"><value>Todas las posiciones</value></data>
+  <data name="OfferFilterGoalkeepers" xml:space="preserve"><value>Porteros</value></data>
+  <data name="OfferFilterDefenders" xml:space="preserve"><value>Defensas</value></data>
+  <data name="OfferFilterMidfielders" xml:space="preserve"><value>Centrocampistas</value></data>
+  <data name="OfferFilterForwards" xml:space="preserve"><value>Delanteros</value></data>
+  <data name="OfferFilterAllTeams" xml:space="preserve"><value>Todos los equipos</value></data>
+  <data name="OfferFilterFirst" xml:space="preserve"><value>Primer equipo</value></data>
+  <data name="OfferFilterReserve" xml:space="preserve"><value>Filial</value></data>
+  <data name="OfferFilterAcademy" xml:space="preserve"><value>Cantera</value></data>
+  <data name="OfferPlayerAge" xml:space="preserve"><value>{0} años</value></data>
+  <data name="OfferSelectedCount" xml:space="preserve"><value>{0} jugadores seleccionados</value></data>
+  <data name="OfferTogglePlayer" xml:space="preserve"><value>Seleccionar o deseleccionar futbolista</value></data>
+  <data name="OfferNoCandidates" xml:space="preserve"><value>No hay futbolistas que coincidan con los filtros.</value></data>
+  <data name="OfferExchangeEligibilityHint" xml:space="preserve"><value>Se verifica pertenencia al club. Elegibilidad competitiva y consentimiento pendientes; incluir un jugador no autoriza un traspaso.</value></data>
+  <data name="OfferPreviousValue" xml:space="preserve"><value>valor anterior</value></data>
+  <data name="OfferOneYear" xml:space="preserve"><value>{0} año</value></data>
+  <data name="OfferManyYears" xml:space="preserve"><value>{0} años</value></data>
+  <data name="OfferOneDay" xml:space="preserve"><value>{0} día</value></data>
+  <data name="OfferManyDays" xml:space="preserve"><value>{0} días</value></data>
+  <data name="OfferBuybackDescription" xml:space="preserve"><value>Permite al club vendedor recuperar al futbolista por un precio pactado durante un periodo determinado.</value></data>
+  <data name="OfferMatchingDescription" xml:space="preserve"><value>Permite al club vendedor igualar una futura oferta por el futbolista.</value></data>
+  <data name="OfferClauseOn" xml:space="preserve"><value>Cláusula activada</value></data>
+  <data name="OfferClauseOff" xml:space="preserve"><value>Cláusula desactivada</value></data>
+  <data name="OfferClauseAbsent" xml:space="preserve"><value>No incluida</value></data>
+  <data name="OfferPreviousConditions" xml:space="preserve"><value>Condiciones anteriores conservadas. Consulta la ayuda para ver el detalle.</value></data>
+  <data name="OfferClauseIncomplete" xml:space="preserve"><value>Completa las condiciones para incluir esta cláusula.</value></data>
+  <data name="OfferBuybackPositive" xml:space="preserve"><value>Introduce un precio de recompra mayor que cero.</value></data>
+  <data name="OfferBuybackDynamic" xml:space="preserve"><value>El club vendedor podrá ejercer la recompra por {0} durante {1}, conforme a las condiciones propuestas.</value></data>
+  <data name="OfferMatchingDynamic" xml:space="preserve"><value>El club vendedor podrá igualar una futura oferta durante {0} y dispondrá de {1} para responder desde su notificación válida.</value></data>
+  <data name="OfferBuybackHelp" xml:space="preserve"><value>Ayuda de recompra</value></data>
+  <data name="OfferMatchingHelp" xml:space="preserve"><value>Ayuda de tanteo</value></data>
+  <data name="OfferArrivalHelp" xml:space="preserve"><value>Ayuda sobre incorporación</value></data>
+  <data name="OfferHelpClose" xml:space="preserve"><value>Cerrar ayuda</value></data>
+  <data name="OfferArrivalQuestion" xml:space="preserve"><value>¿Cuándo quieres incorporar al futbolista?</value></data>
+  <data name="OfferArrivalSoon" xml:space="preserve"><value>Lo antes posible</value></data>
+  <data name="OfferArrivalSoonDescription" xml:space="preserve"><value>Incorporación cuando el fichaje pueda completarse y las reglas deportivas lo permitan.</value></data>
+  <data name="OfferArrivalNext" xml:space="preserve"><value>Próxima ventana de fichajes</value></data>
+  <data name="OfferArrivalNextDescription" xml:space="preserve"><value>Incorporación durante el siguiente periodo habilitado para inscripciones.</value></data>
+  <data name="OfferArrivalFuture" xml:space="preserve"><value>Incorporación futura</value></data>
+  <data name="OfferArrivalFutureDescription" xml:space="preserve"><value>Acuerdo para incorporar al futbolista en una fecha posterior.</value></data>
+  <data name="OfferFutureDateLabel" xml:space="preserve"><value>Fecha solicitada de incorporación</value></data>
+  <data name="OfferInvalidArrivalDate" xml:space="preserve"><value>Elige una fecha válida que no sea anterior a la fecha de la carrera.</value></data>
+  <data name="OfferArrivalDateSummary" xml:space="preserve"><value>Incorporación solicitada para el {0}, pendiente de validación reglamentaria.</value></data>
+  <data name="OfferRegistrationPending" xml:space="preserve"><value>Validación reglamentaria pendiente. No se presuponen ventanas de fichajes ni autorizaciones de inscripción.</value></data>
+  <data name="OfferValidityQuestion" xml:space="preserve"><value>¿Cuánto tiempo tendrá el club vendedor para responder?</value></data>
+  <data name="OfferValidityDynamic" xml:space="preserve"><value>Vigencia prevista: {0} desde el envío. Caducidad calculada: {1}.</value></data>
+  <data name="OfferValidityCompact" xml:space="preserve"><value>{0} · Caduca el {1}</value></data>
+  <data name="OfferValidityContext" xml:space="preserve"><value>Se prevé el envío en la fecha actual de la carrera. La caducidad se valida al enviar y es independiente del plazo de tanteo.</value></data>
+  <data name="OfferValidityPreserved" xml:space="preserve"><value>Caducidad anterior conservada. Elegir otro plazo la recalcula desde la fecha actual de la carrera; no modifica ofertas históricas.</value></data>
+  <data name="OfferAdditionalSummary" xml:space="preserve"><value>Condiciones adicionales</value></data>
+  <data name="OfferAdditionalIncomplete" xml:space="preserve"><value>Completa los campos pendientes para obtener el resumen conjunto.</value></data>
+  <data name="OfferArrivalLabel" xml:space="preserve"><value>Incorporación</value></data>
+  <data name="OfferValidityRemaining" xml:space="preserve"><value>Vigencia restante: {0}. Caducidad conservada: {1}.</value></data>
+  <data name="ReleaseContractHeading" xml:space="preserve"><value>Situación contractual</value></data>
+  <data name="ReleaseClauseLabel" xml:space="preserve"><value>Cláusula de rescisión</value></data>
+  <data name="ReleaseUnknown" xml:space="preserve"><value>Desconocida</value></data>
+  <data name="ReleaseAbsent" xml:space="preserve"><value>Sin cláusula</value></data>
+  <data name="ReleaseNotApplicable" xml:space="preserve"><value>No vigente</value></data>
+  <data name="ReleasePendingConditions" xml:space="preserve"><value>Aplicabilidad pendiente</value></data>
+  <data name="ReleaseSource_Unknown" xml:space="preserve"><value>Información no confirmada</value></data>
+  <data name="ReleaseSource_OwnContract" xml:space="preserve"><value>Información contractual del propio club</value></data>
+  <data name="ReleaseSource_PublicConfirmed" xml:space="preserve"><value>Información pública confirmada</value></data>
+  <data name="ReleaseState_Unknown" xml:space="preserve"><value>Desconocida</value></data>
+  <data name="ReleaseState_Absent" xml:space="preserve"><value>Ausencia confirmada</value></data>
+  <data name="ReleaseState_Known" xml:space="preserve"><value>Cláusula conocida</value></data>
+  <data name="ReleaseState_NotApplicable" xml:space="preserve"><value>No aplicable en el contexto consultado</value></data>
+  <data name="ReleaseComparisonPending" xml:space="preserve"><value>Introduce un importe válido para comparar con la información contractual conocida.</value></data>
+  <data name="ReleaseNotice_Unknown" xml:space="preserve"><value>No dispones de información confirmada sobre la cláusula de rescisión.</value></data>
+  <data name="ReleaseNotice_Absent" xml:space="preserve"><value>No consta una cláusula de rescisión aplicable en el contrato.</value></data>
+  <data name="ReleaseNotice_NotApplicable" xml:space="preserve"><value>La cláusula registrada no está vigente o no resulta aplicable en el contexto consultado.</value></data>
+  <data name="ReleaseNotice_PendingConditions" xml:space="preserve"><value>El importe es conocido, pero quedan condiciones o datos por verificar. No se presupone que la cláusula pueda ejercerse.</value></data>
+  <data name="ReleaseNotice_CurrencyMismatch" xml:space="preserve"><value>La moneda no coincide: no se compara el importe ni se realizan conversiones implícitas.</value></data>
+  <data name="ReleaseNotice_Below" xml:space="preserve"><value>Puedes negociar el traspaso con el club vendedor. La cláusula de rescisión conocida es de {0}.</value></data>
+  <data name="ReleaseNotice_AtOrAbove" xml:space="preserve"><value>La oferta alcanza o supera el importe de la cláusula conocida ({0}). Esto no implica aceptación automática ni ejecución de la rescisión.</value></data>
+<data name="NavPage_ClubPersonnel" xml:space="preserve"><value>Personal</value></data>
+<data name="ClubDelegationsFirstTeam" xml:space="preserve"><value>Primer equipo</value></data>
+<data name="ClubDelegationsTitle" xml:space="preserve"><value>Delegaciones</value></data>
+<data name="ClubDelegationsNotice" xml:space="preserve"><value>Selecciona un equipo y guarda los cambios de cada responsabilidad. Las modalidades de entrenamiento configuran el plan; la ejecución autónoma sigue pendiente.</value></data>
+<data name="ClubDelegationsPending" xml:space="preserve"><value>Mercado, ojeo, economía, área comercial e instalaciones: delegación pendiente. La gestión de cantera conserva sus modalidades directa y delegada.</value></data>
+<data name="ClubDelegationManager" xml:space="preserve"><value>Yo (mánager)</value></data>
+<data name="ClubDelegationPersonal" xml:space="preserve"><value>Personal</value></data>
+<data name="ClubDelegationSupervised" xml:space="preserve"><value>Supervisada</value></data>
+<data name="ClubDelegationFull" xml:space="preserve"><value>Completa</value></data>
+<data name="ClubDelegationSave" xml:space="preserve"><value>Guardar</value></data>
+<data name="TrainingDelegationMode_PersonalSupport" xml:space="preserve"><value>Personal con apoyo</value></data>
 </root>

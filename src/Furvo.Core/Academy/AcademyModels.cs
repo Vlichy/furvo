@@ -9,7 +9,10 @@ public sealed record AcademyStaff(Guid Id,Guid TeamId,string Name,string Role,st
 /// <summary>Miembros propios y demarcaciones de referencia; nunca guarda coordenadas heredadas.</summary>
 public sealed record AcademyAssignments(PlanRoster Roster,IReadOnlyDictionary<string,PlayerRole> Roles);
 public sealed record AcademyTeamState(AcademyTeam Team,AcademyStaff Coach,AcademyManagement Management,AcademyTacticMode TacticMode,int Revision,
-    IReadOnlyDictionary<TacticalPlanKind,AcademyAssignments> Rosters,TacticalPlanBook? OwnBook,TacticalSettings Common);
+    IReadOnlyDictionary<TacticalPlanKind,AcademyAssignments> Rosters,TacticalPlanBook? OwnBook,TacticalSettings Common)
+{
+    public AcademyManagement EffectiveManagement => Coach.LinkState == "Institutional" ? Management : AcademyManagement.Direct;
+}
 /// <summary>Relación unidireccional: solo el esquema se hereda; los miembros siempre pertenecen al equipo inferior.</summary>
 public static class AcademyTactics
 {

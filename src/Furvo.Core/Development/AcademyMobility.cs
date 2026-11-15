@@ -25,3 +25,6 @@ public sealed class ConfiguredAcademyEligibility(AcademyRule rule,Func<Eligibili
         return new(reasons.Count==0,reasons,rule.Source+"/"+rule.VerifiedAt.ToString("yyyy-MM-dd"));
     }
 }
+
+/// <summary>Proyección de movimiento ejecutado, distinta de una recomendación pendiente.</summary>
+public sealed record AcademyMovementRecord(long Id,DateOnly Date,MobilityRequest Request,string Evidence);

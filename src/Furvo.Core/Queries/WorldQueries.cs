@@ -18,7 +18,7 @@ public sealed record VisibleAttribute(string Code, int Value);
 /// <summary>Colección de una categoría visible; nunca se construye para Hidden.</summary>
 public sealed record VisibleAttributeGroup(AttributeCategory Category, IReadOnlyList<VisibleAttribute> Values);
 /// <summary>Ficha pública completa sin entidades ni diccionarios de atributos internos.</summary>
-public sealed record PlayerDetails(PlayerSummary Player, ClubSummary Club, DateOnly? BirthDate,
+public sealed record PlayerDetails(PlayerSummary Player, ClubSummary? Club, DateOnly? BirthDate,
     IReadOnlyList<PlayerRole> SecondaryPositions, IReadOnlyList<VisibleAttributeGroup> AttributeGroups);
 
 /// <summary>Puerto de consultas de solo lectura que puede consumir la presentación sin conocer SQL.</summary>
@@ -123,7 +123,7 @@ public sealed class WorldQueries : IWorldQueries
             ?? throw new KeyNotFoundException("Futbolista desconocido.");
         return ProjectPlayer(player,club,ReferenceDate);
     }
-    public static PlayerDetails ProjectPlayer(Player player,ClubSummary club,DateOnly date)
+    public static PlayerDetails ProjectPlayer(Player player,ClubSummary? club,DateOnly date)
     {
         var visible = player.Attributes.VisibleValues;
         // Una ficha de consulta incompleta no debe aparentar que contiene los 51 atributos aprobados.

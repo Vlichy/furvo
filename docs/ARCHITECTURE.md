@@ -160,3 +160,8 @@ Catálogo, reglas, inventario de archivos, migraciones y límites: [Sistema tác
 Equipo incorpora Plantilla, Táctica, Entrenamiento, Análisis y Cantera; Club añade Instalaciones y Tecnología deportiva. Hay planificación persistente, grupos, configuración de delegación, dos capitanes, movilidad con normativa explícita e informes de datos existentes. La ejecución temporal, normativa incompleta, personal especializado y compras sin aprobación permanecen bloqueados o preparados, sin simular su disponibilidad.
 
 [Informe, archivos, migraciones y límites](SPORTS_DELIVERY.md) · [Fuentes](SPORTS_RESEARCH.md).
+
+
+## Información contractual de rescisión
+
+Contract mantiene una cláusula opcional ligada a su ContractId; null histórico conserva desconocimiento. El módulo optativo ContractRelease001 persiste importes en céntimos con FK y reglas de integridad, sin modificar el esquema 4 de las publicaciones. La proyección ContractInformation filtra disponibilidad por club propietario o confirmación pública documentada antes de entregar DTO a Godot. Consultar no migra ni escribe. Rescisión y negociación entre clubes son procedimientos distintos; solo se prepara un puerto de comprobaciones futuras. [Detalle y validación](MARKET_RELEASE_INFORMATION.md).

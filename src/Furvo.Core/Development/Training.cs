@@ -11,7 +11,7 @@ public sealed record TrainingStaff(Guid Id,string Name,Guid Team,IReadOnlyList<T
 /// <summary>Candidato público para planificar: identidad y demarcaciones, sin atributos internos.</summary>
 public sealed record TrainingCandidate(PlayerId Id,string Name,DateOnly? BirthDate,PlayerPositions? Positions);
 public sealed record TrainingGroup(Guid Id,string Name,IReadOnlyList<PlayerId> Members,string Objective,Guid? Responsible);
-public enum TrainingDelegationMode { Delegated=1,Mixed=2 }
+public enum TrainingDelegationMode { Delegated=1,Mixed=2,PersonalSupport=3 }
 /// <summary>La ausencia de asignación expresa control manual; las partidas anteriores conservan delegación completa por defecto.</summary>
 public sealed record TrainingDelegation(TrainingResponsibility Area,Guid? Responsible,TrainingDelegationMode Mode=TrainingDelegationMode.Delegated);
 public sealed record TrainingTarget(TrainingScope Scope,PlayerId? Player=null,PlayerRole? Position=null,Guid? Group=null,IReadOnlyList<PlayerId>? Excluded=null);
@@ -26,7 +26,7 @@ public sealed record TrainingSession(Guid Id,Guid Team,DateOnly Date,TimeOnly St
 public sealed record TrainingPlan(Guid Team,int Revision,IReadOnlyList<TrainingSession> Sessions,IReadOnlyList<TrainingGroup> Groups,IReadOnlyList<TrainingDelegation> Delegations,bool RequiresReview=false,IReadOnlyList<TrainingDayPlan>? Days=null,IReadOnlyList<LegacyTrainingRest>? LegacyRests=null)
 {
     public static TrainingPlan Empty(Guid team)=>new(team,0,Array.Empty<TrainingSession>(),Array.Empty<TrainingGroup>(),Array.Empty<TrainingDelegation>());
-    public TrainingManagement Management=>Delegations.Count==0?TrainingManagement.Manual:Delegations.All(d=>d.Mode==TrainingDelegationMode.Delegated)&&Delegations.Select(d=>d.Area).Distinct().Count()==Enum.GetValues<TrainingResponsibility>().Length?TrainingManagement.Delegated:TrainingManagement.Mixed;
+    public TrainingManagement Management=>Delegations.All(d=>d.Mode==TrainingDelegationMode.PersonalSupport)?TrainingManagement.Manual:Delegations.All(d=>d.Mode==TrainingDelegationMode.Delegated)&&Delegations.Select(d=>d.Area).Distinct().Count()==Enum.GetValues<TrainingResponsibility>().Length?TrainingManagement.Delegated:TrainingManagement.Mixed;
 }
 public sealed record TrainingExercise(string Code,TrainingArea Area,IReadOnlyList<string> Attributes,decimal LoadFactor,bool GoalkeepersOnly=false);
 /// <summary>Catálogo de ejercicios; parámetros de juego v0 experimentales, sin pretensión médica o ganancias instantáneas.</summary>

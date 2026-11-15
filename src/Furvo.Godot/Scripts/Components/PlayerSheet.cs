@@ -8,7 +8,7 @@ namespace Furvo.Presentation.Components;
 /// <summary>Presentación compacta de la ficha pública; recibe solo PlayerDetails y no consulta ni modifica el mundo.</summary>
 public partial class PlayerSheet : VBoxContainer
 {
-    public PlayerSheet(PlayerDetails details)
+    public PlayerSheet(PlayerDetails details,Control? supplementary=null,PlayerContractInfo? contract=null)
     {
         Name = "PlayerSheet";
         SizeFlagsHorizontal = SizeFlags.ExpandFill;
@@ -22,6 +22,8 @@ public partial class PlayerSheet : VBoxContainer
         var content = new VBoxContainer { Name = "PlayerScrollableContent", SizeFlagsHorizontal = SizeFlags.ExpandFill };
         content.AddThemeConstantOverride("separation", 14);
         overview.AddChild(content);
+        if(contract is not null)content.AddChild(new PlayerContractPanel(contract));
+        if(supplementary is not null)content.AddChild(supplementary);
         content.AddChild(columns);
         columns.AddChild(new AttributeSection(details.AttributeGroups.Single(g => g.Category == AttributeCategory.Technical)));
         columns.AddChild(new AttributeSection(details.AttributeGroups.Single(g => g.Category == AttributeCategory.Mental)));
@@ -69,7 +71,7 @@ public partial class PlayerSheet : VBoxContainer
         identity.AddThemeConstantOverride("separation", 2);
         line.AddChild(identity);
         identity.AddChild(Text("PlayerName", details.Player.Name, 25, "e5ecf5"));
-        identity.AddChild(Text("PlayerClub", details.Club.Name, 15, "f1b96b"));
+        identity.AddChild(Text("PlayerClub", details.Club?.Name??UiText.Get("NotAvailable"), 15, "f1b96b"));
         var facts = new GridContainer { Columns = 2, SizeFlagsHorizontal = SizeFlags.ExpandFill };
         facts.AddThemeConstantOverride("h_separation", 20);
         facts.AddThemeConstantOverride("v_separation", 2);

@@ -71,9 +71,11 @@ public sealed record Contract
     public PlayerId PlayerId { get; }
     public DateOnly? StartDate { get; }
     public DateOnly? EndDate { get; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public ContractReleaseClause? ReleaseClause {get;}
 
     /// <summary>Exige identidades válidas y fechas completas y ordenadas, salvo un intervalo histórico totalmente desconocido.</summary>
-    public Contract(ContractId id, ClubId clubId, PlayerId playerId, DateOnly? startDate = null, DateOnly? endDate = null)
+    public Contract(ContractId id, ClubId clubId, PlayerId playerId, DateOnly? startDate = null, DateOnly? endDate = null,ContractReleaseClause? releaseClause=null)
     {
         Id = DomainRules.Id(id, id.Value);
         ClubId = DomainRules.Id(clubId, clubId.Value);
@@ -81,6 +83,8 @@ public sealed record Contract
         DomainRules.Dates(startDate, endDate);
         StartDate = startDate;
         EndDate = endDate;
+        if(releaseClause is not null)ContractReleaseRules.Validate(releaseClause,this);
+        ReleaseClause=releaseClause;
     }
 }
 

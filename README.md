@@ -157,3 +157,37 @@ Catálogo, reglas, inventario de archivos, migraciones y límites: [Sistema tác
 Equipo incorpora Plantilla, Táctica, Entrenamiento, Análisis y Cantera; Club añade Instalaciones y Tecnología deportiva. Hay planificación persistente, grupos, configuración de delegación, dos capitanes, movilidad con normativa explícita e informes de datos existentes. La ejecución temporal, normativa incompleta, personal especializado y compras sin aprobación permanecen bloqueados o preparados, sin simular su disponibilidad.
 
 [Informe, archivos, migraciones y límites](docs/SPORTS_DELIVERY.md) · [Fuentes](docs/SPORTS_RESEARCH.md).
+
+
+## Mercado: búsqueda y consulta
+
+Mercado → Buscar jugadores consulta los futbolistas ya almacenados en la carrera, incluidos equipos inferiores. Permite filtros combinados, ordenación y fichas públicas sin modificar datos. La gestión de contratos permanece en Equipo → Plantilla; negociaciones, ojeo, cesiones y agentes siguen pendientes. [Informe y validación](docs/MARKET_DELIVERY_1.md).
+
+El buscador normaliza tildes y espacios y permite rangos de atributos por teclado. Configurar columnas selecciona y ordena cualquiera de los 51 atributos públicos, con preferencias del usuario independientes por posición que se conservan al reiniciar. [Guía de columnas](docs/MARKET_SEARCH_COLUMNS.md).
+
+Mercado excluye automáticamente al club dirigido, incluidos filiales y juveniles. Los jugadores propios continúan en Equipo → Plantilla y Cantera. [Regla, pruebas y compatibilidad](docs/MARKET_EXTERNAL_PLAYERS.md).
+
+
+## Propuestas entre clubes
+
+La ficha externa permite Hacer oferta con dinero, plazos, jugadores propios, variables y cláusulas opcionales. Mis ofertas conserva borradores, envío, retirada e historial. No existen respuestas automáticas ni ejecución de fichajes/pagos; la adquisición de derechos queda preparada y bloqueada por sus dependencias. [Alcance real y validación](docs/MARKET_CLUB_NEGOTIATIONS.md).
+
+
+## Mercado — Hacer oferta (05/11/2026)
+
+Pantalla única con secciones plegables, importes limitados y validados, pagos automáticos, selector buscable y cláusulas estándar. Compilación Debug/Release sin errores ni advertencias; 761 pruebas superadas en cada configuración. Recorrido nativo Godot en 1280×720, 1600×900 y 1920×1080. Publicaciones iniciales intactas; sin migración SQL adicional. [Informe, archivos y límites](docs/MARKET_OFFER_REDESIGN.md).
+
+
+## Mercado — Pagos y jugadores incluidos (06/11/2026)
+
+Calendarios de 2/3/4 pagos con reparto y meses editables, conservación expresa de calendarios anteriores y selector visual con filtros deportivos y selección transitoria. 30 casos nuevos; 791 pruebas superadas en Debug y Release. Comprobación nativa en tres resoluciones. [Informe, compatibilidad y límites](docs/MARKET_PAYMENTS_PLAYER_PICKER.md). Sin migración SQL ni cambios del mundo inicial.
+
+
+## Mercado — Tarjetas de condiciones (06/11/2026)
+
+Recompra, tanteo, incorporación y validez con controles visuales, ayudas y resúmenes dinámicos; opciones anteriores conservadas. 24 pruebas nuevas; 815 superadas en Debug y Release. Comprobación nativa en tres resoluciones. [Informe y archivos](docs/MARKET_CONDITION_CARDS.md). Sin cambios de Core, esquemas o publicaciones iniciales.
+
+
+## Mercado — Información de rescisión (06/11/2026)
+
+Cláusula vinculada a Contract, consulta pública filtrada, ficha propia y avisos de oferta. Extensión ContractRelease001 optativa, sin rellenar contratos antiguos ni modificar publicaciones. 22 pruebas nuevas; 837 superadas en Debug y Release. Godot comprobado en tres resoluciones. [Informe y compatibilidad](docs/MARKET_RELEASE_INFORMATION.md). La ejecución de rescisión continúa pendiente.

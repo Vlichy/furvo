@@ -61,7 +61,7 @@ public sealed partial class CareerCreationTests
     }
     [Fact] public void AcademyQueriesExposeExactlyFiftyOneVisibleAttributes()
     {
-        var (_,file,_)=TacticalCareer();var store=new SqliteAcademyStore(file);var state=store.List()[0];var hidden=PlayerAttributeCatalog.All.Where(d=>d.IsHidden).Select(d=>d.Code).ToHashSet();foreach(var p in store.Details(state.Team.Id)){Assert.Equal(51,p.AttributeGroups.Sum(g=>g.Values.Count));Assert.All(p.AttributeGroups,g=>Assert.NotEqual(AttributeCategory.Hidden,g.Category));Assert.All(p.AttributeGroups.SelectMany(g=>g.Values),v=>Assert.DoesNotContain(v.Code,hidden));Assert.Equal(state.Team.Name,p.Club.Name);}
+        var (_,file,_)=TacticalCareer();var store=new SqliteAcademyStore(file);var state=store.List()[0];var hidden=PlayerAttributeCatalog.All.Where(d=>d.IsHidden).Select(d=>d.Code).ToHashSet();foreach(var p in store.Details(state.Team.Id)){Assert.Equal(51,p.AttributeGroups.Sum(g=>g.Values.Count));Assert.All(p.AttributeGroups,g=>Assert.NotEqual(AttributeCategory.Hidden,g.Category));Assert.All(p.AttributeGroups.SelectMany(g=>g.Values),v=>Assert.DoesNotContain(v.Code,hidden));Assert.Equal(state.Team.Name,p.Club?.Name);}
     }
     [Fact] public void AcademyRejectsForeignPlayerAndStalePolicyWithoutWrites()
     {

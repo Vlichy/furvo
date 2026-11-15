@@ -419,3 +419,53 @@ Borradores protegidos por carrera/equipo, eliminación por ID sin cascadas, inst
 ## Cierre base de Entrenamiento — Entrega 2 (04/11/2026)
 
 Modelo TrainingAvailability, almacén SqliteTrainingAvailabilityStore, migración TrainingAvailability001_Initial, panel Main.TrainingAvailability y 30 pruebas nuevas. Integración en planificación y consumidor existente; textos y prueba nativa ampliados. [Inventario detallado y cierre](TRAINING_BASE_CLOSURE.md). Sin cambios en las publicaciones iniciales ni dependencias nuevas.
+
+
+## Cantera — Seguimiento individual e historial — Entrega 1 (04/11/2026)
+
+Observaciones humanas con permisos y revisión, migración AcademyFollowup001_Initial, consultas de informes e historial existentes y contexto visual por carrera/equipo. Presentador de informes compartido con Análisis, sin duplicar almacenamiento. [Inventario completo, compatibilidad y resultados](ACADEMY_FOLLOWUP_DELIVERY_1.md). No se cambia el catálogo de 68 equipos ni se habilitan movimientos nuevos.
+
+
+## Mercado — Entrega 1 (04/11/2026)
+
+Consulta global de carrera, filtros y orden en Core; lector SQLite de solo lectura; buscador Godot y ficha compartida; contexto por carrera y 35 casos nuevos. Sin migraciones, nuevas dependencias ni operaciones económicas. [Inventario completo y límites](MARKET_DELIVERY_1.md). Se preservan los cambios previos de Cantera.
+
+
+## Mercado — Filtros y columnas por posición (04/11/2026)
+
+Normalización de nombres, rangos por teclado, editor de los 51 atributos públicos y preferencias del usuario por posición. Una columna por atributo y orden numérico; DataTable reutilizado con desplazamiento horizontal. Sin cambios en SQLite ni otros módulos. [Archivos, preferencias, predeterminados y límites](MARKET_SEARCH_COLUMNS.md).
+
+
+## Mercado — Exclusión del club dirigido (04/11/2026)
+
+Exclusión previa a la proyección pública en SqliteMarketQueries, guardas de búsqueda/ID en Core y contexto de Mercado por carrera/club. Sin cambios en el sistema de columnas ni consultas propias de Plantilla/Cantera. [Archivos, pruebas y límite del empleo inmutable](MARKET_EXTERNAL_PLAYERS.md).
+
+
+## Mercado — Propuestas entre clubes (05/11/2026)
+
+Dominio TransferNegotiation, almacén SqliteTransferStore, migración Transfer001_Negotiations, formulario Main.Transfers y confirmación TransferSendWindow. Historial inmutable, referencias y versiones por carrera; respuestas solo como integración sin proveedor activo. [Archivos, fases, pruebas y bloqueos de derechos/economía](MARKET_CLUB_NEGOTIATIONS.md). Sin nuevas dependencias ni cambios de publicaciones iniciales.
+
+
+## Mercado — Hacer oferta (05/11/2026)
+
+Pantalla única con secciones plegables, importes limitados y validados, pagos automáticos, selector buscable y cláusulas estándar. Compilación Debug/Release sin errores ni advertencias; 761 pruebas superadas en cada configuración. Recorrido nativo Godot en 1280×720, 1600×900 y 1920×1080. Publicaciones iniciales intactas; sin migración SQL adicional. [Informe, archivos, compatibilidad y evidencia](MARKET_OFFER_REDESIGN.md).
+
+
+## Mercado — Tabla de Negociaciones (06/11/2026)
+
+Columnas compartidas y proporcionales, importes alineados con cifras tabulares, filtro compacto y tooltips. 761 pruebas Debug y 761 Release superadas; recorrido nativo con 1/8/150 filas en tres resoluciones. [Archivos y evidencia](MARKET_NEGOTIATIONS_LAYOUT.md). Sin cambios de dominio ni persistencia.
+
+
+## Mercado — Pagos y jugadores incluidos (06/11/2026)
+
+Calendarios de 2/3/4 pagos con reparto y meses editables, conservación expresa de calendarios anteriores y selector visual con filtros deportivos y selección transitoria. 30 casos nuevos; 791 pruebas superadas en Debug y Release. Comprobación nativa en tres resoluciones. [Archivos, pruebas y límites](MARKET_PAYMENTS_PLAYER_PICKER.md). Sin migración SQL ni cambios del mundo inicial.
+
+
+## Mercado — Tarjetas de condiciones (06/11/2026)
+
+Recompra, tanteo, incorporación y validez con controles visuales, ayudas y resúmenes dinámicos; opciones anteriores conservadas. 24 pruebas nuevas; 815 superadas en Debug y Release. Comprobación nativa en tres resoluciones. [Informe, archivos y evidencia](MARKET_CONDITION_CARDS.md). Sin cambios de Core, esquemas o publicaciones iniciales.
+
+
+## Mercado — Información de rescisión (06/11/2026)
+
+Cláusula vinculada a Contract, consulta pública filtrada, ficha propia y avisos de oferta. Extensión ContractRelease001 optativa, sin rellenar contratos antiguos ni modificar publicaciones. 22 pruebas nuevas; 837 superadas en Debug y Release. Godot comprobado en tres resoluciones. [Archivos, migración y evidencia](MARKET_RELEASE_INFORMATION.md). La ejecución de rescisión continúa pendiente.

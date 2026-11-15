@@ -112,7 +112,7 @@ func check_career_workspace(screen: Node, employed: bool) -> bool:
         return false
     if not require(find_named(screen,"CareerContinue").disabled and not find_named(screen,"CareerContinue").tooltip_text.is_empty(),"Continuar simula avance o no explica el bloqueo"):
         return false
-    if not require(find_named(screen,"NavArea_Market").disabled and find_named(screen,"NavArea_Competition").disabled and find_named(screen,"NavArea_Team").disabled != employed,"Permisos visuales de carrera incorrectos"):
+    if not require(find_named(screen,"NavArea_Market").disabled != employed and find_named(screen,"NavArea_Competition").disabled and find_named(screen,"NavArea_Team").disabled != employed,"Permisos visuales de carrera incorrectos"):
         return false
     for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
         root.size = resolution
@@ -212,11 +212,27 @@ func check_career_workspace(screen: Node, employed: bool) -> bool:
             return false
         find_named(screen,"BackSquad").emit_signal("pressed")
         await process_frame
+        if OS.get_cmdline_user_args().has("--club-delegations-only"):
+            return await check_club_delegations(screen)
+        if OS.get_cmdline_user_args().has("--academy-followup-only"):
+            if not await check_academy(screen):
+                return false
+            return await check_academy_followup(screen)
+        if OS.get_cmdline_user_args().has("--transfer-only"):
+            return await check_transfers(screen)
+        if OS.get_cmdline_user_args().has("--market-exclusion-only"):
+            return await check_market_exclusion(screen)
+        if OS.get_cmdline_user_args().has("--market-columns-only"):
+            return await check_market_columns(screen)
+        if OS.get_cmdline_user_args().has("--market-only"):
+            return await check_market(screen)
         if OS.get_cmdline_user_args().has("--analysis-only"):
             return await check_sports_modules(screen)
         if not await check_lineup(screen):
             return false
         if not await check_academy(screen):
+            return false
+        if not await check_academy_followup(screen):
             return false
         if not await check_advanced_tactics(screen):
             return false
@@ -253,6 +269,88 @@ func check_career_workspace(screen: Node, employed: bool) -> bool:
             return false
     print("FURVO_WORKSPACE_OK: "+("contratado" if employed else "en paro")+", seis áreas, permisos, consulta, contrato y fecha estable")
     return true
+
+func check_club_delegations(screen: Node) -> bool:
+    find_named(screen, "NavArea_Club").emit_signal("pressed")
+    await process_frame
+    find_named(screen, "NavPage_ClubPersonnel").emit_signal("pressed")
+    await process_frame
+    var grid = find_named(screen, "ClubDelegationsGrid")
+    if not require(grid != null and grid.get_child_count() >= 28, "Faltan responsabilidades"):
+        return false
+    if not require(grid.get_child(5).item_count == 1 and grid.get_child(6).disabled, "El mánager debe mantener gestión personal sin personal apto"):
+        return false
+    var picker = find_named(screen, "ClubDelegationsTeam")
+    if not require(picker.item_count > 1, "La carrera de prueba necesita equipos inferiores"):
+        return false
+    picker.select(1)
+    picker.emit_signal("item_selected", 1)
+    await process_frame
+    grid = find_named(screen, "ClubDelegationsGrid")
+    var owner = grid.get_child(5)
+    var mode = grid.get_child(6)
+    if not require(owner.item_count > 1, "Falta el entrenador del equipo inferior"):
+        return false
+    owner.select(1)
+    owner.emit_signal("item_selected", 1)
+    mode.select(1)
+    mode.emit_signal("item_selected", 1)
+    grid.get_child(7).emit_signal("pressed")
+    await process_frame
+    for resolution in [Vector2i(1280,720), Vector2i(1600,900), Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(0.15).timeout
+        grid = find_named(screen, "ClubDelegationsGrid")
+        if not require(grid.get_child(5).selected == 1 and grid.get_child(6).selected == 1, "La delegación guardada no se recuperó"):
+            return false
+        for index in [5,6,7]:
+            var rect = grid.get_child(index).get_global_rect()
+            if not require(rect.position.x >= 0 and rect.end.x <= resolution.x and rect.end.y <= resolution.y, "Control de delegación fuera de pantalla"):
+                return false
+        await capture_economy_screen("career-club-delegations-" + str(resolution.x))
+    var marker = {"root": screen.get_meta("qa_storage_root"), "career": str(find_named(screen,"CareerShell").get_meta("career_id")), "team": 1}
+    await return_career_main_menu(screen)
+    if not require(find_named(screen,"NewGame") != null, "No salió de la carrera"):
+        return false
+    if not await reopen_club_delegations(screen, marker):
+        return false
+    var file = FileAccess.open(ProjectSettings.globalize_path("res://../../artifacts/delegations-restart.json"), FileAccess.WRITE)
+    file.store_string(JSON.stringify(marker))
+    file.close()
+    print("FURVO_CLUB_DELEGATIONS_OK")
+    return true
+
+func reopen_club_delegations(screen: Node, marker: Dictionary) -> bool:
+    screen.OpenIsolatedMarketForValidation(marker.career)
+    for attempt in range(400):
+        if find_named(screen,"MarketPage") != null:
+            break
+        await create_timer(0.05).timeout
+    if not require(find_named(screen,"MarketPage") != null, "No se recargó la carrera SQLite"):
+        return false
+    find_named(screen,"NavArea_Club").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_ClubPersonnel").emit_signal("pressed")
+    await process_frame
+    var picker = find_named(screen,"ClubDelegationsTeam")
+    picker.select(marker.team)
+    picker.emit_signal("item_selected", marker.team)
+    await process_frame
+    var grid = find_named(screen,"ClubDelegationsGrid")
+    if not require(grid.get_child(5).selected == 1 and grid.get_child(6).selected == 1, "La reapertura perdió la delegación"):
+        return false
+    var employee = grid.get_child(5).get_item_text(1)
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_Training").emit_signal("pressed")
+    await process_frame
+    var teams = find_named(screen,"SportsTeamSelector")
+    teams.select(marker.team)
+    teams.emit_signal("item_selected", marker.team)
+    await process_frame
+    var owner = find_named(screen,"TrainingDelegationOwner_Weekly")
+    var mode = find_named(screen,"TrainingDelegationMode_Weekly")
+    return require(owner != null and mode != null and owner.get_item_text(owner.selected) == employee and mode.selected == 2, "Entrenamiento discrepa de Delegaciones")
 
 func check_lineup(screen: Node) -> bool:
     find_named(screen,"NavPage_Lineup").emit_signal("pressed")
@@ -711,10 +809,24 @@ func return_career_main_menu(screen: Node) -> void:
     await process_frame
 
 func run_test() -> void:
+    if OS.get_cmdline_user_args().has("--club-delegations-reopen"):
+        var marker = JSON.parse_string(FileAccess.get_file_as_string(ProjectSettings.globalize_path("res://../../artifacts/delegations-restart.json")))
+        var reopened = load("res://Scenes/Main.tscn").instantiate()
+        reopened.ConfigureCareerStorage(marker.root)
+        root.add_child(reopened)
+        await process_frame
+        if await reopen_club_delegations(reopened, marker):
+            print("FURVO_CLUB_DELEGATIONS_RESTART_OK")
+            quit(0)
+        return
+    if OS.get_cmdline_user_args().has("--market-preferences-reopen"):
+        await check_market_preferences_new_process()
+        return
     root.size = Vector2i(1280, 720)
     var screen = load("res://Scenes/Main.tscn").instantiate()
     var test_root = ProjectSettings.globalize_path("res://../../artifacts/career-ui-" + str(Time.get_ticks_usec()))
     screen.ConfigureCareerStorage(test_root)
+    screen.set_meta("qa_storage_root",test_root)
     root.add_child(screen)
     await process_frame
     if not require(find_named(screen, "NewGame") != null, "Falta pantalla inicial"):
@@ -2752,4 +2864,1060 @@ func check_training_availability(screen: Node) -> bool:
     await select_training_day(screen,"2026-07-01")
     root.size=Vector2i(1280,720)
     print("FURVO_TRAINING_AVAILABILITY_OK: restricción por ID, conflicto sin reescribir actividad, reapertura, parcial explícita, selección colectiva, finalización inclusiva y tres resoluciones")
+    return true
+
+# Expediente humano y lecturas reales; solo actúa sobre la carrera aislada de este recorrido.
+func check_academy_followup(screen: Node) -> bool:
+    find_named(screen,"NavPage_Academy").emit_signal("pressed")
+    await process_frame
+    var teams=find_trees(find_named(screen,"AcademyTeamsTable"))[0]
+    var team_id=str(teams.get_root().get_first_child().get_metadata(0))
+    await open_academy_by_id(screen,team_id)
+    var team_name=find_named(screen,"AcademyTeamTitle").text
+    find_named(screen,"AcademySection_3").emit_signal("pressed")
+    await process_frame
+    var table=find_trees(find_named(screen,"AcademyRosterTable"))[0]
+    table.emit_signal("column_title_clicked",2,MOUSE_BUTTON_LEFT)
+    await process_frame
+    table.emit_signal("column_title_clicked",2,MOUSE_BUTTON_LEFT)
+    await process_frame
+    var row=table.get_root().get_first_child()
+    var player_id=str(row.get_metadata(0))
+    var player_name=row.get_text(0)
+    row.select(0)
+    table.emit_signal("item_selected")
+    group_text(screen,"AcademyNameFilter",player_name)
+    await process_frame
+    find_named(screen,"ViewAcademyPlayer").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AcademyOpenFollowup").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AcademyObservationsEmpty")!=null,"Observaciones iniciales inventadas"):
+        return false
+    find_named(screen,"AcademyObservationNew").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AcademyObservationEditor").emit_signal("confirmed")
+    await process_frame
+    if not require(find_named(screen,"AcademyObservationEditorStatus").text!="","Observación vacía no muestra validación"):
+        return false
+    find_named(screen,"AcademyObservationInput").text="Observación humana de validación QA"
+    find_named(screen,"AcademyObservationEditor").emit_signal("confirmed")
+    await process_frame
+    if not require(find_named(screen,"AcademyObservationSelected").text=="Observación humana de validación QA","No guarda observación"):
+        return false
+    find_named(screen,"AcademyObservationEdit").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AcademyObservationInput").text="Observación humana revisada QA"
+    find_named(screen,"AcademyObservationEditor").emit_signal("confirmed")
+    await process_frame
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        if not require(find_named(screen,"AcademyFollowupBackRoster").get_global_rect().end.y<=root.size.y-8,"Seguimiento oculta regreso"):
+            return false
+        await capture_economy_screen("career-academy-followup-observations-"+str(resolution.x)+"x"+str(resolution.y))
+    find_named(screen,"AcademyFollowupTab_1").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AcademyReportsEmpty")!=null,"Se inventan informes de seguimiento"):
+        return false
+    find_named(screen,"AcademyFollowupTab_2").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AcademyHistoryEmpty")!=null,"Se inventan movimientos"):
+        return false
+    find_named(screen,"AcademyFollowupBackRoster").emit_signal("pressed")
+    await process_frame
+    table=find_trees(find_named(screen,"AcademyRosterTable"))[0]
+    if not require(table.get_selected()!=null and str(table.get_selected().get_metadata(0))==player_id and table.get_root().get_child_count()==1 and find_named(screen,"AcademyNameFilter").text==player_name and table.get_column_title(2).contains("↓"),"Volver pierde jugador, filtro, orden o sección"):
+        return false
+    # Informes reales creados expresamente mediante el sistema de Análisis existente.
+    find_named(screen,"NavPage_Analysis").emit_signal("pressed")
+    await process_frame
+    await choose_clock(screen,"SportsTeamSelector",team_name)
+    find_named(screen,"AnalysisTab_3").emit_signal("pressed")
+    await process_frame
+    await choose_control(screen,"AnalysisReportScope",1)
+    await choose_clock(screen,"AnalysisReportPlayer",player_name)
+    await choose_control(screen,"AnalysisReportStaff",1)
+    find_named(screen,"AnalysisCreateSnapshot").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AnalysisCreateSnapshot").emit_signal("pressed")
+    await process_frame
+    await open_academy_by_id(screen,team_id)
+    table=find_trees(find_named(screen,"AcademyRosterTable"))[0]
+    if not require(table.get_selected()!=null and str(table.get_selected().get_metadata(0))==player_id and find_named(screen,"AcademyNameFilter").text==player_name,"Cambio de sección pierde contexto de cantera"):
+        return false
+    find_named(screen,"ViewAcademyPlayer").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AcademyOpenFollowup").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AcademyFollowupTab_1").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AcademyReportSelect").item_count==2 and find_named(screen,"AnalysisSavePriorities")==null,"Seguimiento duplica informes o permite alterar prioridades al consultar"):
+        return false
+    await choose_control(screen,"AcademyCompareReport",1)
+    var comparison=find_trees(find_named(screen,"AcademyReportComparisonTable"))[0]
+    if not require(comparison.get_root().get_child_count()==51,"Comparación incompleta o revela ocultos"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        await capture_economy_screen("career-academy-followup-reports-"+str(resolution.x)+"x"+str(resolution.y))
+    find_named(screen,"AcademyOpenAnalysisReport").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"BackAcademyFollowup")!=null and find_named(screen,"AnalysisReportTitle")!=null,"No abre informe existente en Análisis"):
+        return false
+    find_named(screen,"BackAcademyFollowup").emit_signal("pressed")
+    await process_frame
+    if not require(str(find_named(screen,"AcademyFollowupPage").get_meta("followup_player"))==player_id,"Regreso de Análisis cambia jugador"):
+        return false
+    find_named(screen,"AcademyFollowupBackPlayer").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"MovePlayerTeam").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"MovementExecute").disabled,"Seguimiento habilita movimientos bloqueados"):
+        return false
+    find_named(screen,"MovementRecommendationReason").text="Recomendación de prueba QA, sin ejecución"
+    find_named(screen,"MovementRecommend").emit_signal("pressed")
+    await process_frame
+    # Abrir otra vez la consulta existente permite ver la recomendación recién registrada.
+    find_named(screen,"MovementBack").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"ViewAcademyPlayer").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AcademyOpenFollowup").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AcademyFollowupTab_2").emit_signal("pressed")
+    await process_frame
+    if not require(find_trees(find_named(screen,"AcademyMovementHistoryTable"))[0].get_root().get_child_count()==1 and find_named(screen,"MovementExecute")==null and find_named(screen,"MovementAccept")==null,"Historial confunde recomendación con movimiento o habilita decisiones"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size=resolution
+        await create_timer(.2).timeout
+        await capture_economy_screen("career-academy-followup-history-"+str(resolution.x)+"x"+str(resolution.y))
+    screen.ReopenIsolatedCareerForValidation()
+    await process_frame
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    await open_academy_by_id(screen,team_id)
+    find_named(screen,"AcademySection_1").emit_signal("pressed")
+    await process_frame
+    table=find_trees(find_named(screen,"AcademyRosterTable"))[0]
+    for candidate in table.get_root().get_children():
+        if str(candidate.get_metadata(0))==player_id:
+            candidate.select(0)
+            table.emit_signal("item_selected")
+    find_named(screen,"ViewAcademyPlayer").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AcademyOpenFollowup").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AcademyObservationSelected").text=="Observación humana revisada QA","Reapertura pierde observación editada"):
+        return false
+    find_named(screen,"AcademyObservationDelete").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AcademyObservationDeleteDialog").emit_signal("canceled")
+    await process_frame
+    if not require(find_named(screen,"AcademyObservationSelected")!=null,"Cancelar elimina observación"):
+        return false
+    find_named(screen,"AcademyObservationDelete").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"AcademyObservationDeleteDialog").emit_signal("confirmed")
+    await process_frame
+    if not require(find_named(screen,"AcademyObservationsEmpty")!=null,"No elimina observación confirmada"):
+        return false
+    find_named(screen,"NavPage_Lineup").emit_signal("pressed")
+    await process_frame
+    root.size=Vector2i(1280,720)
+    print("FURVO_ACADEMY_FOLLOWUP_OK: observaciones crear/editar/eliminar/reabrir, informes reales y comparación de 51 visibles, historial sin ejecutar, filtros/orden/selección y tres resoluciones")
+    return true
+
+
+# Mercado usa la escena real y carreras aisladas; no crea operaciones económicas.
+func check_market(screen: Node) -> bool:
+    find_named(screen,"NavArea_Market").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"MarketPage") != null,"Mercado no abre"):
+        return false
+    if not require(find_named(screen,"MarketCount").get_meta("market_count") == find_named(screen,"MarketPage").get_meta("market_universe") and find_named(screen,"MarketCount").get_meta("market_count") < 1894 and find_named(screen,"MarketAttribute").item_count == 52,"Universo o catálogo público incorrecto"):
+        return false
+    var tree = find_trees(find_named(screen,"MarketResults"))[0]
+    var item = tree.get_root().get_first_child()
+    while item != null and (item.get_text(2) == find_named(screen,"CareerEmployer").text or item.get_text(tree.columns-1) == "No disponible"):
+        item = item.get_next()
+    if not require(item != null,"Falta jugador externo contractual"):
+        return false
+    var identity = item.get_metadata(0)
+    var player_name = item.get_text(0)
+    var club_name = item.get_text(2)
+    var position = item.get_text(3)
+    var age = item.get_text(1)
+    group_text(screen,"MarketName",player_name.substr(0,6).to_upper())
+    choose_clock(screen,"MarketClub",club_name)
+    choose_clock(screen,"MarketPosition",position)
+    group_text(screen,"MarketMinimumAge",age)
+    group_text(screen,"MarketMaximumAge",age)
+    choose_clock(screen,"MarketAttribute","Pase corto")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    tree = find_trees(find_named(screen,"MarketResults"))[0]
+    item = tree.get_root().get_first_child()
+    while item != null:
+        if not require(item.get_text(2) == club_name and item.get_text(3) == position and item.get_text(1) == age,"Filtros combinados incorrectos"):
+            return false
+        if item.get_metadata(0) == identity:
+            item.select(0)
+            tree.emit_signal("item_selected")
+        item = item.get_next()
+    for direction in range(2):
+        tree.emit_signal("column_title_clicked",1,MOUSE_BUTTON_LEFT)
+        await process_frame
+        tree = find_trees(find_named(screen,"MarketResults"))[0]
+        if not require(tree.get_selected() != null and tree.get_selected().get_metadata(0) == identity,"Ordenación cambia identidad"):
+            return false
+    find_named(screen,"MarketOpenPlayer").emit_signal("pressed")
+    await process_frame
+    if not require(find_attribute_rows(screen).size() == 51 and find_named(screen,"MarketPlayerPage").get_meta("market_player") == identity and find_named(screen,"MovementExecute") == null,"Ficha pública o permisos incorrectos"):
+        return false
+    find_named(screen,"MarketContractToggle").emit_signal("pressed")
+    await process_frame
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(0.2).timeout
+        var back = find_named(screen,"MarketBackSearch")
+        if not require(back.get_global_rect().end.y <= root.size.y and back.get_global_rect().position.y >= 0,"Regreso fuera de ventana"):
+            return false
+        await capture_economy_screen("career-market-player-"+str(resolution.x))
+    find_named(screen,"MarketBackSearch").emit_signal("pressed")
+    await process_frame
+    await process_frame
+    if not require(find_named(screen,"MarketName").text == player_name.substr(0,6).to_upper(),"Regreso pierde filtros"):
+        return false
+    tree = find_trees(find_named(screen,"MarketResults"))[0]
+    if not require(tree.get_selected() != null and tree.get_selected().get_metadata(0) == identity,"Regreso pierde identidad"):
+        return false
+    group_text(screen,"MarketMinimumAge","40")
+    group_text(screen,"MarketMaximumAge","20")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    if not require(not find_named(screen,"MarketStatus").text.is_empty(),"Filtro inválido sin mensaje"):
+        return false
+    find_named(screen,"MarketClear").emit_signal("pressed")
+    await process_frame
+    group_text(screen,"MarketName","SIN RESULTADOS 99999")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"MarketCount").get_meta("market_count") == 0,"Vacío incorrecto"):
+        return false
+    find_named(screen,"MarketClear").emit_signal("pressed")
+    await process_frame
+    await process_frame
+    tree = find_trees(find_named(screen,"MarketResults"))[0]
+    var bar = null
+    for child in tree.get_children(true):
+        if child is VScrollBar:
+            bar = child
+    if not require(bar != null,"No hay desplazamiento de tabla"):
+        return false
+    bar.value = 500
+    await process_frame
+    var scroll = tree.get_scroll().y
+    item = tree.get_root().get_first_child()
+    item.select(0)
+    tree.emit_signal("item_selected")
+    find_named(screen,"MarketOpenPlayer").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"MarketBackSearch").emit_signal("pressed")
+    await process_frame
+    await process_frame
+    await process_frame
+    tree = find_trees(find_named(screen,"MarketResults"))[0]
+    if not require(abs(tree.get_scroll().y-scroll) < 3,"Regreso pierde desplazamiento"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(0.2).timeout
+        if not require(find_named(screen,"MarketFilters").get_global_rect().end.x <= root.size.x and find_named(screen,"MarketOpenPlayer").get_global_rect().end.y <= root.size.y,"Buscador recortado"):
+            return false
+        await capture_economy_screen("career-market-search-"+str(resolution.x))
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"SquadTable") != null,"Regresión de Plantilla"):
+        return false
+    print("FURVO_MARKET_OK: universo, filtros combinados, ficha pública, contratos, orden, identidad, regreso, scroll y tres resoluciones")
+    return true
+
+
+# Columnas: cada valor conserva su columna, filtro y selección son independientes de la vista.
+func market_tree(screen: Node) -> Tree:
+    return find_trees(find_named(screen,"MarketResults"))[0]
+
+func market_codes(screen: Node) -> Array:
+    return Array(find_named(screen,"MarketResults").get_meta("market_columns").split(","))
+
+func market_toggle(screen: Node, code: String, enabled: bool) -> void:
+    var check = find_named(screen,"MarketColumn_"+code)
+    check.button_pressed = enabled
+    await process_frame
+
+func market_scroll_horizontal(tree: Tree, value: float) -> void:
+    for child in tree.get_children(true):
+        if child is HScrollBar:
+            child.value = value
+
+func check_market_columns(screen: Node) -> bool:
+    find_named(screen,"NavArea_Market").emit_signal("pressed")
+    await process_frame
+    group_text(screen,"MarketName","Adrián")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    var accented = find_named(screen,"MarketCount").get_meta("market_count")
+    group_text(screen,"MarketName","  adrian  ")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    if not require(accented > 1 and accented == find_named(screen,"MarketCount").get_meta("market_count"),"Tildes/espacios cambian resultados"):
+        return false
+    var first = market_tree(screen).get_root().get_first_child()
+    var full_name = first.get_text(0)
+    group_text(screen,"MarketName",full_name)
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"MarketCount").get_meta("market_count") == 1,"Nombre completo incorrecto"):
+        return false
+    group_text(screen,"MarketName","")
+    choose_clock(screen,"MarketPosition","Defensa central")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    var defaults = market_codes(screen).duplicate()
+    if not require(defaults.has("marking") and not defaults.has("pace"),"Predeterminados de central incorrectos"):
+        return false
+    find_named(screen,"MarketConfigureColumns").emit_signal("pressed")
+    await process_frame
+    if not require(find_marked_nodes(screen,"market_column_code").size() == 51,"Selector no contiene exactamente 51 públicos"):
+        return false
+    await market_toggle(screen,"pace",true)
+    await market_toggle(screen,"short_passing",true)
+    find_named(screen,"MarketColumnUp_short_passing").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"MarketColumnsApply").emit_signal("pressed")
+    await process_frame
+    var configured = market_codes(screen).duplicate()
+    if not require(configured[configured.size()-2] == "short_passing" and configured[configured.size()-1] == "pace","Orden personalizado incorrecto"):
+        return false
+    var tree = market_tree(screen)
+    tree.get_root().get_first_child().select(0)
+    tree.emit_signal("item_selected")
+    var identity = tree.get_selected().get_metadata(0)
+    var pace_column = 4 + configured.find("pace")
+    for direction in range(2):
+        tree.emit_signal("column_title_clicked",pace_column,MOUSE_BUTTON_LEFT)
+        await process_frame
+        tree = market_tree(screen)
+        var previous = -1 if direction == 0 else 21
+        var row = tree.get_root().get_first_child()
+        while row != null:
+            var value = int(row.get_text(pace_column))
+            if not require((value >= previous if direction == 0 else value <= previous) and value >= 1 and value <= 20,"Orden numérico incorrecto"):
+                return false
+            previous = value
+            row = row.get_next()
+        if not require(tree.get_selected().get_metadata(0) == identity,"Orden por atributo pierde selección"):
+            return false
+    choose_clock(screen,"MarketAttribute","Resistencia")
+    await market_type_number(screen,"MarketMinimumValue","13")
+    await market_type_number(screen,"MarketMaximumValue","17")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"MarketStatus").text.is_empty() and market_codes(screen) == configured,"Rango escrito cambia columnas o no se aplica"):
+        return false
+    var count_before = find_named(screen,"MarketCount").get_meta("market_count")
+    group_text(screen,"MarketMinimumValue","21")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    if not require(not find_named(screen,"MarketStatus").text.is_empty() and find_named(screen,"MarketCount").get_meta("market_count") == count_before and find_named(screen,"MarketMinimumValue").text == "21","Rango inválido ajustado/aplicado silenciosamente"):
+        return false
+    find_named(screen,"MarketConfigureColumns").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"MarketColumnsApply").emit_signal("pressed")
+    await process_frame
+    if not require(not find_named(screen,"MarketStatus").text.is_empty(),"Configurar columnas oculta el error de filtro pendiente"):
+        return false
+    group_text(screen,"MarketMinimumValue","13")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    tree = market_tree(screen)
+    if not require(tree.get_root().get_first_child() != null,"Sin jugadores para consultar ficha"):
+        return false
+    first = tree.get_root().get_first_child()
+    first.select(0)
+    tree.emit_signal("item_selected")
+    identity = first.get_metadata(0)
+    market_scroll_horizontal(tree,900)
+    await process_frame
+    var horizontal = tree.get_scroll().x
+    find_named(screen,"MarketOpenPlayer").emit_signal("pressed")
+    await process_frame
+    if not require(find_attribute_rows(screen).size() == 51,"Ficha pierde atributos"):
+        return false
+    find_named(screen,"MarketBackSearch").emit_signal("pressed")
+    await process_frame
+    await process_frame
+    await process_frame
+    if not require(market_codes(screen) == configured and find_named(screen,"MarketMinimumValue").text == "13" and find_named(screen,"MarketMaximumValue").text == "17" and market_tree(screen).get_selected().get_metadata(0) == identity and abs(market_tree(screen).get_scroll().x-horizontal) < 3,"Regreso pierde contexto/columnas/scroll"):
+        return false
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavArea_Market").emit_signal("pressed")
+    await process_frame
+    if not require(market_codes(screen) == configured and find_named(screen,"MarketMinimumValue").text == "13","Cambiar de módulo pierde contexto"):
+        return false
+    choose_clock(screen,"MarketPosition","Portero")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    if not require(market_codes(screen).has("reflexes") and not market_codes(screen).has("short_passing"),"Portero hereda columnas del central"):
+        return false
+    find_named(screen,"MarketConfigureColumns").emit_signal("pressed")
+    await process_frame
+    await market_toggle(screen,"short_passing",true)
+    find_named(screen,"MarketColumnUp_short_passing").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"MarketColumnsApply").emit_signal("pressed")
+    await process_frame
+    var keepers = market_codes(screen).duplicate()
+    choose_clock(screen,"MarketPosition","Defensa central")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    if not require(market_codes(screen) == configured,"Volver a central pierde configuración"):
+        return false
+    # Cualquier atributo público puede seleccionarse, sin límite y sin comprimir las cabeceras.
+    find_named(screen,"MarketConfigureColumns").emit_signal("pressed")
+    await process_frame
+    for check in find_marked_nodes(screen,"market_column_code"):
+        check.button_pressed = true
+    await process_frame
+    find_named(screen,"MarketColumnsApply").emit_signal("pressed")
+    await process_frame
+    var all_codes = market_codes(screen).duplicate()
+    if not require(all_codes.size() == 51 and market_tree(screen).columns == 57,"No se admiten los 51 atributos por separado"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(0.2).timeout
+        if not require(find_named(screen,"MarketOpenPlayer").get_global_rect().end.y <= root.size.y and find_named(screen,"MarketConfigureColumns").get_global_rect().end.x <= root.size.x,"Acciones fuera de pantalla"):
+            return false
+        market_scroll_horizontal(market_tree(screen),0)
+        await process_frame
+        await capture_economy_screen("career-market-columns-left-"+str(resolution.x))
+        market_scroll_horizontal(market_tree(screen),100000)
+        await process_frame
+        await capture_economy_screen("career-market-columns-right-"+str(resolution.x))
+        find_named(screen,"MarketConfigureColumns").emit_signal("pressed")
+        await process_frame
+        var dialog = find_named(screen,"MarketColumnsDialog")
+        if not require(dialog.size.x <= root.size.x and dialog.size.y <= root.size.y,"Diálogo fuera de pantalla"):
+            return false
+        await RenderingServer.frame_post_draw
+        if OS.get_cmdline_user_args().has("--capture"):
+            dialog.get_texture().get_image().save_png(ProjectSettings.globalize_path("res://../../artifacts/career-visual/career-market-columns-dialog-"+str(resolution.x)+".png"))
+        find_named(screen,"MarketColumnsCancel").emit_signal("pressed")
+        await process_frame
+    # Restaurar solo central no debe modificar el portero personalizado.
+    find_named(screen,"MarketConfigureColumns").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"MarketColumnsReset").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"MarketColumnsApply").emit_signal("pressed")
+    await process_frame
+    if not require(market_codes(screen) == defaults,"Restaurar no recupera orden inicial"):
+        return false
+    choose_clock(screen,"MarketPosition","Portero")
+    await process_frame
+    if not require(market_codes(screen) == keepers,"Restaurar central cambia portero"):
+        return false
+    choose_clock(screen,"MarketPosition","Defensa central")
+    await process_frame
+    # Guardar de nuevo la personalización central para comprobarla tras reinicio real.
+    find_named(screen,"MarketConfigureColumns").emit_signal("pressed")
+    await process_frame
+    await market_toggle(screen,"pace",true)
+    await market_toggle(screen,"short_passing",true)
+    find_named(screen,"MarketColumnUp_short_passing").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"MarketColumnsApply").emit_signal("pressed")
+    await process_frame
+    var marker = {"root":screen.get_meta("qa_storage_root"),"career":find_named(screen,"MarketPage").get_meta("market_career"),"central":market_codes(screen),"keeper":keepers}
+    var output = FileAccess.open(ProjectSettings.globalize_path("res://../../artifacts/market-columns-restart.json"),FileAccess.WRITE)
+    output.store_string(JSON.stringify(marker))
+    output.close()
+    print("FURVO_MARKET_COLUMNS_OK: nombres normalizados, rango tecleado, 51 columnas independientes, selección/orden numérico, posiciones, preferencias, regreso y tres resoluciones")
+    return true
+
+func check_market_preferences_new_process() -> void:
+    var marker = JSON.parse_string(FileAccess.get_file_as_string(ProjectSettings.globalize_path("res://../../artifacts/market-columns-restart.json")))
+    var screen = load("res://Scenes/Main.tscn").instantiate()
+    screen.ConfigureCareerStorage(marker.root)
+    root.size = Vector2i(1280,720)
+    root.add_child(screen)
+    await process_frame
+    screen.OpenIsolatedMarketForValidation(marker.career)
+    for attempt in range(400):
+        if find_named(screen,"MarketPage") != null:
+            break
+        await create_timer(0.05).timeout
+    if not require(find_named(screen,"MarketPage") != null,"No reabre carrera aislada en nuevo proceso"):
+        return
+    choose_clock(screen,"MarketPosition","Defensa central")
+    await process_frame
+    if not require(market_codes(screen) == marker.central,"Reinicio pierde columnas de central"):
+        return
+    choose_clock(screen,"MarketPosition","Portero")
+    await process_frame
+    if not require(market_codes(screen) == marker.keeper,"Reinicio pierde columnas de portero"):
+        return
+    if not require(find_named(screen,"MarketName").text == "" and find_named(screen,"MarketMinimumAge").text == "","Reinicio persiste filtros de otra sesión"):
+        return
+    print("FURVO_MARKET_PREFERENCES_RESTART_OK: nuevo proceso, misma carrera aislada, columnas independientes recuperadas")
+    quit(0)
+
+
+func market_type_number(screen: Node, name: String, text: String) -> void:
+    var field = find_named(screen,name)
+    field.grab_focus()
+    field.select_all()
+    for character in text:
+        var key = InputEventKey.new()
+        key.pressed = true
+        key.unicode = character.unicode_at(0)
+        Input.parse_input_event(key)
+        await process_frame
+        var release = InputEventKey.new()
+        release.pressed = false
+        release.unicode = character.unicode_at(0)
+        Input.parse_input_event(release)
+        await process_frame
+    require(field.text == text,"No permite sustituir rangos por teclado")
+
+
+# La exclusión se verifica en resultados y fichas; los accesos propios siguen en Equipo.
+func check_market_exclusion(screen: Node) -> bool:
+    var own_club = find_named(screen,"CareerEmployer").text
+    var own_table = find_trees(find_named(screen,"SquadTable"))[0]
+    var own_ids = []
+    for row in own_table.get_root().get_children():
+        own_ids.append(row.get_metadata(0))
+    var own_player = own_table.get_root().get_first_child().get_text(1)
+    find_named(screen,"NavArea_Market").emit_signal("pressed")
+    await process_frame
+    var count = find_named(screen,"MarketCount").get_meta("market_count")
+    if not require(count > 456 and count < 1894 and count == find_named(screen,"MarketPage").get_meta("market_universe"),"Recuento incluye club propio"):
+        return false
+    var clubs = find_named(screen,"MarketClub")
+    if not require(clubs.item_count == 20,"Filtro no excluye club dirigido"):
+        return false
+    for i in range(clubs.item_count):
+        if not require(clubs.get_item_text(i) != own_club,"El club propio permanece en desplegable"):
+            return false
+    for row in market_tree(screen).get_root().get_children():
+        if not require(row.get_text(2) != own_club and not own_ids.has(row.get_metadata(0)),"Mercado incluye jugador propio"):
+            return false
+    group_text(screen,"MarketName",own_player)
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"MarketCount").get_meta("market_count") == 0,"Nombre exacto recupera jugador propio"):
+        return false
+    group_text(screen,"MarketName",own_player.get_slice(" ",0))
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    for row in market_tree(screen).get_root().get_children():
+        if not require(row.get_text(2) != own_club,"Nombre parcial recupera club propio"):
+            return false
+    group_text(screen,"MarketName","")
+    choose_clock(screen,"MarketPosition","Portero")
+    choose_clock(screen,"MarketAttribute","Reflejos")
+    await market_type_number(screen,"MarketMinimumValue","1")
+    await market_type_number(screen,"MarketMaximumValue","20")
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"MarketCount").get_meta("market_count") > 0,"Faltan porteros externos"):
+        return false
+    for row in market_tree(screen).get_root().get_children():
+        if not require(row.get_text(2) != own_club and row.get_text(3) == "Portero","Filtros combinados rompen exclusión"):
+            return false
+    var external = market_tree(screen).get_root().get_first_child()
+    var external_id = external.get_metadata(0)
+    var external_name = external.get_text(0)
+    group_text(screen,"MarketName",external_name)
+    find_named(screen,"MarketSearch").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"MarketCount").get_meta("market_count") == 1,"No encuentra externo por nombre completo"):
+        return false
+    var tree = market_tree(screen)
+    tree.get_root().get_first_child().select(0)
+    tree.emit_signal("item_selected")
+    find_named(screen,"MarketOpenPlayer").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"MarketPlayerPage").get_meta("market_player") == external_id and find_attribute_rows(screen).size() == 51,"Ficha externa no abre"):
+        return false
+    find_named(screen,"MarketBackSearch").emit_signal("pressed")
+    await process_frame
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(0.2).timeout
+        if not require(find_named(screen,"MarketOpenPlayer").get_global_rect().end.y <= root.size.y and find_named(screen,"MarketFilters").get_global_rect().end.x <= root.size.x,"Mercado queda fuera de pantalla"):
+            return false
+        await capture_economy_screen("career-market-external-"+str(resolution.x))
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    own_table = find_trees(find_named(screen,"SquadTable"))[0]
+    if not require(own_table.get_root().get_child_count() == 24,"Plantilla propia afectada"):
+        return false
+    for row in own_table.get_root().get_children():
+        if row.get_metadata(0) == own_ids[0]:
+            row.select(0)
+            own_table.emit_signal("item_selected")
+    find_named(screen,"ViewPlayer").emit_signal("pressed")
+    await process_frame
+    if not require(find_attribute_rows(screen).size() == 51 and find_named(screen,"MarketPlayerPage") == null,"Ficha propia bloqueada fuera de Mercado"):
+        return false
+    find_named(screen,"BackSquad").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_Academy").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"AcademyTeamsTable") != null,"Cantera propia bloqueada"):
+        return false
+    print("FURVO_MARKET_EXCLUSION_OK: propio ausente por nombre y filtros, externos presentes, recuento/dropdown, ficha externa, Plantilla/Cantera propias y tres resoluciones")
+    return true
+
+
+func named_controls(node: Node, key: String) -> Array:
+    var nodes = []
+    if node.name == key:
+        nodes.append(node)
+    for child in node.get_children():
+        nodes.append_array(named_controls(child,key))
+    return nodes
+
+func offer_expand(screen: Node, key: String) -> void:
+    var button = find_named(screen,"Toggle_"+key)
+    if button.text.begins_with("▸"):
+        button.emit_signal("pressed")
+        await process_frame
+
+func offer_scroll_to(screen: Node, key: String) -> void:
+    var scroll = find_named(screen,"OfferScroll")
+    var control = find_named(screen,key)
+    scroll.scroll_vertical += int(control.get_global_rect().position.y-scroll.get_global_rect().position.y)
+    await process_frame
+
+func check_transfers(screen: Node) -> bool:
+    find_named(screen,"NavArea_Market").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"MarketConfigureColumns").emit_signal("pressed")
+    await process_frame
+    await market_toggle(screen,"reflexes",true)
+    find_named(screen,"MarketColumnsApply").emit_signal("pressed")
+    await process_frame
+    var preferences_file = str(screen.get_meta("qa_storage_root")).path_join("ui/market-columns.v1.json")
+    var preferences_hash = FileAccess.get_sha256(preferences_file)
+    var tree = market_tree(screen)
+    var external = tree.get_root().get_first_child()
+    while external != null and external.get_text(tree.columns-1) == "No disponible":
+        external = external.get_next()
+    if not require(external != null,"Sin externo con contrato"):
+        return false
+    external.select(0)
+    tree.emit_signal("item_selected")
+    find_named(screen,"MarketOpenPlayer").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TransferMakeOffer").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TransferForm") != null and find_named(screen,"TransferTabs") == null and find_named(screen,"OfferScroll") != null,"No es una pantalla única"):
+        return false
+    if not await check_release_information(screen,str(find_named(screen,"TransferForm").get_meta("transfer_target"))):
+        return false
+    for text in ["-1","999999999999999999999999999999999999999999"]:
+        group_text(screen,"TransferAmount",text)
+        await process_frame
+        if not require(find_named(screen,"TransferAmount").text == "" and not find_named(screen,"TransferAmountError").text.is_empty(),"Entrada negativa o enorme no se rechaza junto al campo"):
+            return false
+    group_text(screen,"TransferAmount","1000000001")
+    find_named(screen,"TransferSaveDraft").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TransferForm") != null and not find_named(screen,"TransferAmountError").text.is_empty(),"Importe superior al máximo aceptado"):
+        return false
+    group_text(screen,"TransferAmount","1000,01")
+    find_named(screen,"TransferAmount").emit_signal("focus_exited")
+    await process_frame
+    if not require(find_named(screen,"TransferAmount").text == "1.000,01" and find_named(screen,"TransferFeedback").text.is_empty(),"No formatea importe o mantiene aviso resuelto"):
+        return false
+    if not require(find_named(screen,"OfferPaymentSchedule").text.contains("1.000,01 EUR"),"Pago único no es automático"):
+        return false
+    choose_clock(screen,"OfferPaymentMode","Pago aplazado")
+    for count in [2,3,4]:
+        choose_clock(screen,"OfferPaymentCount",str(count)+" pagos")
+        await process_frame
+        if not require(find_named(screen,"OfferPaymentSchedule").text.contains(str(2026+count-1)),"Último vencimiento no coincide con número de pagos"):
+            return false
+    choose_clock(screen,"OfferPaymentCount","3 pagos")
+    find_named(screen,"OfferPaymentShare0").value = 60
+    find_named(screen,"OfferPaymentShare1").value = 20
+    find_named(screen,"OfferPaymentMonth1").value = 6
+    await process_frame
+    if not require(find_named(screen,"OfferPaymentSchedule").text.contains("600,00 EUR") and find_named(screen,"OfferPaymentShare2").value == 20,"No ajusta anticipo o residuo"):
+        return false
+    find_named(screen,"OfferPaymentMonth1").value = 0
+    find_named(screen,"TransferSaveDraft").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TransferForm") != null and not find_named(screen,"OfferPaymentError").text.is_empty(),"No rechaza vencimiento inválido"):
+        return false
+    find_named(screen,"OfferPaymentMonth1").value = 6
+    await offer_expand(screen,"OfferPlayers")
+    find_named(screen,"OfferChoosePlayers").emit_signal("pressed")
+    await process_frame
+    var list = find_named(screen,"OfferPlayerResults")
+    var candidates = find_marked_nodes(list,"offer_player_card")
+    if not require(candidates.size() == 108,"Selector no usa jugadores propios"):
+        return false
+    if not require(find_named(list,"OfferRecordedInterest") == null,"Interés ficticio"):
+        return false
+    var partial = find_named(candidates[0],"OfferPlayerName").text.get_slice(" ",0)
+    group_text(screen,"OfferPlayerSearch",partial)
+    await process_frame
+    if not require(find_marked_nodes(list,"offer_player_card").size() > 0 and find_marked_nodes(list,"offer_player_card").size() < 108,"Buscador no filtra"):
+        return false
+    group_text(screen,"OfferPlayerSearch","")
+    choose_clock(screen,"OfferPlayerTeam","Primer equipo")
+    await process_frame
+    if not require(find_marked_nodes(list,"offer_player_card").size() == 24,"Filtro de primer equipo incorrecto"):
+        return false
+    choose_clock(screen,"OfferPlayerPosition","Porteros")
+    await process_frame
+    if not require(find_marked_nodes(list,"offer_player_card").size() > 0 and find_marked_nodes(list,"offer_player_card").size() < 24,"Filtro combinado de posición incorrecto"):
+        return false
+    choose_clock(screen,"OfferPlayerPosition","Todas las posiciones")
+    choose_clock(screen,"OfferPlayerTeam","Todos los equipos")
+    await process_frame
+    candidates = find_marked_nodes(list,"offer_player_card")
+    find_named(candidates[0],"OfferSelectPlayer").button_pressed = true
+    find_named(candidates[1],"OfferSelectPlayer").button_pressed = true
+    if not require(find_named(screen,"OfferSelectedCount").text.begins_with("2 "),"Contador no actualiza"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await process_frame
+        await create_timer(0.15).timeout
+        var modal = find_named(screen,"OfferPlayerPopup")
+        print("OFFER_PICKER_SIZE: ",resolution," ",modal.size)
+        if not require(modal.size.x <= root.size.x and modal.size.y <= root.size.y,"Selector excede la ventana"):
+            return false
+        if not require(find_named(screen,"OfferAddSelected").get_global_rect().end.y <= modal.size.y and find_named(screen,"OfferPlayerScroll").get_global_rect().end.y < find_named(screen,"OfferSelectedCount").get_global_rect().position.y,"Footer del selector recortado"):
+            return false
+        await capture_economy_screen("career-offer-player-picker-"+str(resolution.x))
+    find_named(screen,"TransferColumnsCancel").emit_signal("pressed")
+    await process_frame
+    if not require(find_marked_nodes(screen,"offer_selected_player").is_empty(),"Cancelar aplica cambios"):
+        return false
+    find_named(screen,"OfferChoosePlayers").emit_signal("pressed")
+    await process_frame
+    candidates = find_marked_nodes(list,"offer_player_card")
+    if not require(not find_named(candidates[0],"OfferSelectPlayer").button_pressed,"Reabrir mantiene borrador cancelado"):
+        return false
+    find_named(candidates[0],"OfferSelectPlayer").button_pressed = true
+    find_named(candidates[1],"OfferSelectPlayer").button_pressed = true
+    find_named(screen,"OfferAddSelected").emit_signal("pressed")
+    await process_frame
+    if not require(find_marked_nodes(screen,"offer_selected_player").size() == 2,"No confirma selección múltiple"):
+        return false
+    find_named(screen,"OfferRemovePlayer").emit_signal("pressed")
+    await process_frame
+    if not require(find_marked_nodes(screen,"offer_selected_player").size() == 1,"No retira jugador"):
+        return false
+    find_named(screen,"OfferChoosePlayers").emit_signal("pressed")
+    await process_frame
+    candidates = find_marked_nodes(list,"offer_player_card")
+    var restored = false
+    for card in candidates:
+        var toggle = find_named(card,"OfferSelectPlayer")
+        if not toggle.button_pressed and not restored:
+            toggle.button_pressed = true
+            restored = true
+    find_named(screen,"OfferAddSelected").emit_signal("pressed")
+    await process_frame
+    await offer_expand(screen,"OfferBonuses")
+    group_text(screen,"TransferThreshold","30")
+    group_text(screen,"TransferBonusAmount","500")
+    find_named(screen,"OfferAddBonus").emit_signal("pressed")
+    await process_frame
+    if not require(find_marked_nodes(screen,"offer_bonus_id").size() == 1 and find_named(screen,"OfferBonusError").text.is_empty(),"No añade variable visual"):
+        return false
+    find_named(screen,"OfferEditBonus").emit_signal("pressed")
+    await process_frame
+    group_text(screen,"TransferThreshold","40")
+    find_named(screen,"OfferAddBonus").emit_signal("pressed")
+    await process_frame
+    if not require(find_marked_nodes(screen,"offer_bonus_id").size() == 1,"Editar variable la duplica"):
+        return false
+    await offer_expand(screen,"OfferFuture")
+    find_named(screen,"OfferEnableSale").button_pressed = true
+    choose_clock(screen,"OfferSalePercent","20 %")
+    find_named(screen,"OfferEnableProfit").button_pressed = true
+    choose_clock(screen,"OfferProfitPercent","30 %")
+    await offer_expand(screen,"OfferOptions")
+    if not require(not find_named(screen,"OfferBuybackDetails").visible and not find_named(screen,"OfferMatchingDetails").visible,"Cláusulas desactivadas muestran condiciones"):
+        return false
+    find_named(screen,"TransferBuybackEnabled").button_pressed = true
+    group_text(screen,"TransferBuybackAmount","-1")
+    find_named(screen,"TransferSaveDraft").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TransferForm") != null and not find_named(screen,"TransferBuybackAmountError").text.is_empty(),"Recompra negativa no tiene error local"):
+        return false
+    group_text(screen,"TransferBuybackAmount","9000")
+    find_named(screen,"TransferBuybackAmount").emit_signal("focus_exited")
+    find_named(screen,"OfferBuybackYears_3").emit_signal("pressed")
+    find_named(screen,"TransferMatchingEnabled").button_pressed = true
+    find_named(screen,"OfferMatchingYears_2").emit_signal("pressed")
+    find_named(screen,"OfferResponseDays_14").emit_signal("pressed")
+    if not require(find_named(screen,"OfferBuybackSummary").text.contains("9.000,00 EUR") and find_named(screen,"OfferBuybackSummary").text.contains("3 años") and find_named(screen,"OfferMatchingSummary").text.contains("14 días"),"Resúmenes de cláusulas incorrectos"):
+        return false
+    if not require(not find_named(screen,"OfferBuybackYears_1").text.contains("1 años") and find_named(screen,"OfferBuybackYears_1").text.contains("1 año"),"Singular de años incorrecto"):
+        return false
+    find_named(screen,"OfferMatchingHelp").emit_signal("pressed")
+    await process_frame
+    var help = find_named(screen,"OfferMatchingHelpDialog")
+    if not require(help != null and help.dialog_text.contains("Notificación"),"Ayuda contractual no accesible"):
+        return false
+    help.emit_signal("confirmed")
+    await process_frame
+    find_named(screen,"TransferBuybackEnabled").button_pressed = false
+    find_named(screen,"TransferMatchingEnabled").button_pressed = false
+    if not require(not find_named(screen,"OfferBuybackDetails").visible and find_named(screen,"OfferAdditionalSummaryText").text.contains("No incluida"),"Desactivar no excluye cláusulas"):
+        return false
+    find_named(screen,"TransferBuybackEnabled").button_pressed = true
+    find_named(screen,"TransferMatchingEnabled").button_pressed = true
+    await offer_expand(screen,"OfferDates")
+    find_named(screen,"OfferArrival_2").emit_signal("pressed")
+    find_named(screen,"OfferArrivalYear").value = 2025
+    find_named(screen,"TransferSaveDraft").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TransferForm") != null and find_named(screen,"OfferArrivalDateError").visible,"Fecha pasada no muestra error local"):
+        return false
+    find_named(screen,"OfferArrivalYear").value = 2026
+    find_named(screen,"OfferArrivalMonth").value = 8
+    find_named(screen,"OfferArrivalDay").value = 1
+    await process_frame
+    if not require(find_named(screen,"OfferArrivalSummary").text.contains("01/08/2026"),"Resumen de incorporación futura incorrecto"):
+        return false
+    find_named(screen,"OfferArrival_0").emit_signal("pressed")
+    if not require(not find_named(screen,"OfferArrivalCalendar").visible,"Lo antes posible mantiene calendario"):
+        return false
+    find_named(screen,"OfferArrival_1").emit_signal("pressed")
+    for days in [3,7,14,30]:
+        find_named(screen,"OfferValidity_"+str(days)).emit_signal("pressed")
+        if not require(find_named(screen,"OfferValiditySummary").text.contains(str(days)+" días") and find_named(screen,"OfferResponseDays_14").button_pressed,"Validez altera tanteo o no actualiza resumen"):
+            return false
+    await offer_scroll_to(screen,"OfferValidityQuestionHeading")
+    find_named(screen,"OfferValidity_3").grab_focus()
+    var accept = InputEventKey.new()
+    accept.keycode = KEY_SPACE
+    accept.pressed = true
+    Input.parse_input_event(accept)
+    await process_frame
+    accept = InputEventKey.new()
+    accept.keycode = KEY_SPACE
+    accept.pressed = false
+    Input.parse_input_event(accept)
+    await process_frame
+    if not require(find_named(screen,"OfferValidity_3").button_pressed,"Selección por teclado no funciona"):
+        return false
+    find_named(screen,"OfferValidity_14").emit_signal("pressed")
+    find_named(screen,"Toggle_OfferOptions").emit_signal("pressed")
+    find_named(screen,"Toggle_OfferOptions").emit_signal("pressed")
+    find_named(screen,"Toggle_OfferDates").emit_signal("pressed")
+    find_named(screen,"Toggle_OfferDates").emit_signal("pressed")
+    if not require(find_named(screen,"OfferBuybackYears_3").button_pressed and find_named(screen,"OfferArrival_1").button_pressed and find_named(screen,"OfferValidity_14").button_pressed,"Plegar pierde selección"):
+        return false
+    if not require(find_named(screen,"TransferCalculation") == null and find_named(screen,"TransferPaymentDate") == null and find_named(screen,"TransferNotification") == null and find_named(screen,"TransferUntil") == null,"Persisten campos técnicos de redacción/fechas"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(0.2).timeout
+        var header = find_named(screen,"OfferClubs")
+        var footer = find_named(screen,"TransferSaveDraft")
+        var scroll = find_named(screen,"OfferScroll")
+        if not require(header.get_global_rect().end.y <= scroll.get_global_rect().position.y and footer.get_global_rect().end.y <= root.size.y and scroll.get_global_rect().end.x <= root.size.x,"Cabecera, resumen o acciones se solapan"):
+            return false
+        scroll.scroll_vertical = 0
+        await process_frame
+        await capture_economy_screen("career-offer-single-top-"+str(resolution.x))
+        await offer_scroll_to(screen,"Toggle_OfferOptions")
+        await capture_economy_screen("career-offer-single-clauses-"+str(resolution.x))
+        await offer_scroll_to(screen,"OfferMatchingHeading")
+        await capture_economy_screen("career-condition-cards-matching-"+str(resolution.x))
+        await offer_scroll_to(screen,"OfferArrivalQuestionHeading")
+        await capture_economy_screen("career-condition-cards-arrival-"+str(resolution.x))
+        await offer_scroll_to(screen,"OfferValidityQuestionHeading")
+        await capture_economy_screen("career-condition-cards-validity-"+str(resolution.x))
+        scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
+        await process_frame
+        await capture_economy_screen("career-offer-single-summary-"+str(resolution.x))
+    find_named(screen,"TransferSaveDraft").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TransferDetail") != null and find_named(screen,"TransferCurrentState").text == "Borrador","No guarda oferta automática"):
+        return false
+    screen.ReopenIsolatedCareerForValidation()
+    await process_frame
+    find_named(screen,"NavArea_Market").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_MarketOffers").emit_signal("pressed")
+    await process_frame
+    tree = find_trees(find_named(screen,"TransferNegotiationsTable"))[0]
+    if not require(tree.get_root().get_child_count() == 1,"Reapertura pierde o duplica oferta"):
+        return false
+    tree.get_root().get_first_child().select(0)
+    tree.emit_signal("item_selected")
+    find_named(screen,"TransferOpen").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TransferEdit").emit_signal("pressed")
+    await process_frame
+    if not require(find_marked_nodes(screen,"offer_selected_player").size() == 2 and find_named(screen,"OfferPaymentMode").selected == 2 and find_named(screen,"OfferPaymentCount").get_item_text(find_named(screen,"OfferPaymentCount").selected) == "3 pagos","No conserva jugadores o calendario al editar"):
+        return false
+    if not require(find_named(screen,"OfferBuybackYears_3").button_pressed and find_named(screen,"OfferMatchingYears_2").button_pressed and find_named(screen,"OfferResponseDays_14").button_pressed and find_named(screen,"OfferArrival_1").button_pressed and find_named(screen,"OfferValidity_14").button_pressed,"Reapertura pierde condiciones adicionales"):
+        return false
+    find_named(screen,"TransferSend").emit_signal("pressed")
+    await process_frame
+    var confirmation = find_named(screen,"TransferSendConfirmation")
+    if not require(confirmation != null,"No confirma condiciones"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await process_frame
+        if not require(confirmation.size.x <= root.size.x and confirmation.size.y <= root.size.y,"Confirmación fuera de pantalla"):
+            return false
+    find_named(screen,"TransferCancelSend").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TransferSend").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"TransferFinalSend").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TransferCurrentState").text == "Enviada","Oferta válida no se envía"):
+        return false
+    find_named(screen,"TransferWithdraw").emit_signal("pressed")
+    await process_frame
+    if not await check_negotiation_table_layout(screen):
+        return false
+    find_named(screen,"NavArea_Team").emit_signal("pressed")
+    await process_frame
+    if not require(find_trees(find_named(screen,"SquadTable"))[0].get_root().get_child_count() == 24 and FileAccess.get_sha256(preferences_file) == preferences_hash,"La oferta altera plantilla o preferencias"):
+        return false
+    print("FURVO_CONDITION_CARDS_OK: activar/desactivar, precio local, años/días, ayuda, fecha pasada, incorporación, validez independiente, plegado, reapertura, teclado y tres resoluciones")
+    print("FURVO_MARKET_PAYMENTS_PICKER_OK: 1/2/3/4 pagos, anticipo/meses editables, rechazo de fecha inválida, búsqueda y filtros, selección múltiple transitoria, cancelar/confirmar, guardar/reabrir y tres resoluciones")
+    print("FURVO_TRANSFERS_OK: pantalla única, importes locales/máximo, pagos automáticos, selector múltiple buscable sin interés ficticio, variables editables, cláusulas estándar, guardar/reabrir/enviar/retirar y tres resoluciones")
+    return true
+
+func check_negotiation_table_layout(screen: Node) -> bool:
+    find_named(screen,"NavPage_MarketNegotiations").emit_signal("pressed")
+    await process_frame
+    var table = find_named(screen,"TransferNegotiationsTable")
+    var tree: Tree = find_trees(table)[0]
+    if not require(tree.get_root().get_child_count() == 1,"Negociaciones pierde la oferta real"):
+        return false
+    tree.get_root().get_first_child().select(0)
+    tree.emit_signal("item_selected")
+    find_named(screen,"TransferOpen").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"TransferDetail") != null,"No abre detalle de negociación"):
+        return false
+    find_named(screen,"NavPage_MarketNegotiations").emit_signal("pressed")
+    await process_frame
+    table = find_named(screen,"TransferNegotiationsTable")
+    tree = find_trees(table)[0]
+    # Fixtures exclusivamente visuales: no se crean propuestas, versiones ni estados de negocio.
+    var weights = [28,27,20,17,8]
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await process_frame
+        await process_frame
+        var total_width = 0.0
+        for c in range(5):
+            total_width += tree.get_column_width(c)
+        print("NEGOTIATIONS_WIDTHS: ",resolution," ",[tree.get_column_width(0),tree.get_column_width(1),tree.get_column_width(2),tree.get_column_width(3),tree.get_column_width(4)])
+        for c in range(5):
+            if not require(abs(tree.get_column_width(c)/total_width-weights[c]/100.0)<0.025,"Proporción incorrecta de negociación"):
+                return false
+        if not require(not tree.scroll_horizontal_enabled and find_named(screen,"TransferStateFilter").size.x<500,"Tabla o filtro demasiado ancho"):
+            return false
+        for count in [1,8,150]:
+            tree.clear()
+            var origin = tree.create_item()
+            for index in range(count):
+                var item = tree.create_item(origin)
+                var cells = ["Futbolista de nombre y apellidos extraordinariamente largos "+str(index),"Club ficticio con una denominación institucional muy extensa",["1.000.000.000,00 EUR","9,00 EUR","123.456.789,12 EUR"][index%3],["Enviada","Pendiente de negociación con jugadores","Retirada"][index%3],str(12345+index)]
+                item.set_metadata(0,"visual-fixture-"+str(index))
+                item.custom_minimum_height = 34
+                for c in range(5):
+                    item.set_text(c,cells[c])
+                    item.set_tooltip_text(c,cells[c])
+                    item.set_text_alignment(c,[HORIZONTAL_ALIGNMENT_LEFT,HORIZONTAL_ALIGNMENT_LEFT,HORIZONTAL_ALIGNMENT_RIGHT,HORIZONTAL_ALIGNMENT_LEFT,HORIZONTAL_ALIGNMENT_CENTER][c])
+            await process_frame
+            var last = origin.get_child(count-1)
+            last.select(0)
+            tree.emit_signal("item_selected")
+            tree.scroll_to_item(last)
+            await process_frame
+            if not require(table.get("SelectedId")=="visual-fixture-"+str(count-1) and last.get_tooltip_text(0)==last.get_text(0),"Selección o tooltip pierde identidad"):
+                return false
+            if count == 150 and not require(tree.get_scroll().y>0,"No desplaza numerosas negociaciones"):
+                return false
+            await capture_economy_screen("negotiations-table-"+str(resolution.x)+"-"+str(count))
+    print("FURVO_NEGOTIATIONS_LAYOUT_OK: 1/8/150 filas, tres resoluciones, proporciones, selección por ID, tooltips, importes y desplazamiento")
+    return true
+
+func check_release_information(screen: Node,target: String) -> bool:
+    for mode in [0,1,2,3,4,5]:
+        screen.PrepareReleaseInformationForValidation(target,mode,false,false)
+        await process_frame
+        await process_frame
+        var expected = ["Unknown","Absent","Known","Unknown","NotApplicable","Known"][mode]
+        var panel = find_named(screen,"PlayerContractInformation")
+        if not require(panel != null and str(panel.get_meta("release_information_state")) == expected and find_attribute_rows(screen).size() == 51,"Ficha contractual o atributos públicos incorrectos"):
+            return false
+        var value = find_named(screen,"ReleaseClauseLabelValue").text
+        if mode == 3 and not require(not value.contains("12.000.000") and value == "Desconocida","La ficha revela una cláusula privada"):
+            return false
+        for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+            root.size = resolution
+            await create_timer(0.1).timeout
+            await capture_economy_screen("career-release-player-"+str(mode)+"-"+str(resolution.x))
+        screen.PrepareReleaseInformationForValidation(target,mode,true,false)
+        await process_frame
+        if not require(str(find_named(screen,"PlayerContractInformation").get_meta("release_information_state")) == expected,"Oferta no usa el conocimiento contractual filtrado"):
+            return false
+        if mode == 2:
+            for amount in [11999999,12000000,12000001]:
+                group_text(screen,"TransferAmount",str(amount))
+                await process_frame
+                var notice = find_named(screen,"ReleaseOfferNotice").text
+                if not require(notice.contains("Puedes negociar") if amount < 12000000 else notice.contains("no implica aceptación automática"),"Aviso de umbral de rescisión incorrecto"):
+                    return false
+        if mode == 3 and not require(not find_named(screen,"ReleaseContractValue").text.contains("12.000.000") and find_named(screen,"ReleaseOfferNotice").text.contains("No dispones"),"Oferta revela información privada"):
+            return false
+        for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+            root.size = resolution
+            await create_timer(0.1).timeout
+            var header = find_named(screen,"ReleaseContractValue")
+            var footer = find_named(screen,"TransferSaveDraft")
+            if not require(header.get_global_rect().end.x <= root.size.x and footer.get_global_rect().end.y <= root.size.y,"Información contractual o acciones fuera de pantalla"):
+                return false
+            await capture_economy_screen("career-release-offer-"+str(mode)+"-"+str(resolution.x))
+    screen.PrepareReleaseInformationForValidation("",3,false,true)
+    await process_frame
+    if not require(find_named(screen,"ReleaseClauseLabelValue").text.contains("12.000.000") and find_named(screen,"ReleaseKnowledgeState").text.contains("propio club"),"El propio club no consulta su contrato privado"):
+        return false
+    await capture_economy_screen("career-release-own-contract")
+    screen.PrepareReleaseInformationForValidation(target,6,false,false)
+    await process_frame
+    if not require(find_named(screen,"MarketContractEndValue").text == "No disponible" and find_named(screen,"ReleaseClauseLabelValue").text == "Desconocida","Información incompleta aparenta un contrato conocido"):
+        return false
+    await capture_economy_screen("career-release-incomplete-contract")
+    screen.PrepareReleaseInformationForValidation(target,0,true,false)
+    await process_frame
+    print("FURVO_RELEASE_INFORMATION_OK: seis estados/conocimientos, fichas y oferta, propio club, umbrales inferior/igual/superior, 51 atributos públicos y tres resoluciones; sin ejecutar rescisión")
     return true

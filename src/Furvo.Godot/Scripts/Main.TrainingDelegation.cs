@@ -36,16 +36,16 @@ public partial class Main
             var label=ClubUi.Text("TrainingDelegationArea_"+area,UiText.Get("TrainingResponsibility_"+area),13);label.SizeFlagsHorizontal=SizeFlags.Fill;label.CustomMinimumSize=new Vector2(210,32);table.AddChild(label);
             var current=state.Assignments.GetValueOrDefault(area);var eligible=Eligible(area);
             var mode=new OptionButton{Name="TrainingDelegationMode_"+area,FitToLongestItem=false,CustomMinimumSize=new Vector2(145,32)};
-            foreach(var name in new[]{"Manual","Delegated","Mixed"})mode.AddItem(UiText.Get("TrainingDelegationMode_"+name));mode.Selected=current is null?0:current.Mode==TrainingDelegationMode.Mixed?2:1;table.AddChild(mode);
+            foreach(var name in new[]{"Manual","Delegated","Mixed","PersonalSupport"})mode.AddItem(UiText.Get("TrainingDelegationMode_"+name));mode.Selected=current is null?0:(int)current.Mode;table.AddChild(mode);
             var owner=new OptionButton{Name="TrainingDelegationOwner_"+area,FitToLongestItem=false,ClipText=true,CustomMinimumSize=new Vector2(240,32),SizeFlagsHorizontal=SizeFlags.ExpandFill,Disabled=current is null};owner.AddItem(eligible.Length==0?UiText.Get("TrainingDelegationNoStaff"):current is null?manualOwner:UiText.Get("TrainingUnassignedResponsible"));owner.SetItemMetadata(0,"");
             foreach(var person in eligible){owner.AddItem(person.Name+" — "+UiText.Get("AnalysisStaff_"+person.Role));owner.SetItemMetadata(owner.ItemCount-1,person.Id.ToString());}
             owner.Selected=current?.Responsible is {} assigned?Math.Max(0,Array.FindIndex(eligible,p=>p.Id==assigned)+1):0;
             if(current?.Responsible is {} missing&&owner.Selected==0){owner.AddItem((staff.SingleOrDefault(p=>p.Id==missing)?.Name??UiText.Get("Unknown"))+" — "+UiText.Get("TrainingStaffIneligible"));owner.SetItemMetadata(owner.ItemCount-1,missing.ToString());owner.SetItemDisabled(owner.ItemCount-1,true);owner.Selected=owner.ItemCount-1;}
             owner.TooltipText=eligible.Length==0?UiText.Get("TrainingDelegationNoStaff"):"";TrainingUi.LimitPopup(owner);table.AddChild(owner);
-            if(eligible.Length==0){mode.SetItemDisabled(1,true);mode.SetItemDisabled(2,true);}
+            if(eligible.Length==0){mode.SetItemDisabled(1,true);mode.SetItemDisabled(2,true);mode.SetItemDisabled(3,true);}
             Guid? SelectedOwner()=>owner.Selected>0&&Guid.TryParse(owner.GetItemMetadata(owner.Selected).AsString(),out var id)?id:null;
-            mode.ItemSelected+=index=>{owner.Disabled=index==0;owner.SetItemText(0,eligible.Length==0?UiText.Get("TrainingDelegationNoStaff"):index==0?manualOwner:UiText.Get("TrainingUnassignedResponsible"));if(index==0)owner.Selected=0;if(index==0)state.Assignments.Remove(area);else state.Assignments[area]=new(area,SelectedOwner(),index==2?TrainingDelegationMode.Mixed:TrainingDelegationMode.Delegated);Changed();};
-            owner.ItemSelected+=_=>{if(mode.Selected>0)state.Assignments[area]=new(area,SelectedOwner(),mode.Selected==2?TrainingDelegationMode.Mixed:TrainingDelegationMode.Delegated);Changed();};
+            mode.ItemSelected+=index=>{owner.Disabled=index==0;owner.SetItemText(0,eligible.Length==0?UiText.Get("TrainingDelegationNoStaff"):index==0?manualOwner:UiText.Get("TrainingUnassignedResponsible"));if(index==0)owner.Selected=0;if(index==0)state.Assignments.Remove(area);else state.Assignments[area]=new(area,SelectedOwner(),(TrainingDelegationMode)index);Changed();};
+            owner.ItemSelected+=_=>{if(mode.Selected>0)state.Assignments[area]=new(area,SelectedOwner(),(TrainingDelegationMode)mode.Selected);Changed();};
         }
         details.AddChild(ClubUi.Text("TrainingDelegationNotice",UiText.Get("TrainingDelegationNotice"),12));details.AddChild(status);
         var actions=new HFlowContainer();details.AddChild(actions);

@@ -19,6 +19,13 @@ public sealed class SqliteAcademyMobilityStore(string path,IAcademyEligibility? 
     }
     public IReadOnlyList<MovementRecommendation> Recommendations()
     {using var c=WorldDatabase.Open(path);using var t=c.BeginTransaction(deferred:true);_=SqliteLineupStore.Owner(c,t);if(!SqliteSportsStore.HasSchema(c,t))return Array.Empty<MovementRecommendation>();using var q=WorldDatabase.Command(c,t,"SELECT data_json FROM movement_recommendations ORDER BY id");using var r=q.ExecuteReader();var list=new List<MovementRecommendation>();while(r.Read())list.Add(CareerJson.Read<MovementRecommendation>(r.GetString(0)));return list;}
+    /// <summary>Consulta cronológica del registro existente; no comprueba ni ejecuta una nueva operación.</summary>
+    public IReadOnlyList<AcademyMovementRecord> History(PlayerId player)
+    {
+        if(!new SqliteClubSquadStore(path).All(false).ContainsKey(player))throw new InvalidOperationException("Futbolista ajeno al club dirigido.");
+        using var c=WorldDatabase.Open(path);using var t=c.BeginTransaction(deferred:true);_=SqliteLineupStore.Owner(c,t);if(!SqliteSportsStore.HasSchema(c,t))return Array.Empty<AcademyMovementRecord>();
+        using var q=WorldDatabase.Command(c,t,"SELECT id,occurred_on,data_json,evidence FROM movement_history WHERE player_id=$player ORDER BY occurred_on,id",("$player",player.ToString()));using var r=q.ExecuteReader();var result=new List<AcademyMovementRecord>();while(r.Read())result.Add(new(r.GetInt64(0),DateOnly.ParseExact(r.GetString(1),"yyyy-MM-dd"),CareerJson.Read<MobilityRequest>(r.GetString(2)),r.GetString(3)));return result;
+    }
     public void Recommend(MovementRecommendation proposal)
     {
         var coach=new SqliteAcademyStore(path).Get(proposal.Source).Coach;var all=new SqliteClubSquadStore(path).All();var teams=new SqliteClubSquadStore(path).Teams();

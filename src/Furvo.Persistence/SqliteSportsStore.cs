@@ -16,7 +16,29 @@ public sealed class SqliteSportsStore(string path,TrainingSchedulePolicy? schedu
         var target=Team(team);using var c=WorldDatabase.Open(path);using var t=c.BeginTransaction(deferred:true);var result=new List<TrainingStaff>();
         using(var q=WorldDatabase.Command(c,t,"SELECT s.coach_id,c.profile_json FROM career_state s JOIN career_coaches c ON c.id=s.coach_id WHERE s.singleton=1;"))
         using(var r=q.ExecuteReader())if(r.Read())result.Add(new(Guid.Parse(r.GetString(0)),CareerJson.Read<Furvo.Core.Careers.CoachProfile>(r.GetString(1)).FullName,team,new[]{TrainingResponsibility.Weekly,TrainingResponsibility.Collective,TrainingResponsibility.Individual,TrainingResponsibility.Position,TrainingResponsibility.Group,TrainingResponsibility.SetPieces}));
-        if(target.Category!="First"){var coach=new SqliteAcademyStore(path).Get(team).Coach;result.Add(new(coach.Id,coach.Name,team,new[]{TrainingResponsibility.Weekly,TrainingResponsibility.Collective,TrainingResponsibility.Individual,TrainingResponsibility.Position,TrainingResponsibility.Group,TrainingResponsibility.SetPieces},"AcademyCoach"));}return result;
+        if(target.Category!="First"){var coach=new SqliteAcademyStore(path).Get(team).Coach;if(coach.LinkState=="Institutional")result.Add(new(coach.Id,coach.Name,team,new[]{TrainingResponsibility.Weekly,TrainingResponsibility.Collective,TrainingResponsibility.Individual,TrainingResponsibility.Position,TrainingResponsibility.Group,TrainingResponsibility.SetPieces},"AcademyCoach"));}return result;
+    }
+    public void SaveDelegation(Guid team, int revision, TrainingResponsibility area, TrainingDelegation? assignment)
+    {
+        if (!Enum.IsDefined(area) || assignment is not null &&
+            (assignment.Area != area || !Enum.IsDefined(assignment.Mode) || assignment.Responsible is not { } id ||
+             !Staff(team).Any(p => p.Id == id && p.Role != "HeadCoach" && p.Responsibilities.Contains(area))))
+            throw new InvalidDataException("El responsable no está disponible para esta tarea.");
+        Team(team);
+        using var c = WorldDatabase.Open(path, SqliteOpenMode.ReadWrite);
+        using var t = c.BeginTransaction();
+        Ensure(c, t);
+        using var read = WorldDatabase.Command(c, t, "SELECT data_json FROM training_plans WHERE team_id=$team", ("$team", team.ToString("D")));
+        var plan = read.ExecuteScalar() is string json ? CareerJson.Read<TrainingPlan>(json) : TrainingPlan.Empty(team);
+        if (plan.Revision != revision) throw new InvalidOperationException("La planificación cambió; vuelve a abrirla.");
+        var assignments = plan.Delegations.Where(d => d.Area != area).ToList();
+        if (assignment is not null) assignments.Add(assignment);
+        var next = plan with { Revision = checked(plan.Revision + 1), Delegations = assignments.OrderBy(d => d.Area).ToArray() };
+        using var write = WorldDatabase.Command(c, t,
+            "INSERT INTO training_plans VALUES($team,$revision,$json) ON CONFLICT(team_id) DO UPDATE SET revision=excluded.revision,data_json=excluded.data_json",
+            ("$team", team.ToString("D")), ("$revision", next.Revision), ("$json", CareerJson.Write(next)));
+        write.ExecuteNonQuery();
+        t.Commit();
     }
     public TrainingPlan Plan(Guid team)
     {Team(team);using var c=WorldDatabase.Open(path);using var t=c.BeginTransaction(deferred:true);if(!HasSchema(c,t))return TrainingPlan.Empty(team);using var q=WorldDatabase.Command(c,t,"SELECT data_json FROM training_plans WHERE team_id=$team;",("$team",team.ToString("D")));var plan=q.ExecuteScalar() is string json?CareerJson.Read<TrainingPlan>(json):TrainingPlan.Empty(team);if(!HasDaySchema(c,t))return ReadLegacyRests(c,t,plan);var days=new List<TrainingDayPlan>();using var read=WorldDatabase.Command(c,t,"SELECT date,kind,single_turn FROM training_day_plans WHERE team_id=$team ORDER BY date;",("$team",team.ToString("D")));using var rows=read.ExecuteReader();while(rows.Read())days.Add(new(DateOnly.ParseExact(rows.GetString(0),"yyyy-MM-dd"),(TrainingDayKind)rows.GetInt32(1),rows.IsDBNull(2)?null:(TrainingTurn)rows.GetInt32(2)));rows.Close();return ReadLegacyRests(c,t,plan with{Days=days});}

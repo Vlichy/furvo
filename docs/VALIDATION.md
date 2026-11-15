@@ -592,3 +592,98 @@ Base: 521 pruebas Debug. Resultado final: **545 Debug y 545 Release superadas**,
 ## Cierre base de Entrenamiento — Entrega 2 — 04/11/2026
 
 Referencia real anterior: 545 Debug. Resultado final: **575 Debug y 575 Release superadas**, 0 fallidas y 0 omitidas; 30 casos nuevos. Compilaciones Debug/Release y últimas recompilaciones de Godot correctas, sin errores ni advertencias. Pruebas con compilación habilitada. Godot nativo termina con código 0 y valida restricciones por fecha/ejercicio, conflictos sin reescritura, parcial explícita, reapertura y finalización inclusiva, además de las regresiones de Entrenamiento. Capturas finales revisadas en las tres resoluciones; acceso compactado para conservar el calendario. Una migración incremental por carrera, aplicada solo al guardar expresamente; lecturas antiguas sin cambios. Cinco bases fundacionales intactas por SHA-256, sin usar carreras personales. El aviso de solapamiento es una prueba negativa esperada. [Resultados, inventario, límites y conclusión SÍ](TRAINING_BASE_CLOSURE.md).
+
+
+## Cantera — Seguimiento e historial — Entrega 1 — 04/11/2026
+
+Referencia: 575 Debug. Resultado: **594 Debug y 594 Release superadas**, 0 fallidas y 0 omitidas; 19 casos nuevos. Compilaciones finales de solución en ambas configuraciones sin errores ni advertencias. Godot específico --academy-followup-only termina con código 0; capturas revisadas en las tres resoluciones. CRUD y reapertura de observaciones, informes reales/comparación de 51 visibles, consulta de historial sin ejecución y regreso con filtros/orden/selección verificados. El recorrido global supera Cantera pero termina con código 1 en la interferencia ya conocida de faltas de Entrenamiento; no se corrige ni se oculta en esta entrega. Una migración incremental por carrera, lecturas antiguas sin cambios; cinco bases fundacionales y catálogo intactos. [Informe y evidencia](ACADEMY_FOLLOWUP_DELIVERY_1.md).
+
+
+## Mercado — Entrega 1 (04/11/2026)
+- Referencia previa ejecutada: 594 pruebas Debug.
+- 35 casos específicos nuevos: 35/35 superados.
+- Batería completa recompilada: 629/629 Debug y 629/629 Release, cero fallos y cero omisiones. TRX: artifacts/test-results/market-debug.trx y market-release.trx.
+- Compilación de solución Debug/Release: cero errores y advertencias.
+- Recorrido nativo --market-only con Godot 4.7.2 .NET: superado. Comprueba 1.894 jugadores, filtros combinados, catálogo exclusivamente público, ficha externa de 51 atributos, contrato, orden por ID, regreso con filtros/selección/scroll, filtros inválidos y búsqueda vacía.
+- Capturas nativas 1280×720, 1600×900 y 1920×1080 en artifacts/career-visual/career-market-*.png. Se corrigió un solapamiento de posiciones largas detectado al inspeccionarlas.
+- Las cinco publicaciones iniciales conservan su SHA-256 previo. Las pruebas verifican que búsqueda/ficha no cambian el archivo de carrera.
+- Sin migraciones ni dependencias nuevas. No se implementan operaciones de mercado ni se inicia la siguiente entrega.
+- [Inventario, compatibilidad, alcance y límites](MARKET_DELIVERY_1.md).
+- Regresión nativa adicional --academy-followup-only: superada; plantillas, ficha compartida, sincronización, observaciones, reapertura y tres resoluciones. Log: artifacts/market-academy-regression.log.
+
+
+## Mercado — Filtros y columnas por posición (04/11/2026)
+- Referencia anterior: 629/629 Debug.
+- 35 casos nuevos; batería completa: 664/664 Debug y 664/664 Release, cero fallos y cero omisiones.
+- Compilaciones Debug/Release de Furvo.sln: cero errores y advertencias.
+- TRX: artifacts/test-results/market-columns-before.trx, market-columns-focused.trx (69 casos de Mercado), market-columns-debug.trx y market-columns-release.trx.
+- Nativo --market-columns-only: superado en Godot 4.7.2 .NET. Búsqueda normalizada, columnas separadas, rangos sustituidos con eventos de teclado, orden numérico, preferencias independientes, todos los 51 públicos, regreso y cambio de módulo.
+- Nativo --market-preferences-reopen: superado en un segundo proceso; recupera preferencias de central y portero desde el archivo aislado.
+- Nativo --market-only anterior: superado con las columnas variables, incluidos selección por ID y desplazamiento vertical.
+- Capturas inspeccionadas en 1280×720, 1600×900 y 1920×1080; botones accesibles y desplazamientos horizontal/vertical. artifacts/career-visual/career-market-columns-*.png.
+- Logs: artifacts/market-columns-native.log, market-columns-restart.log y market-columns-regression.log.
+- SHA-256 de las cinco publicaciones iniciales idéntico antes/después; pruebas de lectura y preferencias comprueban integridad de la carrera completa, contratos y presupuestos.
+- Sin migraciones, nuevas dependencias, cambios de fichas de otros módulos, commits ni push.
+- Límite conocido: Tree no congela columnas; se ofrece resumen de selección fuera del área horizontal.
+- [Archivos, predeterminados, alcance por usuario e instrucciones](MARKET_SEARCH_COLUMNS.md).
+
+
+## Mercado — Exclusión del club dirigido (04/11/2026)
+- Compilación Furvo.sln Debug y Release: cero errores y advertencias.
+- 18 casos nuevos respecto de las 664 pruebas anteriores.
+- Batería completa: 682/682 Debug y 682/682 Release, cero fallos y cero omisiones.
+- Pruebas específicas de Mercado: 87/87 superadas.
+- TRX: artifacts/test-results/market-exclusion-focused.trx, market-exclusion-debug.trx y market-exclusion-release.trx.
+- Recorrido nativo --market-exclusion-only superado con carrera aislada: nombre propio sin resultados, coincidencias externas, posición/atributos, recuento, desplegable sin club propio, ficha externa y acceso propio desde Plantilla y Cantera.
+- Universo de Mosaico: 1.786 externos de 1.894 almacenados; excluidos 24 del primer equipo y 84 de cantera.
+- Regresión nativa --market-columns-only superada sin modificar el sistema de columnas.
+- Capturas inspeccionadas en 1280×720, 1600×900 y 1920×1080: artifacts/career-visual/career-market-external-*.png.
+- Logs: artifacts/market-exclusion-native.log y market-exclusion-columns-regression.log.
+- Las cinco publicaciones iniciales mantienen SHA-256 idéntico. Las consultas conservan el hash completo de las carreras de prueba.
+- No se modifica el disparador de empleo inmutable. El cambio de ámbito se valida en Core y entre carreras válidas distintas; no se declara disponible un cambio de empleo dentro de la carrera actual.
+- Sin migraciones, paquetes nuevos, cambios de contratos, presupuestos o estructura de cantera. Sin commits ni push.
+- [Inventario y compatibilidad](MARKET_EXTERNAL_PLAYERS.md).
+
+
+## Mercado — Propuestas y negociación entre clubes (05/11/2026)
+- Compilaciones finales Furvo.sln Debug/Release: cero errores y advertencias.
+- 57 casos nuevos respecto de las 682 pruebas anteriores.
+- Batería completa final: 739/739 Debug y 739/739 Release; cero fallos y cero omisiones.
+- TRX finales: artifacts/test-results/transfer-debug.trx y transfer-release.trx. El filtro específico intermedio se conserva en transfer-focused.trx.
+- Recorrido nativo final --transfer-only superado en Godot 4.7.2 .NET: nueve secciones, importe/plazos, dos jugadores propios, variable, futura venta, resumen, confirmación, guardar/reabrir, envío/retirada e historial.
+- La prueba nativa rechaza el formato ambiguo 1.000, comprueba la limpieza del aviso al corregirlo y verifica que el hash del archivo de preferencias de columnas no cambia durante la negociación.
+- Formularios y confirmación comprobados en 1280×720, 1600×900 y 1920×1080; capturas inspeccionadas en artifacts/career-visual/career-transfer-form-*.png y career-transfer-confirm-*.png.
+- Se corrigió la confirmación estándar que podía exceder la ventana, sustituyéndola por contenido desplazable y botones fijos.
+- Regresión nativa --market-exclusion-only superada: club propio excluido, externos disponibles y acceso propio en Plantilla/Cantera conservado.
+- Logs: artifacts/transfer-native.log y transfer-market-regression.log.
+- Migración Transfer001_Negotiations: solo al guardar una primera propuesta válida; consultas y fallos no dejan migraciones parciales.
+- Las pruebas comparan todos los registros de negocio preexistentes antes/después de negociar, incluidos contratos, jugadores, asignaciones, cantera y economía. Solo cambian las tablas nuevas de propuestas.
+- Las cinco publicaciones iniciales conservan sus SHA-256. No se prueban operaciones sobre carreras personales.
+- Respuestas automáticas, cierre de fichajes, pagos, activación y adquisición efectiva de derechos: no operativos, con dependencias documentadas. Las respuestas de prueba son fixtures, nunca un aceptador incluido en el juego.
+- Sin paquetes nuevos, commits ni push.
+- [Informe, inventario y estado de fases](MARKET_CLUB_NEGOTIATIONS.md).
+
+
+## Mercado — Hacer oferta (05/11/2026)
+
+Pantalla única con secciones plegables, importes limitados y validados, pagos automáticos, selector buscable y cláusulas estándar. Compilación Debug/Release sin errores ni advertencias; 761 pruebas superadas en cada configuración. Recorrido nativo Godot en 1280×720, 1600×900 y 1920×1080. Publicaciones iniciales intactas; sin migración SQL adicional. [Informe, archivos, compatibilidad y evidencia](MARKET_OFFER_REDESIGN.md).
+
+
+## Mercado — Tabla de Negociaciones (06/11/2026)
+
+Columnas compartidas y proporcionales, importes alineados con cifras tabulares, filtro compacto y tooltips. 761 pruebas Debug y 761 Release superadas; recorrido nativo con 1/8/150 filas en tres resoluciones. [Archivos y evidencia](MARKET_NEGOTIATIONS_LAYOUT.md). Sin cambios de dominio ni persistencia.
+
+
+## Mercado — Pagos y jugadores incluidos (06/11/2026)
+
+Calendarios de 2/3/4 pagos con reparto y meses editables, conservación expresa de calendarios anteriores y selector visual con filtros deportivos y selección transitoria. 30 casos nuevos; 791 pruebas superadas en Debug y Release. Comprobación nativa en tres resoluciones. [Archivos, pruebas y límites](MARKET_PAYMENTS_PLAYER_PICKER.md). Sin migración SQL ni cambios del mundo inicial.
+
+
+## Mercado — Tarjetas de condiciones (06/11/2026)
+
+Recompra, tanteo, incorporación y validez con controles visuales, ayudas y resúmenes dinámicos; opciones anteriores conservadas. 24 pruebas nuevas; 815 superadas en Debug y Release. Comprobación nativa en tres resoluciones. [Informe, archivos y evidencia](MARKET_CONDITION_CARDS.md). Sin cambios de Core, esquemas o publicaciones iniciales.
+
+
+## Mercado — Información de rescisión (06/11/2026)
+
+Cláusula vinculada a Contract, consulta pública filtrada, ficha propia y avisos de oferta. Extensión ContractRelease001 optativa, sin rellenar contratos antiguos ni modificar publicaciones. 22 pruebas nuevas; 837 superadas en Debug y Release. Godot comprobado en tres resoluciones. [Archivos, migración y evidencia](MARKET_RELEASE_INFORMATION.md). La ejecución de rescisión continúa pendiente.
