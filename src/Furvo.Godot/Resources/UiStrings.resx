@@ -518,7 +518,7 @@
   <data name="NavPage_Desktop" xml:space="preserve"><value>Escritorio</value></data>
   <data name="NavPage_Inbox" xml:space="preserve"><value>Bandeja de entrada</value></data>
   <data name="NavPage_OwnSquad" xml:space="preserve"><value>Plantilla</value></data>
-  <data name="NavPage_OwnInformation" xml:space="preserve"><value>Información y estadio</value></data>
+  <data name="NavPage_OwnInformation" xml:space="preserve"><value>Información</value></data>
   <data name="NavPage_OwnEconomy" xml:space="preserve"><value>Economía</value></data>
   <data name="NavPage_OwnHistory" xml:space="preserve"><value>Historia y récords</value></data>
   <data name="NavPage_PublicClubs" xml:space="preserve"><value>Explorar clubes</value></data>
@@ -1782,4 +1782,31 @@ Jugadores incluidos: {4}; cláusulas de futura venta/plusvalía: {5}. Sus porcen
 <data name="ClubDelegationFull" xml:space="preserve"><value>Completa</value></data>
 <data name="ClubDelegationSave" xml:space="preserve"><value>Guardar</value></data>
 <data name="TrainingDelegationMode_PersonalSupport" xml:space="preserve"><value>Personal con apoyo</value></data>
+<data name="NavPage_OwnStadium" xml:space="preserve"><value>Estadio</value></data>
+<data name="StadiumIdentitySection" xml:space="preserve"><value>Identidad del estadio</value></data>
+<data name="StadiumPitchSection" xml:space="preserve"><value>Terreno de juego</value></data>
+<data name="StadiumAttendanceSection" xml:space="preserve"><value>Gradas y asistencia</value></data>
+<data name="StadiumIllustrationsSection" xml:space="preserve"><value>Representación visual</value></data>
+<data name="StadiumFacilitiesSection" xml:space="preserve"><value>Instalaciones asociadas</value></data>
+<data name="ClubDelegationsDepartment_Training" xml:space="preserve"><value>Entrenamiento</value></data>
+<data name="ClubDelegationsDepartment_Academy" xml:space="preserve"><value>Cantera</value></data>
+<data name="ClubDelegationsNoAcademy" xml:space="preserve"><value>Esta carrera todavía no dispone de equipos inferiores.</value></data>
+<data name="ClubDelegationTaskHeader" xml:space="preserve"><value>Responsabilidad</value></data>
+<data name="ClubDelegationActionHeader" xml:space="preserve"><value>Acción</value></data>
+<data name="ManageClubInfrastructure" xml:space="preserve"><value>Gestionar estadio e infraestructuras</value></data>
+<data name="StadiumCurrent" xml:space="preserve"><value>Estadio actual</value></data>
+<data name="StadiumReforms" xml:space="preserve"><value>Reformas y ampliaciones</value></data>
+<data name="StadiumNew" xml:space="preserve"><value>Nuevo estadio</value></data>
+<data name="StadiumCampus" xml:space="preserve"><value>Ciudad deportiva</value></data>
+<data name="StadiumProjects" xml:space="preserve"><value>Obras y proyectos</value></data>
+<data name="StadiumManagementPending" xml:space="preserve"><value>Puedes consultar el estadio actual. La gestión de reformas, construcción, ciudad deportiva y obras está pendiente.</value></data>
+<data name="AcademyDelegationGroup_Sport" xml:space="preserve"><value>Gestión deportiva</value></data>
+<data name="AcademyDelegationGroup_Recruitment" xml:space="preserve"><value>Captación e incorporaciones</value></data>
+<data name="AcademyDelegationGroup_Development" xml:space="preserve"><value>Desarrollo y seguimiento</value></data>
+<data name="AcademyDelegationGroup_Coordination" xml:space="preserve"><value>Coordinación general</value></data>
+<data name="AcademyDelegationLineups" xml:space="preserve"><value>Alineaciones y selección</value></data>
+<data name="AcademyDelegationPending_Recruitment" xml:space="preserve"><value>Pendiente de integración: captación, contratación de juveniles y renovaciones. Estas tareas requieren personal apto y conexión con Mercado, contratos e inscripciones.</value></data>
+<data name="AcademyDelegationPending_Development" xml:space="preserve"><value>El seguimiento individual se consulta en Equipo → Cantera. La delegación de desarrollo, evaluación y propuestas de promoción está pendiente.</value></data>
+<data name="AcademyDelegationPending_Coordination" xml:space="preserve"><value>Ámbito: todo el club. La supervisión de técnicos, metodología y planificación de categorías requieren un responsable de cantera con competencias acreditadas.</value></data>
+<data name="AcademyDelegationCompetitionPending" xml:space="preserve"><value>La preparación de partidos y la gestión de competiciones juveniles siguen pendientes.</value></data>
 </root>

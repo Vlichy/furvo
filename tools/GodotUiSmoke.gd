@@ -273,6 +273,31 @@ func check_career_workspace(screen: Node, employed: bool) -> bool:
 func check_club_delegations(screen: Node) -> bool:
     find_named(screen, "NavArea_Club").emit_signal("pressed")
     await process_frame
+    for resolution in [Vector2i(1280,720), Vector2i(1600,900), Vector2i(1920,1080)]:
+        root.size = resolution
+        for page in ["OwnInformation", "OwnStadium"]:
+            if page == "OwnStadium":
+                find_named(screen, "ManageClubInfrastructure").emit_signal("pressed")
+            else:
+                find_named(screen, "NavPage_" + page).emit_signal("pressed")
+            await create_timer(0.15).timeout
+            var section = find_named(screen, "ClubInformationPage" if page == "OwnInformation" else "ClubStadiumPage")
+            if not require(section.is_visible_in_tree(), "La navegación abre otra sección"):
+                return false
+            if page == "OwnInformation":
+                if not require(find_named(section,"ClubDirectionPanels") != null and find_named(section,"StadiumViews").get_child_count() == 3 and find_named(section,"StadiumCapacityValue") != null, "Información perdió identidad o resumen del estadio"):
+                    return false
+            else:
+                var views = find_named(section,"StadiumViews")
+                if not require(views.get_child_count() == 3 and views.get_global_rect().end.x <= resolution.x, "Las ilustraciones no caben en Estadio"):
+                    return false
+                var navigation = find_named(section,"StadiumSectionsNavigation")
+                if not require(navigation.get_child_count() == 5 and navigation.get_global_rect().end.x <= resolution.x, "Faltan subapartados de infraestructuras"):
+                    return false
+                for key in ["StadiumReforms", "StadiumNew", "StadiumCampus", "StadiumProjects"]:
+                    if not require(find_named(navigation,key).disabled, "Una acción pendiente aparenta estar disponible"):
+                        return false
+            await capture_economy_screen("career-club-" + page + "-" + str(resolution.x))
     find_named(screen, "NavPage_ClubPersonnel").emit_signal("pressed")
     await process_frame
     var grid = find_named(screen, "ClubDelegationsGrid")
@@ -295,6 +320,13 @@ func check_club_delegations(screen: Node) -> bool:
     owner.emit_signal("item_selected", 1)
     mode.select(1)
     mode.emit_signal("item_selected", 1)
+    find_named(screen,"ClubDelegationsDepartment_Academy").emit_signal("pressed")
+    await process_frame
+    var discard = find_named(screen,"TrainingConfirmDialog")
+    if not require(discard != null and discard.visible, "Se pierde el borrador de delegación sin confirmar"):
+        return false
+    discard.get_cancel_button().emit_signal("pressed")
+    await process_frame
     grid.get_child(7).emit_signal("pressed")
     await process_frame
     for resolution in [Vector2i(1280,720), Vector2i(1600,900), Vector2i(1920,1080)]:
@@ -308,6 +340,52 @@ func check_club_delegations(screen: Node) -> bool:
             if not require(rect.position.x >= 0 and rect.end.x <= resolution.x and rect.end.y <= resolution.y, "Control de delegación fuera de pantalla"):
                 return false
         await capture_economy_screen("career-club-delegations-" + str(resolution.x))
+    find_named(screen,"ClubDelegationsDepartment_Academy").emit_signal("pressed")
+    await process_frame
+    for resolution in [Vector2i(1280,720), Vector2i(1600,900), Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(0.15).timeout
+        grid = find_named(screen,"ClubDelegationsGrid")
+        if not require(grid.get_child_count() == 44 and grid.get_child(6).item_count == 2 and grid.get_child(10).item_count == 3, "Cantera debe mostrar alineaciones y las nueve tareas de entrenamiento con sus modos propios"):
+            return false
+        if not require(grid.get_child(10).selected == 1 and grid.get_child(9).selected == 1, "Cantera no comparte la delegación semanal de Entrenamiento"):
+            return false
+        for index in [5,6,7]:
+            if not require(grid.get_child(index).get_global_rect().end.x <= resolution.x, "Selector de Cantera fuera de pantalla"):
+                return false
+        await capture_economy_screen("career-club-delegations-academy-" + str(resolution.x))
+    var groups = find_named(screen,"AcademyDelegationGroups")
+    if not require(groups.get_child_count() == 4, "Faltan grupos de responsabilidades de cantera"):
+        return false
+    for group in ["Recruitment","Development","Coordination"]:
+        find_named(screen,"AcademyDelegationGroup_" + group).emit_signal("pressed")
+        await process_frame
+        if not require(find_named(screen,"AcademyDelegationGroupStatus") != null and find_named(screen,"ClubDelegationsTeam") == null, "Un grupo pendiente ofrece asignaciones por equipo"):
+            return false
+    find_named(screen,"AcademyDelegationGroup_Sport").emit_signal("pressed")
+    await process_frame
+    grid = find_named(screen,"ClubDelegationsGrid")
+    var academy_owner = grid.get_child(5)
+    var original_owner = academy_owner.selected
+    var alternate_owner = 0 if original_owner == 1 else 1
+    academy_owner.select(alternate_owner)
+    academy_owner.emit_signal("item_selected", alternate_owner)
+    grid.get_child(7).emit_signal("pressed")
+    await process_frame
+    find_named(screen,"ClubDelegationsDepartment_Training").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"ClubDelegationsGrid").get_child(6).selected == 1, "Cambiar de departamento perdió la delegación de Entrenamiento"):
+        return false
+    find_named(screen,"ClubDelegationsDepartment_Academy").emit_signal("pressed")
+    await process_frame
+    grid = find_named(screen,"ClubDelegationsGrid")
+    if not require(grid.get_child(5).selected == alternate_owner, "Cantera no recuperó su configuración guardada"):
+        return false
+    academy_owner = grid.get_child(5)
+    academy_owner.select(original_owner)
+    academy_owner.emit_signal("item_selected", original_owner)
+    grid.get_child(7).emit_signal("pressed")
+    await process_frame
     var marker = {"root": screen.get_meta("qa_storage_root"), "career": str(find_named(screen,"CareerShell").get_meta("career_id")), "team": 1}
     await return_career_main_menu(screen)
     if not require(find_named(screen,"NewGame") != null, "No salió de la carrera"):
@@ -923,9 +1001,9 @@ func run_test() -> void:
             find_named(screen, "ViewClub").emit_signal("pressed")
         await process_frame
         var club_tabs = find_named(screen, "ClubTabs") as TabContainer
-        if not require(club_tabs != null and club_tabs.get_tab_count() == 4 and club_tabs.current_tab == 0, "El club no abre Información con cuatro pestañas"):
+        if not require(club_tabs != null and club_tabs.get_tab_count() == 5 and club_tabs.current_tab == 0, "El club no abre Información con cinco pestañas"):
             return
-        if not require([club_tabs.get_tab_title(0), club_tabs.get_tab_title(1), club_tabs.get_tab_title(2), club_tabs.get_tab_title(3)] == ["Información", "Plantilla", "Historia", "Economía"], "Orden de pestañas incorrecto"):
+        if not require([club_tabs.get_tab_title(0), club_tabs.get_tab_title(1), club_tabs.get_tab_title(2), club_tabs.get_tab_title(3), club_tabs.get_tab_title(4)] == ["Información", "Plantilla", "Historia", "Economía", "Estadio"], "Orden de pestañas incorrecto"):
             return
         if not require(find_named(screen, "ClubHeader").get_meta("club_id") == expected_club_id, "La cabecera pertenece a otro club"):
             return
@@ -935,15 +1013,16 @@ func run_test() -> void:
             if not require(find_named(screen, pending).text == "Pendiente de definir", "Se presentó un dato pendiente como real"):
                 return
         var info_page = find_named(screen, "ClubInformationPage")
-        if not require(find_named(info_page, "FootballPitch") != null and find_named(info_page, "FootballPitch").get_meta("end_area_count") == 4, "Falta el campo horizontal corregido"):
+        var stadium_page = find_named(screen, "ClubStadiumPage")
+        if not require(find_named(stadium_page, "FootballPitch") != null and find_named(stadium_page, "FootballPitch").get_meta("end_area_count") == 4, "Falta el campo horizontal corregido"):
             return
         for view in ["StadiumExterior", "StadiumInterior", "StadiumPitchCaption", "StadiumExteriorCaption", "StadiumInteriorCaption"]:
-            if not require(find_named(info_page, view) != null, "Falta una vista o descripción de estadio"):
+            if not require(find_named(stadium_page, view) != null, "Falta una vista o descripción de estadio"):
                 return
         if not require(find_named(screen, "ClubKits").get_child(0).get_child_count() == 3, "Se esperaban tres equipaciones"):
             return
         for pending in ["ClubAssociationsValue", "ClubOwnershipValue", "ClubPresidentValue", "ClubOwnerValue", "ClubGroupValue", "StadiumCategoryValue", "StadiumDimensionsValue", "StadiumOpeningValue"]:
-            if not require(find_named(info_page, pending).text == "Pendiente de definir", "Se inventaron datos institucionales o de estadio"):
+            if not require(find_named(screen, pending).text == "Pendiente de definir", "Se inventaron datos institucionales o de estadio"):
                 return
         for section in ["HistoryTrajectoryPanel", "HistoryLegendsPanel", "HistoryRecordsPanel"]:
             if not require(find_named(info_page, section) != null, "Falta una sección de síntesis histórica"):
@@ -958,7 +1037,7 @@ func run_test() -> void:
         for panel in ["ClubPhilosophyPanel", "ClubBoardExpectationsPanel"]:
             if not require(find_named(direction_panels, panel) != null and "Borrador" in find_named(find_named(direction_panels, panel), "DirectionDraftNotice").text, "La propuesta no se identifica como borrador"):
                 return
-        for tab_index in [2, 3, 0, 1]:
+        for tab_index in [2, 3, 4, 0, 1]:
             club_tabs.current_tab = tab_index
             await process_frame
             if not require(club_tabs.get_child(tab_index).is_visible_in_tree() and club_tabs.get_child(tab_index).get_meta("club_id") == expected_club_id, "La pestaña no conserva el club seleccionado"):
@@ -978,24 +1057,13 @@ func run_test() -> void:
                             return
                         if not require(overview.vertical == (resolution.x < 1040), "La composición institucional no se adapta al ancho"):
                             return
-                        if not overview.vertical:
-                            var left_panel = find_named(info_page, "ClubInstitutionPanel") as Control
-                            var right_panel = find_named(info_page, "ClubStadiumPanel") as Control
-                            if not require(left_panel.get_global_rect().end.x <= right_panel.get_global_rect().position.x + 1, "Identidad y estadio se solapan"):
-                                return
-                        var view_row = find_named(info_page, "StadiumViews")
-                        var previous_view: Control = null
-                        for view_column in view_row.get_children():
-                            if previous_view != null and not require(previous_view.get_global_rect().end.x <= view_column.get_global_rect().position.x + 1, "Las vistas del estadio se solapan"):
-                                return
-                            previous_view = view_column
                         var info_scroll = find_named(info_page, "ClubInfoScroll") as ScrollContainer
                         info_scroll.scroll_vertical = int(info_scroll.get_v_scroll_bar().max_value)
                         await process_frame
                         await process_frame
                         if not require(find_named(info_page, "ClubHistorySummary").get_global_rect().end.y <= info_scroll.get_global_rect().end.y + 1, "La síntesis inferior no es accesible con desplazamiento"):
                             return
-                        print("FURVO_CLUB_REDESIGN_LAYOUT: ", resolution, " footer visible; stadium views=3")
+                        print("FURVO_CLUB_REDESIGN_LAYOUT: ", resolution, " footer visible")
                     var club_footer = find_named(screen, "BackClubs") as Control
                     var choose = find_named(screen, "ChooseClub") as Button
                     var footer = find_named(screen, "ClubFooter") as Control

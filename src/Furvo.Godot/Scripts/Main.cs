@@ -225,14 +225,16 @@ public partial class Main : Control
             var history = _queries.GetClubHistory(_club.Id);
             var body = Frame("ClubSection", "", "", showHeading: false);
             body.AddChild(new ClubHeader(details));
-            var tabs = new TabContainer { Name = "ClubTabs", SizeFlagsHorizontal = SizeFlags.ExpandFill, SizeFlagsVertical = SizeFlags.ExpandFill };
+            var tabs = new TabContainer { Name = "ClubTabs", TabsVisible = !CareerActive, SizeFlagsHorizontal = SizeFlags.ExpandFill, SizeFlagsVertical = SizeFlags.ExpandFill };
             tabs.SetMeta("club_id", _club.Id.ToString());
             tabs.AddThemeStyleboxOverride("panel", new StyleBoxFlat { BgColor = new Color("0d192b"), ContentMarginTop = 8 });
             body.AddChild(tabs);
-            tabs.AddChild(new ClubInformationPage(details, history));
+            tabs.AddChild(new ClubInformationPage(details, history,
+                CareerActive ? () => NavigateCareer(Furvo.Core.Careers.CareerPage.OwnStadium) : null));
             var squadPage = new VBoxContainer { Name = "ClubSquadPage" }; squadPage.SetMeta("club_id", _club.Id.ToString()); tabs.AddChild(squadPage);
             tabs.AddChild(new ClubHistoryPage(history)); tabs.AddChild(new ClubEconomyPage(_club.Id.ToString(), _queries.GetSeasons(), _queries.ReferenceDate, _queries.GetFinancialResources(_club.Id,_queries.GetSeasons().Single(s=>s.StartDate<=_queries.ReferenceDate && _queries.ReferenceDate<=s.EndDate).Id)));
-            var keys = new[] { "ClubInformationTab", "ClubSquadTab", "ClubHistoryTab", "ClubEconomyTab" };
+            tabs.AddChild(new ClubStadiumPage(details, management: CareerActive));
+            var keys = new[] { "ClubInformationTab", "ClubSquadTab", "ClubHistoryTab", "ClubEconomyTab", "NavPage_OwnStadium" };
             for (var i = 0; i < keys.Length; i++) tabs.SetTabTitle(i, UiText.Get(keys[i]));
             // FlowContainer conserva el pie fuera de las pestañas y envuelve los botones si falta ancho.
             var bar = new HFlowContainer { Name = "ClubFooter", SizeFlagsHorizontal = SizeFlags.ExpandFill };
@@ -269,7 +271,7 @@ public partial class Main : Control
             tabs.TabChanged += tab => { _clubTab = (int)tab; open.Visible = _clubTab == 1; if (_clubTab == 1) table.FocusTable();
                 if(CareerActive)
                 {
-                    _workspace!.Open(_clubTab switch{1=>Furvo.Core.Careers.CareerPage.OwnSquad,2=>Furvo.Core.Careers.CareerPage.OwnHistory,3=>Furvo.Core.Careers.CareerPage.OwnEconomy,_=>Furvo.Core.Careers.CareerPage.OwnInformation});
+                    _workspace!.Open(_clubTab switch{1=>Furvo.Core.Careers.CareerPage.OwnSquad,2=>Furvo.Core.Careers.CareerPage.OwnHistory,3=>Furvo.Core.Careers.CareerPage.OwnEconomy,4=>Furvo.Core.Careers.CareerPage.OwnStadium,_=>Furvo.Core.Careers.CareerPage.OwnInformation});
                     var expectedPage=_workspace.Page;var expectedClub=_club!.Id;
                     Callable.From(()=>{if(CareerActive && _workspace!.Page==expectedPage && _club?.Id==expectedClub){if(expectedPage==Furvo.Core.Careers.CareerPage.OwnSquad)ShowCareerSquad();else ShowClub();}}).CallDeferred();
                 }

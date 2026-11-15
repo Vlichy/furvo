@@ -1,6 +1,6 @@
 # Club → Personal → Delegaciones
 
-Abre una carrera con club, entra en Club y pulsa Personal. Selecciona el equipo, el responsable y el tipo de gestión. Guarda con el botón de esa fila. Los errores se muestran junto a la tabla y una confirmación aparece después de guardar.
+Abre una carrera con club, entra en Club y pulsa Personal. Elige Entrenamiento o Cantera en el submenú de Delegaciones. Selecciona el equipo, el responsable y el tipo de gestión. Guarda con el botón de esa fila. Los errores se muestran junto a la tabla y una confirmación aparece después de guardar. El guardado de una fila conserva las demás ediciones en pantalla. Cambiar de departamento o equipo con ediciones pendientes solicita confirmación.
 
 | Responsabilidad | Configuración | Fuente SQLite |
 |---|---|---|

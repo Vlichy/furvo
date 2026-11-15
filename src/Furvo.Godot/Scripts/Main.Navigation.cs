@@ -43,12 +43,12 @@ public partial class Main
             if(page==CareerPage.Lineup){_tacticTab=0;ShowTactics();return;}
             if(page==CareerPage.OwnSquad){ShowCareerSquad();return;}
             if(page==CareerPage.NoClub){var b=Frame("CareerSection",UiText.Get("NavPage_NoClub"),"");b.AddChild(ClubUi.Text("NoClubInformation",UiText.Get("CareerNoClubManagement"),17));return;}
-            if(page is CareerPage.OwnInformation or CareerPage.OwnEconomy or CareerPage.OwnHistory)
+            if(page is CareerPage.OwnInformation or CareerPage.OwnEconomy or CareerPage.OwnHistory or CareerPage.OwnStadium)
             {
                 var club=_workspace.Career.ClubId!.Value;_workspace.RequireManagement(club);
                 if(_club?.Id!=club){_selectedPlayer=null;_sort=SquadSort.Position;_descending=false;}
                 _club=_queries!.GetClubs().Single(c=>c.Id==club);
-                _clubTab=page switch{CareerPage.OwnSquad=>1,CareerPage.OwnEconomy=>3,CareerPage.OwnHistory=>2,_=>0};ShowClub();return;
+                _clubTab=page switch{CareerPage.OwnSquad=>1,CareerPage.OwnEconomy=>3,CareerPage.OwnHistory=>2,CareerPage.OwnStadium=>4,_=>0};ShowClub();return;
             }
             if(page==CareerPage.Desktop){ShowCareerDesktop();return;}
             if(page==CareerPage.Inbox){var b=Frame("CareerSection",UiText.Get("NavInbox"),"");b.AddChild(new CareerEmptyList("CareerInbox","CareerInboxEmpty",Array.Empty<CareerListEntry>()));b.AddChild(Button("BackCareerDashboard",()=>NavigateCareer(CareerPage.Desktop)));return;}
@@ -104,7 +104,7 @@ public partial class Main
     private CareerPage DefaultPage(CareerArea area)=>area switch{CareerArea.Home=>CareerPage.Desktop,CareerArea.Team=>CareerPage.OwnSquad,CareerArea.Market=>CareerPage.MarketSearch,CareerArea.Career=>CareerPage.Profile,_=>_workspace!.HasClub?CareerPage.OwnInformation:CareerPage.NoClub};
     private CareerPage[] ContextPages(CareerArea area)=>area switch{
         CareerArea.Home=>[],CareerArea.Team=>[CareerPage.OwnSquad,CareerPage.Lineup,CareerPage.Training,CareerPage.Analysis,CareerPage.Academy],
-        CareerArea.Club=>_workspace!.HasClub?[CareerPage.OwnInformation,CareerPage.OwnEconomy,CareerPage.OwnHistory,CareerPage.Facilities,CareerPage.ClubPersonnel]:[CareerPage.NoClub],
+        CareerArea.Club=>_workspace!.HasClub?[CareerPage.OwnInformation,CareerPage.OwnStadium,CareerPage.OwnEconomy,CareerPage.OwnHistory,CareerPage.Facilities,CareerPage.ClubPersonnel]:[CareerPage.NoClub],
         CareerArea.Career=>[CareerPage.Profile,CareerPage.Contract],CareerArea.Market=>[CareerPage.MarketSearch,CareerPage.MarketOffers,CareerPage.MarketNegotiations,CareerPage.MarketRights],_=>[]};
     private void ToggleCareerMenu()
     {
