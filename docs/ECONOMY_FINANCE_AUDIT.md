@@ -1,5 +1,7 @@
 # Auditoría de Economía y Finanzas
 
+Nota de alcance: el inventario económico refleja el momento de aquella auditoría. Posteriormente, Staff incorporó contratos iniciales de técnicos y negociación persistida hasta el acuerdo condicionado. Nómina, devengos, pagos y formalización siguen pendientes. Véase la [consolidación de Staff](STAFF_ARCHITECTURE.md).
+
 Furvo conserva recursos iniciales por club y temporada. El fichaje inicial del mánager registra un compromiso anual en la misma transacción que crea la carrera. La economía operativa requiere un libro mayor, un registro de obligaciones y servicios que ejecuten movimientos contra estos registros.
 
 ## Inventario verificado

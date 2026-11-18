@@ -1,12 +1,54 @@
 # Staff de Furvo
 
-## Estado de esta entrega
+## Consolidación vigente
+
+Referencia de trabajo: rama `main`, revisión `b2eeecc`, árbol limpio al comenzar. Los cambios recientes de Hacer oferta están incluidos en esa revisión. La consolidación registra el estado funcional y la auditoría. Las correcciones posteriores y sus pruebas se recogen en un bloque separado.
+
+| Función | Estado | Evidencia y alcance |
+|---|---|---|
+| Plantilla propia y directorio externo | Implementada y verificada | `SqliteStaffDirectory.Read` y `Main.Staff`. Identidades procedentes de la carrera y exclusión del club propio en Mercado. |
+| Filtros, ordenación y ficha | Implementada y verificada | Nombre, cargo cuando es útil, estado, vencimiento y reputación cuando consta. Plantilla filtra por departamento, cargo y equipo. El vencimiento se ordena y se calcula con la fecha de carrera. |
+| Perfiles profesionales | Implementada y verificada | `StaffProfession` guarda atributos 1–20, reputación 1–5, idiomas, experiencia y deriva fortalezas y debilidades. Las carreras económicas nuevas generan perfiles y contratos de sus técnicos de cantera. Las anteriores conservan datos ausentes como tales. |
+| Contratos de inicio | Implementada y verificada | `SqliteInitialStaffProfession` y extensión StaffProfession001. El mánager conserva su contrato separado. Los contratos de Staff se consultan y validan según sus fechas. |
+| Borrador, envío, revisión e historial | Implementada y verificada | `SqliteStaffOffers` conserva versiones por carrera. Staff y Jugadores tienen vistas y registros separados. |
+| Negociación y acuerdo condicionado | Implementada parcialmente | El recorrido de un técnico contratado separa club y persona y llega al acuerdo condicionado. Hay decisiones deterministas, contraofertas, retirada y caducidad. La fase personal de un libre se prueba en dominio. El catálogo externo inicial carece de una población de libres acreditados. |
+| Delegaciones y Cantera | Implementada parcialmente | Las identidades coinciden con Entrenamiento y Cantera. SQLite conserva el técnico y modalidad. Las tareas de entrenamiento admiten tres modalidades. La gestión de alineaciones inferiores conserva Directa y Delegada. |
+| Efecto profesional en entrenamiento | Implementada y verificada | `SqliteTrainingExecutionStore.Process` usa el perfil del responsable apto y guarda su factor con la evidencia. `StaffTrainingEffectTests` compara Desarrollo juvenil 6 y 16. |
+| Efecto durante una jornada normal en Godot | No verificable con la evidencia disponible | El reloj sigue deshabilitado. La prueba de impacto usa evidencia controlada y el ejecutor real. |
+| Incorporación, liberación del puesto, renovación, despido, formación y progresión | Pendiente | La aceptación contractual se guarda como condicionada. El organigrama actual proyecta los equipos y técnicos existentes. Falta un organigrama laboral por club con puestos, vacantes y estructuras propias. |
+| Salarios devengados, primas, compensación, indemnización y cláusulas ejecutadas | Pendiente | Requieren validación de compromisos, obligaciones e integración con Economía. |
+
+El formulario vigente se documenta en [Ofertas y negociación](STAFF_HIRING.md). El origen y compatibilidad de los datos se detallan en [Perfiles profesionales](STAFF_PROFESSIONAL_PROFILES.md). Aptitud y ejecución se detallan en [Entrenamiento](STAFF_TRAINING_INTEGRATION.md), [Delegaciones](CLUB_DELEGATIONS.md) y [Cantera](ACADEMY_DELEGATIONS.md). La dependencia financiera sigue en [Auditoría de Economía](ECONOMY_FINANCE_AUDIT.md).
+
+### Hallazgos de la consolidación y resolución posterior
+
+- **Pendiente tras la consolidación. Fechas de incorporación transcurridas.** Revisar el tratamiento de envío, revisión y evaluación al avanzar la fecha de la carrera.
+- **Media. Borradores históricos con compensación diferente del cálculo actual.** `Main.StaffOffers` conserva y bloquea el importe de la revisión previa. Una contraoferta del club puede aportar otro importe. Antes de ampliar el flujo, definir una acción explícita de actualización que conserve el historial y permita revisar casos antiguos sin mutarlos al abrir.
+- **Media. Contratación definitiva y delegaciones.** El modelo institucional conserva un técnico por equipo. La incorporación no debe añadirse sin representar vacantes, titularidad del puesto e historial de funciones. Los presupuestos iniciales son previsiones y requieren un registro de obligaciones para autorizar una firma.
+- **Pendiente tras la consolidación. Vencimiento contractual.** Unificar la fecha mostrada en Godot con el último día incluido almacenado en SQLite.
+- **Pendiente tras la consolidación. Aviso de fecha.** Retirar el aviso obsoleto al corregir la incorporación.
+
+### Evidencia histórica de la consolidación
+
+- Evidencia histórica anterior a las correcciones finales. `dotnet build Furvo.sln --no-restore` en Debug: cero errores y cero advertencias. `dotnet test Furvo.sln --no-build --no-restore` en Debug: 851 ejecutadas, 851 superadas, cero fallidas y cero omitidas. Incluye Staff, traspasos, datos históricos, Entrenamiento y Cantera.
+- En Godot, `--staff-hiring --capture` verificó las cuatro duraciones, el recálculo tras cambiar inicio, el bloqueo ante fecha e importe inválidos, la edición y sugerencia en el mismo campo monetario y la compensación de solo lectura en ambas fases. Resoluciones 1280×720, 1600×900 y 1920×1080. Una carrera histórica aislada anterior a StaffProfession superó el recorrido de ficha y conservó el estado desconocido.
+- SQLite, en lectura sobre la carrera de Staff usada por Godot: `integrity_check = ok`, cero infracciones de claves foráneas y 68 contratos iniciales. Las siete revisiones guardaron inicio 18/11/2026, último día incluido 17/11/2029 y compensación 78.000 EUR. En aquella comprobación histórica, el formulario mostró 18/11/2029. La última revisión conserva salario 150.000 EUR, prima 5.100,25 EUR y porcentajes 25 de reducción, 20 de incremento y 50 de recuperación.
+
+### Continuidad propuesta
+
+1. Definir y probar el tratamiento de fechas transcurridas, borradores históricos y caducidad antes de habilitar el reloj.
+2. Dentro de Staff, modelar puesto, vacante, disponibilidad, historial, baja y retorno de responsabilidades. Mantener la compatibilidad de identidades institucionales.
+3. Incorporar renovación y rescisión como propuestas persistentes. Ampliar perfiles y organigramas con reglas acreditadas. Diseñar formación y progresión ligadas a hechos verificables.
+4. Una vez disponible Economía, validar compromisos salariales, compensaciones y liquidez, y formalizar altas y bajas en la misma transacción que registra las obligaciones.
+5. Verificar expiraciones, cláusulas y pagos con carreras de varias temporadas, reintentos y reapertura.
+
+## Estado histórico de la primera entrega
 
 La primera entrega del Staff unifica la **consulta** de identidades laborales existentes. En **Club → Personal** aparecen Plantilla de empleados, Formación y desarrollo y Delegaciones. La plantilla consulta al mánager y a los técnicos institucionales del club activo, con ficha y contrato si consta. **Mercado → Buscar empleados** sigue inmediatamente a Buscar jugadores y consulta el personal externo de esa carrera. Formación muestra el estado pendiente.
 
 El filtro de nombre normaliza espacios, mayúsculas y acentos con las reglas de Mercado. El cargo, la situación contractual y el vencimiento se combinan. El escenario actual solo registra un contrato laboral verificable, el del mánager. Los vínculos institucionales de cantera se listan con contrato desconocido, fuera de los filtros Libres y Con contrato. Con contrato exige vigencia en la fecha interna. Los vencimientos admiten 3, 6 o 12 meses y se pueden ordenar desde el encabezado. El buscador es de consulta y la contratación sigue pendiente.
 
-## Auditoría inicial
+## Auditoría inicial histórica
 
 | Fuente | Uso actual | Límites |
 |---|---|---|
@@ -30,7 +72,7 @@ No se identificó un directorio laboral operativo de ojeadores, médicos, direct
 - **Formación** con curso, requisito, coste, especialidad, fechas y estado. Registrar asistencia, rendimiento y terminación antes de evolucionar atributos. Respetar el límite 20 y justificar el efecto con nivel de partida, dedicación, aprendizaje y dificultad. La experiencia laboral exige actividad real.
 - **Economía** gestiona tesorería y obligaciones por salario, primas, indemnizaciones, compensaciones y formación. Staff aporta contratos y eventos identificables. La contabilidad seguirá en el módulo económico.
 
-## Etapas y compatibilidad
+## Etapas de la primera entrega
 
 | Etapa | Estado y siguiente comprobación |
 |---|---|

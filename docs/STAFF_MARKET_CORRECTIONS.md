@@ -1,5 +1,7 @@
 # Correcciones de Mercado y Plantilla de Staff
 
+Este documento conserva el resultado de la entrega anterior a los perfiles profesionales persistidos. En carreras nuevas con planificación económica compatible, los técnicos pueden tener contrato acreditado y las vistas Staff de Mis ofertas y Negociaciones muestran sus revisiones. El estado vigente se describe en [Ofertas y negociación](STAFF_HIRING.md) y [Perfiles profesionales](STAFF_PROFESSIONAL_PROFILES.md).
+
 ## Datos de la carrera
 
 `AcademyGenerator.Coach` genera una identidad determinista por equipo inferior del catálogo aprobado. `SqliteAcademyStore.Initialize` guarda identificador, equipo, nombre, cargo y vínculo institucional en `academy_staff`. El club se obtiene de `academy_teams`. El directorio abre la carrera en lectura y excluye el club propio del listado de contratación.

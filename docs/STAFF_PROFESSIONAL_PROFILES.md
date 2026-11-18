@@ -24,7 +24,7 @@ Mercado filtra por reputación guardada, cargo, situación y vencimiento. Planti
 
 ## Alcance de la ficha y pendientes
 
-La ficha reúne identidad y contrato en paralelo y agrupa atributos, puntos fuertes y débiles e idiomas. Una ficha anterior sin ampliación usa un único aviso para los datos ausentes. El alcance todavía excluye contratación o negociación laboral, pago y ejecución de cláusulas, entrenamiento lingüístico, progresión, nuevas categorías de empleados y generación de candidatos libres externos. Las fichas de ojeador y director deportivo quedan pendientes de identidades persistidas de esos puestos.
+La ficha reúne identidad y contrato en paralelo y agrupa atributos, puntos fuertes y débiles e idiomas. Una ficha anterior sin ampliación usa un único aviso para los datos ausentes. La negociación laboral se incorporó en una entrega posterior y llega al acuerdo condicionado. Siguen pendientes la formalización, el pago y ejecución de cláusulas, el entrenamiento lingüístico, la progresión, nuevas categorías de empleados y la generación de candidatos libres externos. Las fichas de ojeador y director deportivo requieren identidades persistidas de esos puestos. Véase [Ofertas y negociación](STAFF_HIRING.md).
 
 Archivos: `StaffProfession.cs`, `StaffProfile.cs`, `StaffProfession001_Initial.sql`, `SqliteInitialStaffProfession.cs`, `SqliteCareerStore.cs`, `SqliteStaffDirectory.cs`, `Main.Staff.cs`, `UiStrings.resx`, `StaffDirectoryTests.cs`, `GodotUiSmoke.gd` y este documento.
 
