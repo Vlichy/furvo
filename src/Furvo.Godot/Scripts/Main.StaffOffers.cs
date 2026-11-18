@@ -67,24 +67,37 @@ public partial class Main
         durationRow.AddChild(ClubUi.Text("StaffDurationLabel","Duración del contrato",13));
         durationRow.AddChild(duration);
         foreach (var year in years) duration.AddItem(year == 1 ? "1 año" : year + " años");
-        var original = prior is null ? 0 : Array.FindIndex(years,year => StaffOfferRules.Anniversary(prior.Start,year).AddDays(-1) == prior.End);
+        var original = prior is null ? 0 : Array.FindIndex(years,year => StaffOfferRules.LastContractDay(prior.Start,year) == prior.End);
         if (original < 0) { duration.AddItem("Plazo de la oferta anterior"); original = years.Length; }
         duration.Select(original);
         var end = Field("StaffExpiry","");
         end.Editable = false;
-        end.TooltipText = "Primer día fuera del contrato. El último día incluido es el anterior.";
+        end.TooltipText = "Último día incluido en el contrato.";
         DateOnly Expiry(DateOnly from) => duration.Selected < years.Length
-            ? StaffOfferRules.Anniversary(from,years[duration.Selected])
-            : from.AddDays(prior!.End.DayNumber - prior.Start.DayNumber + 1);
+            ? StaffOfferRules.LastContractDay(from,years[duration.Selected])
+            : from.AddDays(prior!.End.DayNumber - prior.Start.DayNumber);
+        DateOnly? ReadStart()
+        {
+            errors[start].Hide();
+            try
+            {
+                if (!DateOnly.TryParseExact(start.Text,"dd/MM/yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,out var date))
+                    throw new InvalidDataException("Introduce una fecha con formato DD/MM/AAAA.");
+                StaffOfferRules.ValidateIncorporation(date,today);
+                return date;
+            }
+            catch (InvalidDataException error)
+            {
+                Invalid(start,error.Message);
+                return null;
+            }
+        }
         void RefreshExpiry()
         {
-            end.Text = "";
-            if (DateOnly.TryParseExact(start.Text,"dd/MM/yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,out var date)
-                && date.Year <= 9994)
-                end.Text = FormatDate(Expiry(date));
+            end.Text = ReadStart() is { } date ? FormatDate(Expiry(date)) : "";
         }
         duration.ItemSelected += _ => RefreshExpiry();
-        start.TextChanged += _ => RefreshExpiry();
+        start.TextChanged += _ => { status.Text = ""; RefreshExpiry(); };
         RefreshExpiry();
         var salary = Field("StaffGrossSalary",Amount(prior?.Salary));
         var bonus = Field("StaffSigningBonus",Amount(prior?.SigningBonus ?? 0));
@@ -106,11 +119,11 @@ public partial class Main
         body.AddChild(actions);
         var save = WindowUi.Button("StaffSaveOffer",() =>
         {
+            status.Text = "";
+            if (ReadStart() is not { } from) return;
             try
             {
-                var from = ParseDate(start);
-                if (from < today || from.Year > 9994) throw Invalid(start,"Introduce un inicio válido a partir de la fecha de la carrera.");
-                var until = Expiry(from).AddDays(-1);
+                var until = Expiry(from);
                 var clauses = new List<StaffClause>();
                 if (reduction() is > 0 and var cut) clauses.Add(new(StaffClauseKind.RelegationReduction,cut,null,null));
                 if (increase() is > 0 and var rise) clauses.Add(new(StaffClauseKind.PromotionIncrease,rise,null,null));
@@ -201,8 +214,6 @@ public partial class Main
             try { return Furvo.Core.Market.TransferRules.ParseMoney(edit.Text,StaffOfferRules.MoneyPolicy); }
             catch (InvalidDataException e) { throw Invalid(edit,e.Message); }
         }
-        DateOnly ParseDate(LineEdit edit) => DateOnly.TryParseExact(edit.Text,"dd/MM/yyyy",CultureInfo.InvariantCulture,
-            DateTimeStyles.None,out var date) ? date : throw Invalid(edit,"Introduce una fecha con formato DD/MM/AAAA.");
         InvalidDataException Invalid(LineEdit edit,string message)
         {
             errors[edit].Text = message;
@@ -236,6 +247,7 @@ public partial class Main
         {
             var card = ClubUi.Card(content,"StaffOfferDetail");
             ClubUi.Field(card,"StaffProposalDate",FormatDate(entry.Date));
+            ClubUi.Field(card,"StaffOfferValidUntil",FormatDate(entry.Expires));
             ClubUi.Field(card,"TransferState",UiText.Get("StaffOfferState_"+entry.State));
             ClubUi.Field(card,"StaffOfferPhase",UiText.Get("StaffPhase_"+entry.Phase));
             ClubUi.Field(card,"StaffGrossSalary",TransferMoney(entry.Terms.Salary,entry.Terms.Currency));

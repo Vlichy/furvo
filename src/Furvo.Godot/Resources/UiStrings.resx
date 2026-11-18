@@ -1917,6 +1917,7 @@ Jugadores incluidos: {4}; cláusulas de futura venta/plusvalía: {5}. Sus porcen
 <data name="StaffClause_Severance" xml:space="preserve"><value>Indemnización</value></data>
 <data name="StaffClause_Release" xml:space="preserve"><value>Cláusula de salida</value></data>
 <data name="StaffProposalDate" xml:space="preserve"><value>Fecha de propuesta</value></data>
+<data name="StaffOfferValidUntil" xml:space="preserve"><value>Oferta válida hasta</value></data>
 <data name="StaffEditDraft" xml:space="preserve"><value>Editar borrador</value></data>
 <data name="StaffOfferBasicTerms" xml:space="preserve"><value>Condiciones laborales</value></data>
 <data name="StaffOfferClauses" xml:space="preserve"><value>Cláusulas opcionales</value></data>

@@ -420,17 +420,27 @@ func check_staff_hiring(screen: Node) -> bool:
     for index in range(4):
         duration.select(index)
         duration.emit_signal("item_selected",index)
-        if not require(expiry_field.text == ["01/07/2027","01/07/2028","01/07/2029","01/07/2031"][index], "Aniversario de contrato incorrecto"):
+        if not require(expiry_field.text == ["30/06/2027","30/06/2028","30/06/2029","30/06/2031"][index], "Último día contractual incorrecto"):
             return false
-    var valid_start = start_field.text
+    var valid_start = "18/11/2026"
+    start_field.text = "18/11/2026"
+    start_field.emit_signal("text_changed",start_field.text)
+    duration.select(2)
+    duration.emit_signal("item_selected",2)
+    if not require(expiry_field.text == "17/11/2029", "El vencimiento a tres años debe mostrar el último día incluido"):
+        return false
     start_field.text = "fecha"
     start_field.emit_signal("text_changed",start_field.text)
+    if not require(find_named(screen,"StaffStartDateError").visible, "El aviso debe aparecer al editar la fecha"):
+        return false
     find_named(screen,"StaffSaveOffer").emit_signal("pressed")
     await process_frame
     if not require(find_named(screen,"StaffStartDateError").visible and expiry_field.text.is_empty(), "El inicio inválido debe bloquear el guardado"):
         return false
     start_field.text = valid_start
     start_field.emit_signal("text_changed",valid_start)
+    if not require(not find_named(screen,"StaffStartDateError").visible and find_named(screen,"StaffOfferFeedback").text.is_empty() and expiry_field.text == "17/11/2029", "Corregir el inicio debe retirar el aviso y recuperar el vencimiento"):
+        return false
     for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
         root.size = resolution
         await create_timer(0.15).timeout

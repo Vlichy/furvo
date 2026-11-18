@@ -22,11 +22,11 @@ El formulario vigente se documenta en [Ofertas y negociación](STAFF_HIRING.md).
 
 ### Hallazgos de la consolidación y resolución posterior
 
-- **Pendiente tras la consolidación. Fechas de incorporación transcurridas.** Revisar el tratamiento de envío, revisión y evaluación al avanzar la fecha de la carrera.
+- **Corregido. Fechas de incorporación transcurridas.** El envío, la revisión y la evaluación de una oferta vigente validan la incorporación contra la fecha actual de la carrera. Un borrador vigente puede corregirse explícitamente. Su historial y su caducidad se conservan.
 - **Media. Borradores históricos con compensación diferente del cálculo actual.** `Main.StaffOffers` conserva y bloquea el importe de la revisión previa. Una contraoferta del club puede aportar otro importe. Antes de ampliar el flujo, definir una acción explícita de actualización que conserve el historial y permita revisar casos antiguos sin mutarlos al abrir.
 - **Media. Contratación definitiva y delegaciones.** El modelo institucional conserva un técnico por equipo. La incorporación no debe añadirse sin representar vacantes, titularidad del puesto e historial de funciones. Los presupuestos iniciales son previsiones y requieren un registro de obligaciones para autorizar una firma.
-- **Pendiente tras la consolidación. Vencimiento contractual.** Unificar la fecha mostrada en Godot con el último día incluido almacenado en SQLite.
-- **Pendiente tras la consolidación. Aviso de fecha.** Retirar el aviso obsoleto al corregir la incorporación.
+- **Corregido. Vencimiento contractual.** Godot y SQLite utilizan el último día incluido. El historial muestra la caducidad de la oferta por separado.
+- **Corregido. Aviso de fecha.** El error de incorporación se muestra junto al campo durante la edición y se retira al corregirlo, momento en que se actualiza el vencimiento.
 
 ### Evidencia histórica de la consolidación
 
@@ -34,9 +34,22 @@ El formulario vigente se documenta en [Ofertas y negociación](STAFF_HIRING.md).
 - En Godot, `--staff-hiring --capture` verificó las cuatro duraciones, el recálculo tras cambiar inicio, el bloqueo ante fecha e importe inválidos, la edición y sugerencia en el mismo campo monetario y la compensación de solo lectura en ambas fases. Resoluciones 1280×720, 1600×900 y 1920×1080. Una carrera histórica aislada anterior a StaffProfession superó el recorrido de ficha y conservó el estado desconocido.
 - SQLite, en lectura sobre la carrera de Staff usada por Godot: `integrity_check = ok`, cero infracciones de claves foráneas y 68 contratos iniciales. Las siete revisiones guardaron inicio 18/11/2026, último día incluido 17/11/2029 y compensación 78.000 EUR. En aquella comprobación histórica, el formulario mostró 18/11/2029. La última revisión conserva salario 150.000 EUR, prima 5.100,25 EUR y porcentajes 25 de reducción, 20 de incremento y 50 de recuperación.
 
+### Correcciones finales y validación vigente
+
+El formulario retira el aviso de incorporación al corregir la fecha y muestra el último día contractual incluido. Los borradores vigentes admiten corrección expresa mediante una revisión, conservando los términos históricos y la caducidad original. Las ofertas caducadas permanecen consultables.
+
+La última ejecución completa en Debug, posterior a las correcciones, superó **852 pruebas, con 0 fallidas y 0 omitidas**, en 3 min 43 s. Se ejecutó sin filtros mediante:
+
+```powershell
+dotnet build Furvo.sln --no-restore -m:1 -p:UseSharedCompilation=false
+dotnet test Furvo.sln --no-build --no-restore -m:1
+```
+
+La compilación terminó con cero errores y cero advertencias. Godot verificó los vencimientos de 1, 2, 3 y 5 años y la retirada del aviso al corregir el inicio, en 1280×720, 1600×900 y 1920×1080. La carrera aislada de validación conservó siete revisiones, inicio 18/11/2026 y fin 17/11/2029, con integridad SQLite correcta y cero infracciones de claves foráneas. La regresión de avance temporal modifica exclusivamente su copia de prueba, cuyo reloj está congelado en esta versión.
+
 ### Continuidad propuesta
 
-1. Definir y probar el tratamiento de fechas transcurridas, borradores históricos y caducidad antes de habilitar el reloj.
+1. Mantener la cobertura de fechas transcurridas, borradores históricos y caducidad al habilitar el reloj. Las correcciones finales ya validan estos casos.
 2. Dentro de Staff, modelar puesto, vacante, disponibilidad, historial, baja y retorno de responsabilidades. Mantener la compatibilidad de identidades institucionales.
 3. Incorporar renovación y rescisión como propuestas persistentes. Ampliar perfiles y organigramas con reglas acreditadas. Diseñar formación y progresión ligadas a hechos verificables.
 4. Una vez disponible Economía, validar compromisos salariales, compensaciones y liquidez, y formalizar altas y bajas en la misma transacción que registra las obligaciones.

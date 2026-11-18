@@ -60,6 +60,8 @@ public sealed class SqliteStaffOffers(string path, CareerSummary career)
         if (expected.State is not (StaffOfferState.Draft or StaffOfferState.Sent or StaffOfferState.Counter or StaffOfferState.ClubAgreed or StaffOfferState.Conditional))
             throw new InvalidOperationException("La negociación está cerrada.");
         if (action == "Withdraw") next = expected with { State = StaffOfferState.Withdrawn, Reason = "Retirada por el mánager." };
+        else if (action == "Revise" && date > expected.Expires)
+            throw new InvalidOperationException("La vigencia de la oferta ha terminado.");
         else if (date > expected.Expires) next = expected with { State = StaffOfferState.Expired, Reason = "Vigencia superada." };
         else
         {

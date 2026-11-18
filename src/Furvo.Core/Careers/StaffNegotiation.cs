@@ -17,6 +17,15 @@ public static class StaffOfferRules
 
     // El aniversario marca el primer día fuera del contrato. SQLite guarda el último día incluido.
     public static DateOnly Anniversary(DateOnly start, int years) => start.AddYears(years);
+    public static DateOnly LastContractDay(DateOnly start, int years) => Anniversary(start, years).AddDays(-1);
+
+    public static void ValidateIncorporation(DateOnly start, DateOnly careerDate)
+    {
+        if (start < careerDate)
+            throw new InvalidDataException("La fecha de incorporación es anterior a la fecha actual de la carrera.");
+        if (start.Year > 9994)
+            throw new InvalidDataException("La fecha de incorporación no permite calcular un vencimiento válido.");
+    }
 
     public static decimal EstimateCompensation(StaffProfile candidate, DateOnly date)
     {
@@ -31,8 +40,9 @@ public static class StaffOfferRules
     public static void Validate(StaffOffer offer, DateOnly date)
     {
         var terms = offer.Terms;
-        if (terms.Team == Guid.Empty || terms.Role != "AcademyCoach" || terms.Start < date ||
-            terms.Start.Year > 9994 || terms.End <= terms.Start || terms.End >= Anniversary(terms.Start, MaximumYears))
+        ValidateIncorporation(terms.Start, date);
+        if (terms.Team == Guid.Empty || terms.Role != "AcademyCoach" ||
+            terms.End <= terms.Start || terms.End > LastContractDay(terms.Start, MaximumYears))
             throw new InvalidDataException("Comprueba el equipo, las fechas y los importes de la propuesta.");
         foreach (var amount in new[] { terms.Salary, terms.SigningBonus, terms.Compensation }
             .Concat(terms.Clauses.Select(clause => clause.Amount).OfType<decimal>()))
@@ -47,6 +57,7 @@ public static class StaffOfferRules
         if (offer.State != StaffOfferState.Sent) throw new InvalidOperationException("La propuesta no está pendiente.");
         if (date > offer.Expires) return offer with { State = StaffOfferState.Expired, Reason = "Vigencia superada." };
         var terms = offer.Terms;
+        ValidateIncorporation(terms.Start, date);
         var employment = candidate.Employment;
         if (offer.Phase == StaffOfferPhase.Club)
         {

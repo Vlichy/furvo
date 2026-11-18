@@ -2,7 +2,9 @@
 
 En Mercado → Buscar empleados, la ficha externa permite hacer una oferta si la situación laboral está acreditada. Los vínculos desconocidos conservan la explicación y la acción deshabilitada. La plantilla propia conserva la consulta contractual. Renovaciones y modificación de contratos ya firmados quedan pendientes.
 
-El formulario recoge cargo de entrenador de cantera, equipo inferior propio, incorporación, vencimiento, salario anual, prima de fichaje, compensación y cláusulas. Las duraciones ofrecidas son 1, 2, 3 y 5 años. Un borrador anterior puede conservar su plazo original. En la comprobación histórica de consolidación, el formulario mostraba el primer día fuera del contrato y SQLite guardaba el último día incluido. Para un inicio el 18/11/2026 y tres años, se mostraba 18/11/2029 y se guardaba 17/11/2029.
+El formulario recoge cargo de entrenador de cantera, equipo inferior propio, incorporación, vencimiento, salario anual, prima de fichaje, compensación y cláusulas. Las duraciones ofrecidas son 1, 2, 3 y 5 años. Un borrador anterior puede conservar su plazo original. El vencimiento mostrado y guardado en SQLite es el último día incluido. Para un inicio el 18/11/2026 y tres años, es el 17/11/2029.
+
+Si un borrador sigue vigente y su incorporación ya pasó según la fecha de la carrera, hay que corregirla antes de enviarlo. La corrección explícita crea una revisión y conserva los términos históricos y la fecha de caducidad de la oferta. Una oferta caducada sigue disponible para consulta.
 
 Los importes editables combinan texto y sugerencias en el mismo control. La compensación aparece en euros y en solo lectura desde la propuesta inicial al club hasta la negociación personal. Su importe proviene del cálculo de Furvo o de la revisión que se está editando. Se conservan los desplegables de reducción, incremento y recuperación salarial. Una recuperación antigua sin porcentaje se interpreta como el 100 % de la reducción. Salida, indemnización y prima por ascenso conservan importes editables.
 

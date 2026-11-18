@@ -8,6 +8,50 @@ namespace Furvo.Tests;
 public sealed partial class CareerCreationTests
 {
     [Fact]
+    public void HistoricalStaffDraftRequiresExplicitDateCorrectionBeforeSending()
+    {
+        var (careers, file, _) = TacticalCareer();
+        var save = new SaveId(Guid.Parse(Path.GetFileNameWithoutExtension(file)));
+        var career = careers.Load(save);
+        var person = SqliteStaffDirectory.Read(file,career).First(p => p.Employment is not null && p.Club != career.ClubId);
+        var team = new SqliteClubSquadStore(file).Teams().First(t => t.Category != "First");
+        var start = career.CurrentDate;
+        var terms = new StaffOfferTerms(team.Id,"AcademyCoach",start,StaffOfferRules.LastContractDay(start,1),
+            1_000_000m,"EUR",0,0,[]);
+        var draft = new SqliteStaffOffers(file,career).Draft(person.Id,terms);
+
+        using (var connection = Connection(file))
+        using (var command = connection.CreateCommand())
+        {
+            // La versión actual congela el reloj. Solo esta copia de prueba simula su avance.
+            command.CommandText = "DROP TRIGGER frozen_career_start; UPDATE career_state SET current_date = $date WHERE singleton = 1";
+            command.Parameters.AddWithValue("$date",start.AddDays(1).ToString("yyyy-MM-dd"));
+            Assert.Equal(1,command.ExecuteNonQuery());
+        }
+
+        career = careers.Load(save);
+        var store = new SqliteStaffOffers(file,career);
+        var original = Assert.Single(store.History(draft.Id));
+        Assert.Equal(start,original.Terms.Start);
+        Assert.Contains("incorporación",Assert.Throws<InvalidDataException>(() => store.Move(original,"Send")).Message);
+        Assert.Throws<InvalidDataException>(() => store.Move(original,"Revise",original.Terms));
+        Assert.Single(store.History(draft.Id));
+
+        var correctedStart = career.CurrentDate;
+        var revised = store.Move(original,"Revise",original.Terms with
+        {
+            Start = correctedStart,
+            End = StaffOfferRules.LastContractDay(correctedStart,1)
+        });
+        Assert.Equal(StaffOfferState.Sent,store.Move(revised,"Send").State);
+        var history = new SqliteStaffOffers(file,careers.Load(save)).History(draft.Id);
+        Assert.Equal(3,history.Count);
+        Assert.Equal(start,history[0].Terms.Start);
+        Assert.All(history,entry => Assert.Equal(draft.Expires,entry.Expires));
+        Assert.Equal(StaffOfferRules.LastContractDay(correctedStart,1),history[^1].Terms.End);
+    }
+
+    [Fact]
     public void StaffOfferSeparatesClubDecisionAndPersonalAcceptanceAcrossReload()
     {
         var (careers, file, _) = TacticalCareer();
@@ -54,5 +98,6 @@ public sealed partial class CareerCreationTests
         Assert.True(counter.Terms.Salary > terms.Salary);
         Assert.Equal(StaffOfferState.Conditional,StaffOfferRules.Evaluate(sent with { Terms = counter.Terms },employee,date,2,2,60000m).State);
         Assert.Equal(StaffOfferState.Expired,StaffOfferRules.Evaluate(sent,employee,date.AddDays(15),2,2,60000m).State);
+        Assert.Throws<InvalidDataException>(() => StaffOfferRules.Evaluate(sent,employee,date.AddDays(1),2,2,60000m));
     }
 }
