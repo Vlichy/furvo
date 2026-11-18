@@ -12,6 +12,12 @@ public sealed record StaffOffer(Guid Id, int Revision, Guid Employee, ClubId Buy
 
 public static class StaffOfferRules
 {
+    public static Furvo.Core.Market.TransferMoneyPolicy MoneyPolicy { get; } = new(100_000_000m);
+    public const int MaximumYears = 5;
+
+    // El aniversario marca el primer día fuera del contrato. SQLite guarda el último día incluido.
+    public static DateOnly Anniversary(DateOnly start, int years) => start.AddYears(years);
+
     public static decimal EstimateCompensation(StaffProfile candidate, DateOnly date)
     {
         if (candidate.Employment is not { } employment || date < employment.Start || date > employment.End)
@@ -26,9 +32,11 @@ public static class StaffOfferRules
     {
         var terms = offer.Terms;
         if (terms.Team == Guid.Empty || terms.Role != "AcademyCoach" || terms.Start < date ||
-            terms.End <= terms.Start || terms.End.DayNumber - terms.Start.DayNumber > 1096 ||
-            new[] { terms.Salary, terms.SigningBonus, terms.Compensation }.Any(v => v < 0 || v > 100000000 || decimal.Round(v, 2) != v))
+            terms.Start.Year > 9994 || terms.End <= terms.Start || terms.End >= Anniversary(terms.Start, MaximumYears))
             throw new InvalidDataException("Comprueba el equipo, las fechas y los importes de la propuesta.");
+        foreach (var amount in new[] { terms.Salary, terms.SigningBonus, terms.Compensation }
+            .Concat(terms.Clauses.Select(clause => clause.Amount).OfType<decimal>()))
+            Furvo.Core.Market.TransferRules.Money(amount, MoneyPolicy);
         new StaffEmployment(offer.Id, offer.Employee, offer.Buyer, terms.Start, terms.End, terms.Salary, terms.Currency, terms.Clauses)
             .Validate(offer.Employee, offer.Buyer);
     }

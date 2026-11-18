@@ -385,21 +385,52 @@ func check_staff_hiring(screen: Node) -> bool:
     await process_frame
     find_named(screen,"StaffGrossSalary").text = "150000"
     var compensation = find_named(screen,"StaffCompensation")
-    if not require(compensation.text.to_float() > 0 and find_named(screen,"StaffCompensationEstimate") != null, "La compensación inicial debe llegar calculada"):
+    var calculated = compensation.text
+    if not require(not compensation.editable and calculated.ends_with(" EUR") and calculated != "0,00 EUR" and find_named(screen,"StaffCompensationSuggestions") == null and find_named(screen,"StaffCompensationEstimate") != null, "La compensación debe llegar calculada, en euros y sin controles de edición"):
         return false
-    compensation.text = "0" # Conserva el recorrido de contraoferta por una propuesta inferior.
-    find_named(screen,"StaffRelegation").select(3)
-    find_named(screen,"StaffRestoration").select(2)
-    find_named(screen,"StaffSigningBonus").select(1)
-    var expiry_field = find_named(screen,"StaffExpiry")
-    var valid_expiry = expiry_field.text
-    expiry_field.text = find_named(screen,"StaffStartDate").text
+    var salary = find_named(screen,"StaffGrossSalary")
+    var oversized = "22222222222222222222"
+    salary.text = oversized
+    salary.emit_signal("text_changed", oversized)
+    if not require(salary.text == oversized and find_named(screen,"StaffGrossSalaryError").visible, "El importe fuera de rango debe mantenerse visible y mostrar un error inmediato"):
+        return false
     find_named(screen,"StaffSaveOffer").emit_signal("pressed")
     await process_frame
-    if not require(find_named(screen,"StaffExpiryError").visible, "El vencimiento inválido debe señalarse junto al campo"):
+    if not require(find_named(screen,"StaffOfferForm") != null, "El importe fuera de rango no puede guardarse"):
         return false
-    expiry_field.text = valid_expiry
-    expiry_field.emit_signal("text_changed",valid_expiry)
+    salary.text = "150000"
+    salary.emit_signal("text_changed", salary.text)
+    find_named(screen,"StaffRelegation").select(3)
+    var promotion = find_named(screen,"StaffPromotion")
+    if not require(promotion.item_count == 9 and promotion.get_item_text(8) == "50 %", "Faltan las opciones de incremento por ascenso"):
+        return false
+    promotion.select(4)
+    find_named(screen,"StaffRestoration").select(2)
+    var signing = find_named(screen,"StaffSigningBonus")
+    find_named(screen,"StaffSigningBonusSuggestions").get_popup().emit_signal("id_pressed",1)
+    if not require(signing.text == "5000", "La sugerencia debe actualizar el mismo campo editable"):
+        return false
+    signing.text = "5100,25"
+    signing.emit_signal("text_changed", signing.text)
+    var expiry_field = find_named(screen,"StaffExpiry")
+    var start_field = find_named(screen,"StaffStartDate")
+    var duration = find_named(screen,"StaffDuration")
+    if not require(not expiry_field.editable and duration.item_count == 4, "Vencimiento editable o duraciones incompletas"):
+        return false
+    for index in range(4):
+        duration.select(index)
+        duration.emit_signal("item_selected",index)
+        if not require(expiry_field.text == ["01/07/2027","01/07/2028","01/07/2029","01/07/2031"][index], "Aniversario de contrato incorrecto"):
+            return false
+    var valid_start = start_field.text
+    start_field.text = "fecha"
+    start_field.emit_signal("text_changed",start_field.text)
+    find_named(screen,"StaffSaveOffer").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"StaffStartDateError").visible and expiry_field.text.is_empty(), "El inicio inválido debe bloquear el guardado"):
+        return false
+    start_field.text = valid_start
+    start_field.emit_signal("text_changed",valid_start)
     for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
         root.size = resolution
         await create_timer(0.15).timeout
@@ -407,7 +438,11 @@ func check_staff_hiring(screen: Node) -> bool:
         if not require(button.get_global_rect().end.y <= resolution.y, "Guardar borrador queda fuera de la ventana"):
             return false
         await capture_economy_screen("career-staff-offer-" + str(resolution.x))
-    for action in ["StaffSaveOffer","StaffSendOffer","StaffEvaluateOffer","StaffReviseOffer","StaffSaveOffer","StaffSendOffer","StaffEvaluateOffer","StaffStartPersonal","StaffSendOffer","StaffEvaluateOffer"]:
+    for action in ["StaffSaveOffer","StaffSendOffer","StaffEvaluateOffer","StaffStartPersonal","StaffEditDraft","StaffSaveOffer","StaffSendOffer","StaffEvaluateOffer"]:
+        if action == "StaffSaveOffer":
+            var field = find_named(screen,"StaffCompensation")
+            if not require(not field.editable and field.text == calculated and find_named(screen,"StaffCompensationSuggestions") == null, "La fase personal debe conservar la compensación guardada en solo lectura"):
+                return false
         var button = find_named(screen,action)
         if not require(button != null and not button.disabled, "Falta el paso de negociación " + action):
             return false
@@ -3761,7 +3796,7 @@ func check_transfers(screen: Node) -> bool:
     for text in ["-1","999999999999999999999999999999999999999999"]:
         group_text(screen,"TransferAmount",text)
         await process_frame
-        if not require(find_named(screen,"TransferAmount").text == "" and not find_named(screen,"TransferAmountError").text.is_empty(),"Entrada negativa o enorme no se rechaza junto al campo"):
+        if not require(find_named(screen,"TransferAmount").text == text and not find_named(screen,"TransferAmountError").text.is_empty(),"La entrada inválida debe conservarse y señalarse junto al campo"):
             return false
     group_text(screen,"TransferAmount","1000000001")
     find_named(screen,"TransferSaveDraft").emit_signal("pressed")

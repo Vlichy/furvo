@@ -60,16 +60,41 @@ public partial class Main
         var today = _workspace!.Career.CurrentDate;
         var errors = new Dictionary<LineEdit,Label>();
         var start = Field("StaffStartDate",FormatDate(prior?.Start ?? today));
-        var end = Field("StaffExpiry",FormatDate(prior?.End ?? today.AddYears(1).AddDays(-1)));
+        var years = new[] { 1, 2, 3, 5 };
+        var duration = new OptionButton { Name = "StaffDuration", CustomMinimumSize = new Vector2(248,36) };
+        var durationRow = new HBoxContainer();
+        basic.AddChild(durationRow);
+        durationRow.AddChild(ClubUi.Text("StaffDurationLabel","Duración del contrato",13));
+        durationRow.AddChild(duration);
+        foreach (var year in years) duration.AddItem(year == 1 ? "1 año" : year + " años");
+        var original = prior is null ? 0 : Array.FindIndex(years,year => StaffOfferRules.Anniversary(prior.Start,year).AddDays(-1) == prior.End);
+        if (original < 0) { duration.AddItem("Plazo de la oferta anterior"); original = years.Length; }
+        duration.Select(original);
+        var end = Field("StaffExpiry","");
+        end.Editable = false;
+        end.TooltipText = "Primer día fuera del contrato. El último día incluido es el anterior.";
+        DateOnly Expiry(DateOnly from) => duration.Selected < years.Length
+            ? StaffOfferRules.Anniversary(from,years[duration.Selected])
+            : from.AddDays(prior!.End.DayNumber - prior.Start.DayNumber + 1);
+        void RefreshExpiry()
+        {
+            end.Text = "";
+            if (DateOnly.TryParseExact(start.Text,"dd/MM/yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,out var date)
+                && date.Year <= 9994)
+                end.Text = FormatDate(Expiry(date));
+        }
+        duration.ItemSelected += _ => RefreshExpiry();
+        start.TextChanged += _ => RefreshExpiry();
+        RefreshExpiry();
         var salary = Field("StaffGrossSalary",Amount(prior?.Salary));
-        var bonus = Choice(basic,"StaffSigningBonus","Sin prima",[0,5000,10000,25000,50000,100000],prior?.SigningBonus ?? 0," EUR",true);
-        var compensation = Field("StaffCompensation",Amount(prior?.Compensation ?? StaffOfferRules.EstimateCompensation(person, today)));
-        compensation.Editable = counter?.Phase != StaffOfferPhase.Personal &&
-            person.ContractStatus(today) == StaffContractStatus.Contracted;
-        if (compensation.Editable && prior is null)
+        var bonus = Field("StaffSigningBonus",Amount(prior?.SigningBonus ?? 0));
+        var compensation = prior?.Compensation ?? StaffOfferRules.EstimateCompensation(person, today);
+        Field("StaffCompensation",TransferMoney(compensation,"EUR"),readOnly:true);
+        if (prior is null && person.ContractStatus(today) == StaffContractStatus.Contracted)
             basic.AddChild(ClubUi.Text("StaffCompensationEstimate",UiText.Get("StaffCompensationEstimate"),13));
         var reduction = Choice(clausesPanel,"StaffRelegation","Sin reducción",[0,10,20,25,30,40,50],PriorClause(StaffClauseKind.RelegationReduction)?.Percentage ?? 0," %");
-        var increase = Field("StaffPromotion",ClauseValue(StaffClauseKind.PromotionIncrease),clausesPanel);
+        var increase = Choice(clausesPanel,"StaffPromotion","Sin incremento",[0,5,10,15,20,25,30,40,50],
+            PriorClause(StaffClauseKind.PromotionIncrease)?.Percentage ?? 0," %");
         var previousRestoration = PriorClause(StaffClauseKind.PromotionRestoration);
         var restore = Choice(clausesPanel,"StaffRestoration","Sin recuperación",[0,25,50,75,100],
             previousRestoration is null ? 0 : previousRestoration.Percentage ?? 100," % de la reducción");
@@ -84,12 +109,11 @@ public partial class Main
             try
             {
                 var from = ParseDate(start);
-                var until = ParseDate(end);
-                if (from < today) throw Invalid(start,"El inicio no puede ser anterior a la fecha de la carrera.");
-                if (until <= from || until.DayNumber - from.DayNumber > 1096) throw Invalid(end,"El vencimiento debe ser posterior al inicio. El plazo máximo es de tres años.");
+                if (from < today || from.Year > 9994) throw Invalid(start,"Introduce un inicio válido a partir de la fecha de la carrera.");
+                var until = Expiry(from).AddDays(-1);
                 var clauses = new List<StaffClause>();
                 if (reduction() is > 0 and var cut) clauses.Add(new(StaffClauseKind.RelegationReduction,cut,null,null));
-                AddClause(increase,StaffClauseKind.PromotionIncrease,true);
+                if (increase() is > 0 and var rise) clauses.Add(new(StaffClauseKind.PromotionIncrease,rise,null,null));
                 AddClause(release,StaffClauseKind.Release);
                 AddClause(severance,StaffClauseKind.Severance);
                 AddClause(promotionBonus,StaffClauseKind.ObjectiveBonus,objective:"promotion");
@@ -97,7 +121,7 @@ public partial class Main
                 var annual = TransferRulesMoney(salary);
                 if (annual <= 0) throw Invalid(salary,"Introduce un salario positivo.");
                 var terms = new StaffOfferTerms(teams[selected.Selected].Id,"AcademyCoach",from,until,
-                    annual,"EUR",bonus(),TransferRulesMoney(compensation),clauses);
+                    annual,"EUR",TransferRulesMoney(bonus),compensation,clauses);
                 var store = StaffOffers();
                 var draft = counter is null ? store.Draft(employee,terms) : store.Move(counter,"Revise",terms);
                 ShowStaffOfferDetail(draft.Id,CareerPage.MarketOffers);
@@ -105,7 +129,7 @@ public partial class Main
                 {
                     if (string.IsNullOrWhiteSpace(input.Text)) return;
                     var value = TransferRulesMoney(input);
-                    if (value <= 0 || percent && value > 100) throw Invalid(input,percent ? "Introduce un porcentaje mayor que 0 y hasta 100." : "Introduce un importe positivo.");
+                    if (value == 0) return;
                     clauses.Add(new(kind,percent ? value : null,percent ? null : value,objective));
                 }
             }
@@ -121,39 +145,60 @@ public partial class Main
             var clause = prior?.Clauses.FirstOrDefault(v=>v.Kind==kind);
             return Amount(clause?.Percentage ?? clause?.Amount);
         }
-        LineEdit Field(string key,string value,Control? column = null)
+        LineEdit Field(string key,string value,Control? column = null,bool readOnly = false)
         {
             var row = new HBoxContainer();
             var parent = column ?? basic;
             parent.AddChild(row);
             row.AddChild(ClubUi.Text(key+"Label",UiText.Get(key),13));
-            var edit = new LineEdit { Name = key, Text = value, SizeFlagsHorizontal = SizeFlags.ShrinkBegin,
-                CustomMinimumSize = new Vector2(210,34) };
-            row.AddChild(edit);
+            var edit = new LineEdit { Name = key, Text = value, Editable = !readOnly, SizeFlagsHorizontal = SizeFlags.ShrinkBegin,
+                CustomMinimumSize = new Vector2(210,36) };
+            if (!readOnly && key is not ("StaffStartDate" or "StaffExpiry"))
+            {
+                var control = new HBoxContainer { CustomMinimumSize = new Vector2(248,36) };
+                control.AddThemeConstantOverride("separation",4);
+                row.AddChild(control);
+                edit.CustomMinimumSize = new Vector2(0,36);
+                edit.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+                control.AddChild(edit);
+                decimal[] suggestions = key == "StaffGrossSalary"
+                    ? [25_000, 50_000, 75_000, 100_000, 150_000, 250_000]
+                    : [0, 5_000, 10_000, 25_000, 50_000, 100_000];
+                control.AddChild(TransferMoneyField.Suggestions(edit, StaffOfferRules.MoneyPolicy,suggestions,"EUR"));
+            }
+            else
+            {
+                edit.CustomMinimumSize = new Vector2(248,36);
+                row.AddChild(edit);
+            }
             var error = ClubUi.Text(key+"Error","",12,"ec8e8e");
             error.Hide();
             parent.AddChild(error);
             errors.Add(edit,error);
-            var last = value;
             edit.TextChanged += text =>
             {
-                if (key is not ("StaffStartDate" or "StaffExpiry") && text.Any(c => !char.IsAsciiDigit(c) && c is not (',' or '.')))
-                {
-                    edit.Text = last;
-                    edit.CaretColumn = last.Length;
-                    error.Text = "Introduce solo cifras y un separador decimal.";
-                    error.Show();
-                    return;
-                }
-                last = text;
                 error.Hide();
+                if (key is "StaffStartDate" or "StaffExpiry") return;
+                var optional = key is "StaffRelease" or "StaffSeverance" or "StaffPromotionBonus";
+                if (optional && string.IsNullOrWhiteSpace(text)) return;
+                try
+                {
+                    var amount = Furvo.Core.Market.TransferRules.ParseMoney(text,StaffOfferRules.MoneyPolicy);
+                    if (key == "StaffGrossSalary" && amount == 0)
+                        throw new InvalidDataException("Introduce un importe positivo.");
+                }
+                catch (InvalidDataException failure)
+                {
+                    error.Text = failure.Message;
+                    error.Show();
+                }
             };
             return edit;
         }
         static string Amount(decimal? number) => number?.ToString("0.##",CultureInfo.GetCultureInfo("es-ES")) ?? "";
         decimal TransferRulesMoney(LineEdit edit)
         {
-            try { return Furvo.Core.Market.TransferRules.ParseMoney(edit.Text); }
+            try { return Furvo.Core.Market.TransferRules.ParseMoney(edit.Text,StaffOfferRules.MoneyPolicy); }
             catch (InvalidDataException e) { throw Invalid(edit,e.Message); }
         }
         DateOnly ParseDate(LineEdit edit) => DateOnly.TryParseExact(edit.Text,"dd/MM/yyyy",CultureInfo.InvariantCulture,
@@ -164,27 +209,17 @@ public partial class Main
             errors[edit].Show();
             return new InvalidDataException(message);
         }
-        Func<decimal> Choice(Control parent,string key,string zero,decimal[] values,decimal initial,string unit,bool custom = false)
+        Func<decimal> Choice(Control parent,string key,string zero,decimal[] values,decimal initial,string unit)
         {
             var row = new HBoxContainer();
             parent.AddChild(row);
             row.AddChild(ClubUi.Text(key+"Label",UiText.Get(key),13));
-            var options = new OptionButton { Name = key, CustomMinimumSize = new Vector2(210,34) };
+            var options = new OptionButton { Name = key, FitToLongestItem = false, ClipText = true, CustomMinimumSize = new Vector2(248,36) };
             row.AddChild(options);
             var choices = values.Append(initial).Distinct().Order().ToArray();
             foreach (var value in choices) options.AddItem(value == 0 ? zero : Amount(value)+unit);
             options.Select(Array.IndexOf(choices,initial));
-            if (!custom) return () => choices[options.Selected];
-            options.AddItem("Otro importe");
-            var other = Field("StaffCustomBonus","",parent);
-            void RefreshCustom()
-            {
-                other.GetParent<Control>().Visible = options.Selected == choices.Length;
-                errors[other].Hide();
-            }
-            options.ItemSelected += _ => RefreshCustom();
-            RefreshCustom();
-            return () => options.Selected == choices.Length ? TransferRulesMoney(other) : choices[options.Selected];
+            return () => choices[options.Selected];
         }
     }
 
