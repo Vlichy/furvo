@@ -56,7 +56,7 @@ public sealed partial class CareerCreationTests
     [Fact] public void ExistingCareersWithoutAcademyReadWithoutMigrationAndUpgradeExplicitly()
     {
         var (_,file,_)=TacticalCareer();var original=new SqliteWorldStore(file).Load().Players.Select(p=>(p.Id,p.Name,p.BirthDate)).ToArray();var primary=AcademyFingerprint(new SqliteTacticalPlanStore(file).Load()!);
-        using(var c=Connection(file))using(var q=c.CreateCommand()){q.CommandText="DROP TRIGGER academy_world_distinct_player;DROP TRIGGER academy_world_distinct_player_update;DROP TABLE academy_players;DROP TABLE academy_staff;DROP TABLE academy_teams;DROP TABLE academy_schema_version;";q.ExecuteNonQuery();}
+        using(var c=Connection(file))using(var q=c.CreateCommand()){q.CommandText="DROP TRIGGER academy_world_distinct_player;DROP TRIGGER academy_world_distinct_player_update;DROP TABLE staff_employments;DROP TABLE staff_professions;DROP TABLE academy_players;DROP TABLE academy_staff;DROP TABLE academy_teams;DROP TABLE academy_schema_version;";q.ExecuteNonQuery();}
         var hash=SHA256.HashData(File.ReadAllBytes(file));var store=new SqliteAcademyStore(file);Assert.False(store.IsInitialized);Assert.Empty(store.List());Assert.Equal(hash,SHA256.HashData(File.ReadAllBytes(file)));store.InitializeMissing();Assert.True(store.IsInitialized);Assert.Equal(original,new SqliteWorldStore(file).Load().Players.Select(p=>(p.Id,p.Name,p.BirthDate)));Assert.Equal(primary,AcademyFingerprint(new SqliteTacticalPlanStore(file).Load()!));
     }
     [Fact] public void AcademyQueriesExposeExactlyFiftyOneVisibleAttributes()

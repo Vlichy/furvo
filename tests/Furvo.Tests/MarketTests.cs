@@ -61,7 +61,7 @@ public sealed partial class CareerCreationTests
     }
     [Fact] public void MarketReadsLegacyCareerWithoutInitializingMissingAcademy()
     {
-        var (_,file,_)=TacticalCareer();using(var c=Connection(file))using(var q=c.CreateCommand()){q.CommandText="DROP TRIGGER academy_world_distinct_player;DROP TRIGGER academy_world_distinct_player_update;DROP TABLE academy_players;DROP TABLE academy_staff;DROP TABLE academy_teams;DROP TABLE academy_schema_version;";q.ExecuteNonQuery();}var before=SHA256.HashData(File.ReadAllBytes(file));var s=new SqliteMarketQueries(file).Read();Assert.Equal(456,s.Players.Count);Assert.Equal(before,SHA256.HashData(File.ReadAllBytes(file)));Assert.False(new SqliteAcademyStore(file).IsInitialized);
+        var (_,file,_)=TacticalCareer();using(var c=Connection(file))using(var q=c.CreateCommand()){q.CommandText="DROP TRIGGER academy_world_distinct_player;DROP TRIGGER academy_world_distinct_player_update;DROP TABLE staff_employments;DROP TABLE staff_professions;DROP TABLE academy_players;DROP TABLE academy_staff;DROP TABLE academy_teams;DROP TABLE academy_schema_version;";q.ExecuteNonQuery();}var before=SHA256.HashData(File.ReadAllBytes(file));var s=new SqliteMarketQueries(file).Read();Assert.Equal(456,s.Players.Count);Assert.Equal(before,SHA256.HashData(File.ReadAllBytes(file)));Assert.False(new SqliteAcademyStore(file).IsInitialized);
     }
     [Fact] public void MarketRejectsInitialWorldAndMissingFileWithoutCreatingAnything()
     {Assert.Throws<InvalidOperationException>(()=>new SqliteMarketQueries(EconomicSource).Read());var missing=Path.Combine(_root,"missing-market.db");Assert.Throws<Microsoft.Data.Sqlite.SqliteException>(()=>new SqliteMarketQueries(missing).Read());Assert.False(File.Exists(missing));}

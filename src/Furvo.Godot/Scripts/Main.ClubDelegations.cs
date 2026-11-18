@@ -18,14 +18,15 @@ public partial class Main
         var club = _workspace!.Career.ClubId!.Value;
         var body = Frame("CareerSection", UiText.Get("ClubDelegationsTitle"), _queries!.GetClubDetails(club).Club.Name);
         body.Name = "ClubDelegationsPage";
-        var departments = new HFlowContainer { Name = "ClubDelegationDepartments" };
-        body.AddChild(departments);
         var edits = new List<Func<bool>>();
         void ChangeView(Action change)
         {
             if (edits.Any(isDirty => isDirty())) TrainingConfirm(UiText.Get("TrainingDiscardChanges"), change);
             else change();
         }
+        PersonnelNavigation(body, "StaffDelegations", ChangeView);
+        var departments = new HFlowContainer { Name = "ClubDelegationDepartments" };
+        body.AddChild(departments);
         foreach (var section in Enum.GetValues<DelegationDepartment>())
         {
             var button = WindowUi.Button("ClubDelegationsDepartment_" + section,

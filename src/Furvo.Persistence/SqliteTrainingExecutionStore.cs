@@ -24,7 +24,17 @@ public sealed class SqliteTrainingExecutionStore(string path)
         // Punto de integración protegido: no se activa el ejecutor desde la interfaz.
         var restrictions=new SqliteTrainingAvailabilityStore(path).Restrictions();
         foreach(var session in plan.Sessions.Where(s=>s.Date==day&&!completed.Contains(s.Id)))TrainingAvailability.Validate(session,restrictions);
-        var states=new List<DevelopmentState>();foreach(var p in squad.Where(p=>observations.Any(e=>e.Attended.Contains(p.Id)))){if(!physical.TryGetValue(p.Id,out var state))throw new InvalidOperationException("No existe observación física de ese futbolista.");states.Add(DevelopmentEngine.Process(p,State(p.Id),day,plan.Sessions,observations,state));}
-        using var c=WorldDatabase.Open(path,SqliteOpenMode.ReadWrite);using var t=c.BeginTransaction();SqliteSportsStore.Ensure(c,t);foreach(var observation in observations){using var record=WorldDatabase.Command(c,t,"INSERT INTO training_attendance VALUES($id,$team,$date,$json)",("$id",observation.Session.ToString("D")),("$team",team.ToString("D")),("$date",day.ToString("yyyy-MM-dd")),("$json",CareerJson.Write(new {Session=plan.Sessions.Single(s=>s.Id==observation.Session),Observation=observation,Model=DevelopmentEngine.Version})));record.ExecuteNonQuery();}foreach(var state in states){using var q=WorldDatabase.Command(c,t,"INSERT INTO training_development VALUES($player,$team,$json) ON CONFLICT(player_id) DO UPDATE SET team_id=excluded.team_id,data_json=excluded.data_json;",("$player",state.Player.ToString()),("$team",team.ToString("D")),("$json",CareerJson.Write(state)));q.ExecuteNonQuery();}t.Commit();
+        var eligible = service.Staff(team);
+        var youth = new SqliteClubSquadStore(path).Teams().Single(squad => squad.Id == team).Category == "Juvenil";
+        var profiles = SqliteStaffDirectory.TrainingProfiles(path, team, day);
+        var contributions = new Dictionary<Guid, TrainingStaffContribution>();
+        foreach (var observation in observations)
+        {
+            var session = plan.Sessions.Single(value => value.Id == observation.Session);
+            if (TrainingStaffEffect.Resolve(plan, session, eligible, youth, id => profiles.GetValueOrDefault(id)) is { } contribution)
+                contributions.Add(session.Id, contribution);
+        }
+        var states=new List<DevelopmentState>();foreach(var p in squad.Where(p=>observations.Any(e=>e.Attended.Contains(p.Id)))){if(!physical.TryGetValue(p.Id,out var state))throw new InvalidOperationException("No existe observación física de ese futbolista.");states.Add(DevelopmentEngine.Process(p,State(p.Id),day,plan.Sessions,observations,state,staff:contributions));}
+        using var c=WorldDatabase.Open(path,SqliteOpenMode.ReadWrite);using var t=c.BeginTransaction();SqliteSportsStore.Ensure(c,t);foreach(var observation in observations){using var record=WorldDatabase.Command(c,t,"INSERT INTO training_attendance VALUES($id,$team,$date,$json)",("$id",observation.Session.ToString("D")),("$team",team.ToString("D")),("$date",day.ToString("yyyy-MM-dd")),("$json",CareerJson.Write(new {Session=plan.Sessions.Single(s=>s.Id==observation.Session),Observation=observation,Model=DevelopmentEngine.Version,StaffModel=TrainingStaffEffect.Version,Staff=contributions.GetValueOrDefault(observation.Session)})));record.ExecuteNonQuery();}foreach(var state in states){using var q=WorldDatabase.Command(c,t,"INSERT INTO training_development VALUES($player,$team,$json) ON CONFLICT(player_id) DO UPDATE SET team_id=excluded.team_id,data_json=excluded.data_json;",("$player",state.Player.ToString()),("$team",team.ToString("D")),("$json",CareerJson.Write(state)));q.ExecuteNonQuery();}t.Commit();
     }
 }

@@ -1809,4 +1809,117 @@ Jugadores incluidos: {4}; cláusulas de futura venta/plusvalía: {5}. Sus porcen
 <data name="AcademyDelegationPending_Development" xml:space="preserve"><value>El seguimiento individual se consulta en Equipo → Cantera. La delegación de desarrollo, evaluación y propuestas de promoción está pendiente.</value></data>
 <data name="AcademyDelegationPending_Coordination" xml:space="preserve"><value>Ámbito: todo el club. La supervisión de técnicos, metodología y planificación de categorías requieren un responsable de cantera con competencias acreditadas.</value></data>
 <data name="AcademyDelegationCompetitionPending" xml:space="preserve"><value>La preparación de partidos y la gestión de competiciones juveniles siguen pendientes.</value></data>
+<data name="NavPage_MarketStaff" xml:space="preserve"><value>Buscar empleados</value></data>
+<data name="StaffRoster" xml:space="preserve"><value>Plantilla de empleados</value></data>
+<data name="StaffDevelopment" xml:space="preserve"><value>Formación y desarrollo</value></data>
+<data name="StaffDevelopmentNotice" xml:space="preserve"><value>Todavía no hay cursos profesionales ni registros de formación en esta carrera.</value></data>
+<data name="StaffDelegations" xml:space="preserve"><value>Delegaciones</value></data>
+<data name="StaffMarketNotice" xml:space="preserve"><value>Consulta los perfiles y contratos registrados en otros clubes. La contratación está pendiente.</value></data>
+<data name="StaffRosterNotice" xml:space="preserve"><value>Personal registrado en el club y sus equipos.</value></data>
+<data name="StaffAll" xml:space="preserve"><value>Todos</value></data>
+<data name="StaffFree" xml:space="preserve"><value>Libres</value></data>
+<data name="StaffContracted" xml:space="preserve"><value>Con contrato</value></data>
+<data name="StaffUnknown" xml:space="preserve"><value>Desconocida</value></data>
+<data name="StaffAnyExpiry" xml:space="preserve"><value>Todos los vencimientos</value></data>
+<data name="StaffThreeMonths" xml:space="preserve"><value>Próximos 3 meses</value></data>
+<data name="StaffSixMonths" xml:space="preserve"><value>Próximos 6 meses</value></data>
+<data name="StaffTwelveMonths" xml:space="preserve"><value>Próximos 12 meses</value></data>
+<data name="StaffAllRoles" xml:space="preserve"><value>Todos los cargos</value></data>
+<data name="StaffRole_Manager" xml:space="preserve"><value>Mánager</value></data>
+<data name="StaffRole_AcademyCoach" xml:space="preserve"><value>Entrenador de cantera</value></data>
+<data name="StaffRole" xml:space="preserve"><value>Cargo</value></data>
+<data name="StaffTeam" xml:space="preserve"><value>Equipo o club</value></data>
+<data name="StaffContractStatus" xml:space="preserve"><value>Situación contractual</value></data>
+<data name="StaffExpiry" xml:space="preserve"><value>Vencimiento</value></data>
+<data name="StaffResultCount" xml:space="preserve"><value>{0} profesionales</value></data>
+<data name="StaffOpenProfile" xml:space="preserve"><value>Ver ficha</value></data>
+<data name="StaffBackToDirectory" xml:space="preserve"><value>Volver al listado</value></data>
+<data name="StaffProfileIdentity" xml:space="preserve"><value>Identidad profesional</value></data>
+<data name="StaffReputation" xml:space="preserve"><value>Reputación (1–5)</value></data>
+<data name="StaffStartDate" xml:space="preserve"><value>Inicio</value></data>
+<data name="StaffGrossSalary" xml:space="preserve"><value>Salario bruto anual</value></data>
+<data name="StaffDurationMonths" xml:space="preserve"><value>Duración en meses</value></data>
+<data name="StaffStrengths" xml:space="preserve"><value>Puntos fuertes</value></data>
+<data name="StaffWeaknesses" xml:space="preserve"><value>Puntos débiles</value></data>
+<data name="StaffLanguages" xml:space="preserve"><value>Idiomas</value></data>
+<data name="StaffProfessionalHistory" xml:space="preserve"><value>Trayectoria profesional</value></data>
+<data name="StaffExpiryFilterLabel" xml:space="preserve"><value>Vencimiento del contrato</value></data>
+<data name="StaffAllDepartments" xml:space="preserve"><value>Todos los departamentos</value></data>
+<data name="StaffAllTeams" xml:space="preserve"><value>Todos los equipos</value></data>
+<data name="StaffDepartment" xml:space="preserve"><value>Departamento</value></data>
+<data name="StaffResponsibilities" xml:space="preserve"><value>Responsabilidades</value></data>
+<data name="StaffNoAssignments" xml:space="preserve"><value>Sin asignaciones</value></data>
+<data name="StaffNoVerifiedContracts" xml:space="preserve"><value>El personal externo registrado tiene vínculo institucional, pero todavía carece de contratos acreditados. Puedes consultarlo en «Todos».</value></data>
+<data name="StaffNoMatches" xml:space="preserve"><value>No hay empleados que coincidan con los filtros.</value></data>
+<data name="TransferTabPlayers" xml:space="preserve"><value>Jugadores</value></data>
+<data name="TransferTabStaff" xml:space="preserve"><value>Staff</value></data>
+<data name="StaffOffersPending" xml:space="preserve"><value>Todavía no hay ofertas de Staff. Las propuestas laborales aparecerán aquí.</value></data>
+<data name="StaffNegotiationsPending" xml:space="preserve"><value>Todavía no hay negociaciones de Staff. Las negociaciones laborales enviadas aparecerán aquí.</value></data>
+<data name="StaffAllReputations" xml:space="preserve"><value>Todas las reputaciones</value></data>
+<data name="StaffReputationFilter" xml:space="preserve"><value>Reputación {0}/5</value></data>
+<data name="StaffSpecialty" xml:space="preserve"><value>Especialidad</value></data>
+<data name="StaffExperienceYears" xml:space="preserve"><value>Años de experiencia</value></data>
+<data name="StaffNoAdditionalClauses" xml:space="preserve"><value>Sin primas ni cláusulas adicionales registradas.</value></data>
+<data name="StaffProfessionalAttributes" xml:space="preserve"><value>Atributos profesionales (1–20)</value></data>
+<data name="StaffHistoryEmpty" xml:space="preserve"><value>Sin etapas anteriores registradas.</value></data>
+<data name="StaffLegacyProfile" xml:space="preserve"><value>Esta ficha conserva los datos originales disponibles. No consta un perfil profesional ampliado.</value></data>
+<data name="StaffNoHighlight" xml:space="preserve"><value>Sin atributos destacados en este apartado.</value></data>
+<data name="StaffLanguage_es" xml:space="preserve"><value>Español</value></data>
+<data name="StaffLanguage_en" xml:space="preserve"><value>Inglés</value></data>
+<data name="StaffLanguageLevel_Basic" xml:space="preserve"><value>Básico</value></data>
+<data name="StaffLanguageLevel_Working" xml:space="preserve"><value>Profesional</value></data>
+<data name="StaffLanguageLevel_Fluent" xml:space="preserve"><value>Fluido</value></data>
+<data name="StaffLanguageLevel_Native" xml:space="preserve"><value>Nativo</value></data>
+<data name="StaffAttribute_Tactics" xml:space="preserve"><value>Conocimientos tácticos</value></data>
+<data name="StaffAttribute_Technical" xml:space="preserve"><value>Entrenamiento técnico</value></data>
+<data name="StaffAttribute_Attacking" xml:space="preserve"><value>Entrenamiento ofensivo</value></data>
+<data name="StaffAttribute_Defending" xml:space="preserve"><value>Entrenamiento defensivo</value></data>
+<data name="StaffAttribute_YouthDevelopment" xml:space="preserve"><value>Desarrollo juvenil</value></data>
+<data name="StaffAttribute_Fitness" xml:space="preserve"><value>Preparación física</value></data>
+<data name="StaffAttribute_Motivation" xml:space="preserve"><value>Motivación</value></data>
+<data name="StaffAttribute_Discipline" xml:space="preserve"><value>Disciplina</value></data>
+<data name="StaffAttribute_GroupManagement" xml:space="preserve"><value>Gestión de grupo</value></data>
+<data name="StaffAttribute_TacticalAdaptability" xml:space="preserve"><value>Adaptabilidad táctica</value></data>
+<data name="StaffHistoryExperienceNotice" xml:space="preserve"><value>La experiencia acumulada forma parte del perfil. No constan clubes o períodos anteriores en la trayectoria registrada.</value></data>
+<data name="StaffMakeOffer" xml:space="preserve"><value>Hacer oferta</value></data>
+<data name="StaffOfferUnavailable" xml:space="preserve"><value>Falta acreditar la situación contractual del empleado.</value></data>
+<data name="StaffOfferPhase" xml:space="preserve"><value>Fase</value></data>
+<data name="StaffPhase_Club" xml:space="preserve"><value>Club de origen</value></data>
+<data name="StaffPhase_Personal" xml:space="preserve"><value>Contrato personal</value></data>
+<data name="StaffOfferState_Draft" xml:space="preserve"><value>Borrador</value></data>
+<data name="StaffOfferState_Sent" xml:space="preserve"><value>Pendiente de respuesta</value></data>
+<data name="StaffOfferState_Counter" xml:space="preserve"><value>Contraoferta</value></data>
+<data name="StaffOfferState_ClubAgreed" xml:space="preserve"><value>Acuerdo entre clubes</value></data>
+<data name="StaffOfferState_Conditional" xml:space="preserve"><value>Acuerdo condicionado</value></data>
+<data name="StaffOfferState_Rejected" xml:space="preserve"><value>Rechazada</value></data>
+<data name="StaffOfferState_Withdrawn" xml:space="preserve"><value>Retirada</value></data>
+<data name="StaffOfferState_Expired" xml:space="preserve"><value>Caducada</value></data>
+<data name="StaffSigningBonus" xml:space="preserve"><value>Prima de fichaje</value></data>
+<data name="StaffCompensation" xml:space="preserve"><value>Compensación al club</value></data>
+<data name="StaffRelegation" xml:space="preserve"><value>Reducción por descenso (%)</value></data>
+<data name="StaffPromotion" xml:space="preserve"><value>Incremento por ascenso (%)</value></data>
+<data name="StaffRestoration" xml:space="preserve"><value>Recuperar salario tras ascenso</value></data>
+<data name="StaffRelease" xml:space="preserve"><value>Cláusula de salida (EUR)</value></data>
+<data name="StaffSeverance" xml:space="preserve"><value>Indemnización (EUR)</value></data>
+<data name="StaffPromotionBonus" xml:space="preserve"><value>Prima por ascenso (EUR)</value></data>
+<data name="StaffSaveOffer" xml:space="preserve"><value>Guardar borrador</value></data>
+<data name="StaffOfferDetail" xml:space="preserve"><value>Historial de la propuesta de Staff</value></data>
+<data name="StaffFormalizationBlocked" xml:space="preserve"><value>Pendiente de formalización. Faltan la validación de compromisos salariales, el registro de obligaciones económicas y la baja y alta de puestos.</value></data>
+<data name="StaffSendOffer" xml:space="preserve"><value>Enviar oferta</value></data>
+<data name="StaffEvaluateOffer" xml:space="preserve"><value>Evaluar respuesta</value></data>
+<data name="StaffStartPersonal" xml:space="preserve"><value>Negociar contrato personal</value></data>
+<data name="StaffReviseOffer" xml:space="preserve"><value>Revisar contraoferta</value></data>
+<data name="StaffWithdrawOffer" xml:space="preserve"><value>Retirar oferta</value></data>
+<data name="StaffClause_RelegationReduction" xml:space="preserve"><value>Reducción por descenso</value></data>
+<data name="StaffClause_PromotionIncrease" xml:space="preserve"><value>Incremento por ascenso</value></data>
+<data name="StaffClause_PromotionRestoration" xml:space="preserve"><value>Recuperación salarial tras ascenso</value></data>
+<data name="StaffClause_ObjectiveBonus" xml:space="preserve"><value>Prima por ascenso</value></data>
+<data name="StaffClause_Severance" xml:space="preserve"><value>Indemnización</value></data>
+<data name="StaffClause_Release" xml:space="preserve"><value>Cláusula de salida</value></data>
+<data name="StaffProposalDate" xml:space="preserve"><value>Fecha de propuesta</value></data>
+<data name="StaffEditDraft" xml:space="preserve"><value>Editar borrador</value></data>
+<data name="StaffOfferBasicTerms" xml:space="preserve"><value>Condiciones laborales</value></data>
+<data name="StaffOfferClauses" xml:space="preserve"><value>Cláusulas opcionales</value></data>
+<data name="StaffCompensationEstimate" xml:space="preserve"><value>Estimación editable para el club de origen: salario pendiente del contrato ajustado por la relevancia del técnico.</value></data>
+<data name="StaffCustomBonus" xml:space="preserve"><value>Otro importe</value></data>
 </root>

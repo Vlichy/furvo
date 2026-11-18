@@ -34,6 +34,7 @@ public partial class Main
             _workspace!.Open(page);
             if(page is CareerPage.MarketOffers or CareerPage.MarketNegotiations){ShowTransferList(page);return;}
             if(page==CareerPage.MarketRights){ShowTransferRights();return;}
+            if(page==CareerPage.MarketStaff){ShowStaffDirectory(market:true);return;}
             if(page==CareerPage.MarketSearch){ShowMarket();return;}
             if(page==CareerPage.Training){ShowTraining();return;}
             if(page==CareerPage.Analysis){ShowSportsAnalysis();return;}
@@ -105,7 +106,7 @@ public partial class Main
     private CareerPage[] ContextPages(CareerArea area)=>area switch{
         CareerArea.Home=>[],CareerArea.Team=>[CareerPage.OwnSquad,CareerPage.Lineup,CareerPage.Training,CareerPage.Analysis,CareerPage.Academy],
         CareerArea.Club=>_workspace!.HasClub?[CareerPage.OwnInformation,CareerPage.OwnStadium,CareerPage.OwnEconomy,CareerPage.OwnHistory,CareerPage.Facilities,CareerPage.ClubPersonnel]:[CareerPage.NoClub],
-        CareerArea.Career=>[CareerPage.Profile,CareerPage.Contract],CareerArea.Market=>[CareerPage.MarketSearch,CareerPage.MarketOffers,CareerPage.MarketNegotiations,CareerPage.MarketRights],_=>[]};
+        CareerArea.Career=>[CareerPage.Profile,CareerPage.Contract],CareerArea.Market=>[CareerPage.MarketSearch,CareerPage.MarketStaff,CareerPage.MarketOffers,CareerPage.MarketNegotiations,CareerPage.MarketRights],_=>[]};
     private void ToggleCareerMenu()
     {
         var menu=GetNodeOrNull<ExplorationMenu>("ExplorationMenu");

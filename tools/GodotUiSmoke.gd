@@ -212,6 +212,8 @@ func check_career_workspace(screen: Node, employed: bool) -> bool:
             return false
         find_named(screen,"BackSquad").emit_signal("pressed")
         await process_frame
+        if OS.get_cmdline_user_args().has("--staff-only") or OS.get_cmdline_user_args().has("--staff-hiring"):
+            return await check_staff_directory(screen)
         if OS.get_cmdline_user_args().has("--club-delegations-only"):
             return await check_club_delegations(screen)
         if OS.get_cmdline_user_args().has("--academy-followup-only"):
@@ -268,6 +270,161 @@ func check_career_workspace(screen: Node, employed: bool) -> bool:
         if not require(find_named(screen,"EconomyTransferBudgetValue") == null and find_named(screen,"CareerOffersList").get_meta("entry_count") == 0 and find_named(screen,"CareerVacanciesList").get_meta("entry_count") == 0,"El escritorio libre asigna recursos u ofertas ficticias"):
             return false
     print("FURVO_WORKSPACE_OK: "+("contratado" if employed else "en paro")+", seis áreas, permisos, consulta, contrato y fecha estable")
+    return true
+
+func check_staff_directory(screen: Node) -> bool:
+    find_named(screen,"NavArea_Club").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"NavPage_ClubPersonnel").emit_signal("pressed")
+    await process_frame
+    find_named(screen,"StaffRoster").emit_signal("pressed")
+    await process_frame
+    var table = find_trees(find_named(screen,"StaffDirectoryTable"))[0]
+    if not require(table.get_root().get_child_count() == 5, "El directorio no refleja mánager y técnicos de Mosaico"):
+        return false
+    if not require(find_named(screen,"StaffSearchStatus") == null and find_named(screen,"StaffSearchExpiry") == null and find_named(screen,"StaffSearchDepartment") != null and find_named(screen,"StaffSearchTeam") != null, "La plantilla conserva filtros de Mercado"):
+        return false
+    var roles = find_named(screen,"StaffSearchRole")
+    for index in range(roles.item_count):
+        if roles.get_item_text(index) == "Mánager":
+            roles.select(index)
+            roles.emit_signal("item_selected",index)
+    await process_frame
+    if not require(table.get_root().get_child_count() == 1, "Solo debería constar el contrato conocido del mánager"):
+        return false
+    table.get_root().get_first_child().select(0)
+    table.emit_signal("item_activated")
+    await process_frame
+    if not require(find_named(screen,"StaffProfilePage") != null and find_named(screen,"StaffGrossSalaryValue").text.contains("EUR"), "La ficha no recuperó el contrato"):
+        return false
+    find_named(screen,"NavArea_Market").emit_signal("pressed")
+    await process_frame
+    var nav = find_named(screen,"CareerContextNavigation")
+    if not require(find_named(nav,"NavPage_MarketStaff").get_index() == find_named(nav,"NavPage_MarketSearch").get_index() + 1, "Buscar empleados está fuera de posición"):
+        return false
+    find_named(nav,"NavPage_MarketStaff").emit_signal("pressed")
+    await process_frame
+    table = find_trees(find_named(screen,"StaffDirectoryTable"))[0]
+    if not require(table.get_root().get_child_count() == 64, "Mercado no recuperó los 64 técnicos externos existentes"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(0.15).timeout
+        if not require(table.get_global_rect().end.x <= resolution.x and table.get_global_rect().end.y <= resolution.y, "Directorio fuera de pantalla"):
+            return false
+        await capture_economy_screen("career-staff-market-" + str(resolution.x))
+    var filter = find_named(screen,"StaffSearchStatus")
+    var expiry = find_named(screen,"StaffSearchExpiry")
+    if not require(find_named(screen,"StaffSearchRole") == null and expiry.get_item_text(0) == "Todos los vencimientos", "Filtro redundante o vencimiento incorrecto"):
+        return false
+    expiry.select(1)
+    expiry.emit_signal("item_selected",1)
+    await process_frame
+    if not require(table.get_root().get_child_count() == 0, "Un vencimiento desconocido aparece como próximo"):
+        return false
+    filter.select(1)
+    filter.emit_signal("item_selected",1)
+    await process_frame
+    if not require(expiry.disabled and expiry.selected == 0 and table.get_root().get_child_count() == 0, "Libres no desactiva vencimiento o incluye vínculos desconocidos"):
+        return false
+    filter.select(2)
+    filter.emit_signal("item_selected",2)
+    await process_frame
+    if not require(not expiry.disabled and table.get_root().get_child_count() == 64, "Con contrato no recuperó los técnicos contratados"):
+        return false
+    table.get_root().get_first_child().select(0)
+    table.emit_signal("item_activated")
+    await process_frame
+    if not require(find_named(screen,"StaffProfessionalAttributesPanel") != null and find_named(screen,"StaffLanguagesPanel") != null and find_named(screen,"StaffGrossSalaryValue").text.contains("EUR"), "Faltan datos profesionales persistidos"):
+        return false
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(0.15).timeout
+        var attributes = find_marked_nodes(find_named(screen,"StaffProfessionalAttributesPanel"), "staff_attribute")
+        if not require(attributes.size() == 10, "La ficha no muestra los diez atributos de la especialidad"):
+            return false
+        for attribute in attributes:
+            var bar = find_named(attribute,"Bar")
+            var number = find_named(attribute,"Number")
+            if not require(bar.max_value == 20 and bar.value >= 1 and bar.value <= 20 and number.text == str(int(bar.value)) + " / 20" and attribute.get_global_rect().end.x <= resolution.x, "Barra profesional desalineada o incoherente con su valor"):
+                return false
+        await capture_economy_screen("career-staff-profile-" + str(resolution.x))
+    var preview = FileAccess.open(ProjectSettings.globalize_path("res://../../artifacts/staff-profile-restart.json"), FileAccess.WRITE)
+    preview.store_string(JSON.stringify({"root": screen.get_meta("qa_storage_root"), "career": str(find_named(screen,"CareerShell").get_meta("career_id"))}))
+    preview.close()
+    for page in ["MarketOffers", "MarketNegotiations"]:
+        find_named(screen,"NavPage_" + page).emit_signal("pressed")
+        await process_frame
+        if not require(find_named(screen,"TransferNegotiationsTable") != null and find_named(screen,"TransferTabPlayers").disabled, "Falta la vista de jugadores"):
+            return false
+        find_named(screen,"TransferTabStaff").emit_signal("pressed")
+        await process_frame
+        var empty_key = "StaffOffersPending" if page == "MarketOffers" else "StaffNegotiationsPending"
+        if not require(find_named(screen,empty_key) != null and find_named(screen,"TransferNegotiationsTable") == null, "Staff mezcla operaciones de jugadores"):
+            return false
+        find_named(screen,"TransferTabPlayers").emit_signal("pressed")
+        await process_frame
+        if not require(find_named(screen,"TransferNegotiationsTable") != null, "No se recupera la vista de jugadores"):
+            return false
+    print("FURVO_STAFF_DIRECTORY_OK")
+    if OS.get_cmdline_user_args().has("--staff-hiring"):
+        return await check_staff_hiring(screen)
+    return true
+
+func check_staff_hiring(screen: Node) -> bool:
+    find_named(screen,"NavPage_MarketStaff").emit_signal("pressed")
+    await process_frame
+    var table = find_trees(find_named(screen,"StaffDirectoryTable"))[0]
+    table.get_root().get_first_child().select(0)
+    table.emit_signal("item_activated")
+    await process_frame
+    var offer = find_named(screen,"StaffMakeOffer")
+    if not require(offer != null and not offer.disabled, "El técnico contratado no admite iniciar una negociación"):
+        return false
+    offer.emit_signal("pressed")
+    await process_frame
+    find_named(screen,"StaffGrossSalary").text = "150000"
+    var compensation = find_named(screen,"StaffCompensation")
+    if not require(compensation.text.to_float() > 0 and find_named(screen,"StaffCompensationEstimate") != null, "La compensación inicial debe llegar calculada"):
+        return false
+    compensation.text = "0" # Conserva el recorrido de contraoferta por una propuesta inferior.
+    find_named(screen,"StaffRelegation").select(3)
+    find_named(screen,"StaffRestoration").select(2)
+    find_named(screen,"StaffSigningBonus").select(1)
+    var expiry_field = find_named(screen,"StaffExpiry")
+    var valid_expiry = expiry_field.text
+    expiry_field.text = find_named(screen,"StaffStartDate").text
+    find_named(screen,"StaffSaveOffer").emit_signal("pressed")
+    await process_frame
+    if not require(find_named(screen,"StaffExpiryError").visible, "El vencimiento inválido debe señalarse junto al campo"):
+        return false
+    expiry_field.text = valid_expiry
+    expiry_field.emit_signal("text_changed",valid_expiry)
+    for resolution in [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080)]:
+        root.size = resolution
+        await create_timer(0.15).timeout
+        var button = find_named(screen,"StaffSaveOffer")
+        if not require(button.get_global_rect().end.y <= resolution.y, "Guardar borrador queda fuera de la ventana"):
+            return false
+        await capture_economy_screen("career-staff-offer-" + str(resolution.x))
+    for action in ["StaffSaveOffer","StaffSendOffer","StaffEvaluateOffer","StaffReviseOffer","StaffSaveOffer","StaffSendOffer","StaffEvaluateOffer","StaffStartPersonal","StaffSendOffer","StaffEvaluateOffer"]:
+        var button = find_named(screen,action)
+        if not require(button != null and not button.disabled, "Falta el paso de negociación " + action):
+            return false
+        button.emit_signal("pressed")
+        await process_frame
+    if not require(find_named(screen,"StaffFormalizationBlocked") != null, "El acuerdo personal debe quedar condicionado"):
+        return false
+    await capture_economy_screen("career-staff-hiring-conditional")
+    for page in ["MarketOffers","MarketNegotiations"]:
+        find_named(screen,"NavPage_" + page).emit_signal("pressed")
+        await process_frame
+        find_named(screen,"TransferTabStaff").emit_signal("pressed")
+        await process_frame
+        var list = find_named(screen,"StaffOffersTable")
+        if not require(list != null and find_trees(list)[0].get_root().get_child_count() == 1, "Falta el historial de Staff en " + page):
+            return false
+    print("FURVO_STAFF_HIRING_OK")
     return true
 
 func check_club_delegations(screen: Node) -> bool:

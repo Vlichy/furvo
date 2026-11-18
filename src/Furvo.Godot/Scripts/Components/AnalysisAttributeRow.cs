@@ -14,7 +14,7 @@ public partial class AnalysisAttributeRow : HBoxContainer
         if(value.ComparisonValue is {} other)AddChild(Meter(other,"Comparison"));
         TooltipText=value.Relevant?UiText.Get("AnalysisRelevantAttribute"):UiText.Get("AnalysisOtherAttribute");
     }
-    private static HBoxContainer Meter(int value,string name)
+    internal static HBoxContainer Meter(int value,string name)
     {
         var body=new HBoxContainer{Name=name,SizeFlagsHorizontal=SizeFlags.ExpandFill,SizeFlagsStretchRatio=2};body.AddThemeConstantOverride("separation",8);
         var bar=new ProgressBar{Name="Bar",MinValue=0,MaxValue=20,Value=value,ShowPercentage=false,MouseFilter=MouseFilterEnum.Ignore,

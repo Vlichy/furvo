@@ -49,9 +49,22 @@ public partial class Main
             },Back);body.AddChild(editor);
         }catch(Exception e){GD.PushWarning(e.ToString());ShowError("TransferLoadError",()=>ShowTransferList(CareerPage.MarketOffers),ShowMarket);}
     }
-    private void ShowTransferList(CareerPage page)
+    private void ShowTransferList(CareerPage page, bool staff = false)
     {
-        _workspace!.Open(page);var body=Frame("CareerSection",UiText.Get(page==CareerPage.MarketOffers?"NavPage_MarketOffers":"NavPage_MarketNegotiations"),UiText.Get("TransferNoAutomaticResponses"));body.Name="TransferList";
+        _workspace!.Open(page);var body=Frame("CareerSection",UiText.Get(page==CareerPage.MarketOffers?"NavPage_MarketOffers":"NavPage_MarketNegotiations"),staff?"":UiText.Get("TransferNoAutomaticResponses"));body.Name="TransferList";
+        var categories = new HFlowContainer { Name = "TransferOperationTabs" };
+        body.AddChild(categories);
+        var players = WindowUi.Button("TransferTabPlayers", () => ShowTransferList(page));
+        var employees = WindowUi.Button("TransferTabStaff", () => ShowTransferList(page, staff: true));
+        players.Disabled = !staff;
+        employees.Disabled = staff;
+        categories.AddChild(players);
+        categories.AddChild(employees);
+        if (staff)
+        {
+            RenderStaffOffers(body,page);
+            return;
+        }
         try{
             var store=Transfers();var all=store.Current();var data=store.Participants();var filter=new OptionButton{Name="TransferStateFilter",SizeFlagsHorizontal=Control.SizeFlags.ShrinkBegin,CustomMinimumSize=new Vector2(260,40)};filter.AddItem(UiText.Get("TransferAllStates"));foreach(var s in Enum.GetValues<NegotiationState>())filter.AddItem(UiText.Get("TransferState_"+s));body.AddChild(filter);
             // Tree comparte la geometría de cabeceras y celdas. El recorte y los tooltips impiden que
