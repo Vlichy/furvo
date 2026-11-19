@@ -9,7 +9,7 @@ namespace Furvo.Persistence;
 /// <summary>Operaciones técnicas en una transacción ajena. Nunca abre conexiones ni confirma la transacción.</summary>
 public static class SqliteFinancialOperations
 {
-    private static void CheckCareer(SqliteConnection connection, SqliteTransaction transaction, SaveId career)
+    internal static void CheckCareer(SqliteConnection connection, SqliteTransaction transaction, SaveId career)
     {
         if (transaction.Connection != connection)
             throw new ArgumentException("La transacción no pertenece a la conexión indicada.");
@@ -18,7 +18,7 @@ public static class SqliteFinancialOperations
             throw new InvalidOperationException("Las operaciones pertenecen a la carrera indicada, nunca a una publicación.");
     }
 
-    private static bool HasSchema(SqliteConnection connection, SqliteTransaction transaction)
+    internal static bool HasSchema(SqliteConnection connection, SqliteTransaction transaction)
     {
         using var command = WorldDatabase.Command(connection, transaction,
             "SELECT count(*) FROM sqlite_master WHERE type='table' AND name IN ('financial_operation_schema','financial_operations')");
