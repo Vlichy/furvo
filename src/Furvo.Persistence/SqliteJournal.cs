@@ -8,33 +8,52 @@ namespace Furvo.Persistence;
 /// <summary>Diario de observación explícito. Participa en la transacción del consumidor y nunca escribe la caja antigua.</summary>
 public static class SqliteJournal
 {
+    public const int CurrentSchemaVersion = 2;
     private sealed record StoredLine(int Account, long Debit, long Credit);
     private sealed record Scope(DateOnly Cutoff, SeasonId Season, long Opening, long Cash);
 
-    private static bool HasSchema(SqliteConnection connection, SqliteTransaction transaction)
+    private static int SchemaVersion(SqliteConnection connection, SqliteTransaction transaction)
     {
         using var command = WorldDatabase.Command(connection, transaction,
-            "SELECT count(*) FROM sqlite_master WHERE name IN ('journal_schema','journal_accounts','journal_scopes','journal_entries','journal_lines')");
+            """
+            SELECT count(*) FROM sqlite_master WHERE
+            (type='table' AND name IN ('journal_schema','journal_accounts','journal_scopes','journal_entries')) OR
+            (type='view' AND name='journal_lines') OR
+            (type='index' AND name IN ('journal_one_opening','journal_one_reversal')) OR
+            (type='trigger' AND name IN ('journal_valid_entry','journal_update_cash','journal_entries_no_update',
+             'journal_entries_no_delete','journal_scope_identity','journal_scope_no_delete','journal_accounts_no_update','journal_accounts_no_delete'))
+            """);
         var count = Convert.ToInt32(command.ExecuteScalar());
-        if (count == 0) return false;
-        if (count != 5) throw new InvalidDataException("Extensión de diario incompleta.");
+        if (count == 0) return 0;
+        if (count != 15) throw new InvalidDataException("Extensión de diario incompleta: faltan tablas, índices, vistas o triggers.");
         if (!SqliteFinancialOperations.HasSchema(connection, transaction))
             throw new InvalidDataException("El diario requiere la extensión de operaciones completa.");
         command.CommandText = "SELECT version FROM journal_schema WHERE singleton=1";
-        if (Convert.ToInt32(command.ExecuteScalar()) != 1)
+        var version = Convert.ToInt32(command.ExecuteScalar());
+        if (version is not (1 or CurrentSchemaVersion))
             throw new NotSupportedException("Versión de diario no compatible.");
-        return true;
+        return version;
     }
 
     public static void Migrate(SqliteConnection connection, SqliteTransaction transaction, SaveId career)
     {
         SqliteFinancialOperations.Migrate(connection, transaction, career);
-        if (!HasSchema(connection, transaction)) CareerJson.Migrate(connection, transaction, "Journal001_Initial.sql");
+        var version = SchemaVersion(connection, transaction);
+        if (version == 0)
+        {
+            CareerJson.Migrate(connection, transaction, "Journal001_Initial.sql");
+            version = 1;
+        }
+        if (version == 1)
+        {
+            ValidateVersionOne(connection, transaction, career);
+            CareerJson.Migrate(connection, transaction, "Journal002_AuditIntegrity.sql");
+        }
     }
 
     private static Scope? ReadScope(SqliteConnection connection, SqliteTransaction transaction, ClubId club)
     {
-        if (!HasSchema(connection, transaction)) return null;
+        if (SchemaVersion(connection, transaction) == 0) return null;
         using var command = WorldDatabase.Command(connection, transaction,
             "SELECT cutoff,source_season_id,opening_cents,cash_cents FROM journal_scopes WHERE club_id=$club", ("$club", club.ToString()));
         using var reader = command.ExecuteReader();
@@ -51,7 +70,7 @@ public static class SqliteJournal
             CareerJson.Write(new { Club = club, SourceSeason = sourceSeason, Cutoff = cutoff }));
         return SqliteFinancialOperations.Execute(connection, transaction, request, (c, t) =>
         {
-            if (!HasSchema(c, t)) throw new InvalidOperationException("Instala explícitamente el diario antes de abrirlo.");
+            RequireCurrent(c, t);
             if (ReadScope(c, t, club) is not null) throw new InvalidOperationException("El club ya tiene un corte de apertura.");
             var source = SqliteEconomyStore.ReadResources(c, t).SingleOrDefault(row => row.ClubId == club && row.SeasonId == sourceSeason);
             if (source?.Cash is not { } cash || source.Currency != "EUR")
@@ -80,6 +99,7 @@ public static class SqliteJournal
         var request = new FinancialOperationRequest(frozen.OperationId, career, "journal-post-v1", frozen.Id.ToString("D"), CareerJson.Write(frozen));
         return SqliteFinancialOperations.Execute(connection, transaction, request, (c, t) =>
         {
+            RequireCurrent(c, t);
             var scope = ReadScope(c, t, frozen.Club) ?? throw new InvalidOperationException("El club carece de apertura contable.");
             if (!Reconcile(c, t, career, frozen.Club)!.Balanced)
                 throw new InvalidDataException("La proyección de caja no concuerda con el diario.");
@@ -91,6 +111,7 @@ public static class SqliteJournal
                     !original.Entry.Lines.Select(line => new JournalLine(line.Account, line.Credit, line.Debit)).SequenceEqual(frozen.Lines))
                     throw new InvalidDataException("El contraasiento no invierte un asiento compatible del mismo club.");
             }
+            ValidateBalanceRanges(Movements(c, t, career, frozen.Club).Select(row => row.Entry).Append(frozen));
             Insert(c, t, frozen, false);
             return CareerJson.Write(new { EntryId = frozen.Id });
         });
@@ -112,7 +133,7 @@ public static class SqliteJournal
         SaveId career, ClubId club, DateOnly? through = null)
     {
         SqliteFinancialOperations.CheckCareer(connection, transaction, career);
-        if (!HasSchema(connection, transaction)) return [];
+        if (SchemaVersion(connection, transaction) == 0) return [];
         using var command = WorldDatabase.Command(connection, transaction,
             "SELECT sequence,opening,id,economic_date,operation_id,reference,reverses,lines_json FROM journal_entries WHERE club_id=$club AND ($through IS NULL OR economic_date<=$through) ORDER BY economic_date,sequence",
             ("$club", club.ToString()), ("$through", through is { } date ? Date(date) : null));
@@ -162,4 +183,47 @@ public static class SqliteJournal
     }
 
     private static string Date(DateOnly date) => date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+    private static void RequireCurrent(SqliteConnection connection, SqliteTransaction transaction)
+    {
+        if (SchemaVersion(connection, transaction) != CurrentSchemaVersion)
+            throw new InvalidOperationException("Actualiza explícitamente el diario antes de registrar nuevos asientos.");
+    }
+
+    private static void ValidateBalanceRanges(IEnumerable<JournalEntry> entries)
+    {
+        var balances = new Dictionary<JournalAccount, long>();
+        foreach (var entry in entries)
+        {
+            foreach (var account in entry.Lines.GroupBy(line => line.Account))
+            {
+                // Acumular en decimal evita truncamiento y comprueba el saldo al terminar cada documento.
+                var change = account.Sum(line => (decimal)line.Debit.Cents - line.Credit.Cents);
+                balances[account.Key] = checked((long)(balances.GetValueOrDefault(account.Key) + change));
+            }
+        }
+    }
+
+    private static void ValidateVersionOne(SqliteConnection connection, SqliteTransaction transaction, SaveId career)
+    {
+        using var invalid = WorldDatabase.Command(connection, transaction, """
+            SELECT e.id FROM journal_entries e JOIN journal_scopes s ON s.club_id=e.club_id
+            WHERE (e.opening=1 AND (s.opening_cents<=0 OR e.id IS NOT s.opening_entry_id)) OR
+            EXISTS(SELECT 1 FROM json_each(e.lines_json) line WHERE json_type(line.value) IS NOT 'object' OR
+             (SELECT count(*) FROM json_each(line.value))<>3)
+            LIMIT 1
+            """);
+        if (invalid.ExecuteScalar() is not null)
+            throw new InvalidDataException("El diario v1 contiene documentos ambiguos o una apertura incoherente; requiere revisión explícita.");
+        using var query = WorldDatabase.Command(connection, transaction, "SELECT club_id FROM journal_scopes ORDER BY club_id");
+        var clubs = new List<ClubId>();
+        using (var reader = query.ExecuteReader())
+            while (reader.Read()) clubs.Add(new ClubId(Guid.Parse(reader.GetString(0))));
+        foreach (var club in clubs)
+        {
+            ValidateBalanceRanges(Movements(connection, transaction, career, club).Select(row => row.Entry));
+            if (!Reconcile(connection, transaction, career, club)!.Balanced)
+                throw new InvalidDataException("La caja del diario v1 requiere conciliación antes de actualizarlo.");
+        }
+    }
 }

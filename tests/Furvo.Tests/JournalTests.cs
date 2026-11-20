@@ -8,7 +8,7 @@ using Xunit;
 namespace Furvo.Tests;
 
 /// <summary>Una copia aislada por prueba. Nunca modifica publicaciones o partidas personales.</summary>
-public sealed class JournalTests : IDisposable
+public sealed partial class JournalTests : IDisposable
 {
     private readonly string _root = Path.Combine(Path.GetTempPath(), "FurvoJournalTests", Guid.NewGuid().ToString("N"));
     private readonly SaveId _career = SaveId.New();

@@ -142,7 +142,7 @@ El catálogo permite probar invariantes sin crear reglas de negocio de nómina, 
 
 ## 10. Esquema y garantías de persistencia
 
-`Journal001_Initial.sql` instala explícitamente una extensión local de versión 1, aditiva y compatible con el esquema del mundo existente. Reutiliza la extensión de operaciones de F1.1 como dependencia.
+`Journal001_Initial.sql` conserva el esquema inicial v1. La auditoría posterior añade `Journal002_AuditIntegrity.sql` y eleva la versión local a 2. La instalación y actualización son explícitas y reutilizan la extensión de operaciones F1.1. Los lectores admiten v1/v2 válidas; nuevas aperturas y apuntes exigen v2. La migración preserva documentos, recibos y cantidades y se detiene si encuentra historial inválido. No modifica el esquema del mundo ni las partidas al consultarlas.
 
 | Objeto | Contenido y controles |
 |---|---|
@@ -213,7 +213,7 @@ Partidas anteriores a F1.1 y partidas con operaciones pero sin diario pueden con
 - `tests/Furvo.Tests/JournalTests.cs` contiene los casos aislados y la regresión de carrera real de prueba.
 - Este documento conserva la aclaración previa y registra arquitectura, transición y evidencia de F1.2.
 
-## 16. Resultados de validación
+## 16. Resultados históricos de la implementación inicial
 
 La compilación Debug con `dotnet build Furvo.sln --no-restore -m:1 -p:UseSharedCompilation=false` terminó con cero errores y cero advertencias. El pase específico final de diario y reapertura de carrera superó **27 pruebas, cero fallidas y cero omitidas**. El primer pase de 24 casos también pasó, antes de añadir las tres regresiones finales.
 
@@ -227,7 +227,7 @@ F1.3 debe implementar presupuestos/compromisos por periodo y autorización de ca
 
 Quedan pendientes calendario y cierres reales, nóminas, obligaciones/pagos operativos, reglas de ingresos, préstamos, descubierto, insolvencia, contratación efectiva de Staff y nuevas infraestructuras. La investigación de fuentes reales y el modelo completo de cuentas anuales continúan fuera del alcance de esta implementación.
 
-## 18. Matriz de cierre
+## 18. Matriz histórica de cierre inicial
 
 | Requisito | Implementado | Probado | Limitaciones |
 |---|---|---|---|
@@ -247,3 +247,64 @@ Quedan pendientes calendario y cierres reales, nóminas, obligaciones/pagos oper
 | Staff, Mercado y Carrera | Conservados | Sí, regresión específica y suite completa | Las restricciones actuales de temporadas siguen documentadas. |
 | Compilación Debug y suite completa | Sí | 903 superadas, 0 fallidas, 0 omitidas; compilación sin errores/advertencias | Release no solicitado en esta entrega. |
 | Arranque y recorrido Godot | Conservados | Sí, headless con código 0 | Sin validación visual nueva. |
+
+## 19. Auditoría técnica y contable posterior
+
+La auditoría parte de `main`, HEAD `6f6a0f2`, con árbol limpio. Se inspeccionaron el dominio, el diario, el SQL y sus dependencias de operaciones F1.1, además de las 27 pruebas contables y documentación existentes. Los resultados de 903 pruebas y de la matriz anterior son evidencia histórica de la implementación inicial y quedan subordinados a la verificación posterior.
+
+### Defectos reproducidos y correcciones acotadas
+
+Antes de corregir se añadieron cuatro pruebas y se ejecutaron sobre el código publicado. Las cuatro fallaron porque no se producía el rechazo esperado. La evidencia corresponde a copias aisladas, sin identificar ni alterar partidas personales.
+
+| Prioridad | Archivo y causa | Escenario reproducido | Corrección y regresión |
+|---|---|---|---|
+| Alta para una extensión parcial | `SqliteJournal.SchemaVersion` comprobaba tablas/vista pero omitía índices y triggers | Eliminar `journal_update_cash` permitía aceptar un apunte sin actualizar su proyección | Se verifica presencia y tipo de los 15 objetos esenciales. `AuditDetectsAMissingProjectionTriggerBeforeAcceptingAnEntry` exige rechazo antes de escribir. No implica que las transacciones normales produzcan por sí solas esa pérdida de esquema. |
+| Media, importes extremos por API normal | `Post` validaba los totales del documento, pero no el saldo acumulado de cuentas distintas de caja | Dos asientos individualmente válidos acumulaban Assets por encima de long.MaxValue; `Balance` ya no podía representar el saldo | Comprobación exacta de saldos por cuenta al terminar cada documento, antes de persistir. `AuditRejectsAccountBalanceOverflowBeforePersistingAnotherEntry` conserva el historial anterior consultable. |
+| Media, frontera SQL | `journal_valid_entry` admitía JSON con una misma clave repetida | SQLite validaba el primer Debit y el deserializador utilizaba el último, permitiendo un documento de interpretación ambigua | El trigger v2 exige objetos con exactamente los tres campos válidos. `AuditRejectsDuplicateJsonKeysInsteadOfPersistingAmbiguousAmounts` verifica el rechazo. El serializador normal de Post no generaba esas claves repetidas. |
+| Media, frontera SQL tras apertura cero | Comparación `id <> opening_entry_id` con NULL y falta de rechazo explícito de apertura de importe cero | Tras abrir con cero y registrar fondos en la copia, una inserción SQL podía reutilizar el recibo de apertura para crear un asiento falso contra OpeningBalance | Comparación nula segura y apertura positiva obligatoria para un asiento opening=1. `AuditRejectsAFictitiousOpeningAfterAZeroCashOpening` conserva la apertura cero sin asiento. La API Open normal no generaba ese documento. |
+
+### Compatibilidad de la actualización
+
+No se edita `Journal001_Initial.sql`, que sigue siendo la especificación del formato publicado. `Journal002_AuditIntegrity.sql` sustituye solo el trigger de validación y la tabla unifila de metadatos de versión, cuyo CHECK v1 impedía almacenar otro número. No reconstruye ni reescribe asientos, apuntes, ámbitos, recibos, saldos o contratos. Todo sucede en la transacción del consumidor.
+
+Antes de actualizar un v1, `ValidateVersionOne` rechaza documentos ambiguos, aperturas incoherentes, saldos fuera de rango y proyecciones no conciliadas. No repara ni normaliza silenciosamente esos datos. Un v1 válido puede leerse y recuperar recibos existentes, pero nuevas escrituras requieren migración explícita. Un esquema parcial se rechaza y necesita revisión; no se recrean triggers perdidos a ciegas.
+
+Las pruebas conservan una reproducción exacta del trigger/metadatos v1 en copias temporales. Comprueban actualización con documentos iguales, rollback de migración con hash de archivo idéntico y rechazo de historial ambiguo sin modificarlo.
+
+### Cobertura de invariantes
+
+| Invariante | Evidencia ejecutable |
+|---|---|
+| Debe/Haber exactos y documento completo | Casos de dominio inválido, restricciones SQL de JSON/líneas, sumas desbordadas, fallo durante validación de primera línea y después de insertar el documento. |
+| Identidad única tras reapertura | `AuditReplayAfterReopeningPreservesIdentityAndRejectsChangedTokens` conserva el cargo y rechaza reutilizar token/asiento con otra identidad. |
+| Concurrencia del mismo hecho | `AuditConcurrentRetriesRecordTheSameFactOnce` usa dos conexiones de escritura; solo una contabiliza y la otra recupera replay. |
+| Atomicidad | Rollback exterior después del SAVEPOINT, fallo de trigger, falta de recibo detectada al commit y recuperación de F1.1; sin efectos parciales. |
+| Inmutabilidad | Intentos de UPDATE/DELETE del asiento y modificación de la vista rechazados. |
+| Contraasientos | Inversión completa que restaura caja; inversión parcial, referencia inexistente y segunda inversión del mismo original rechazadas. |
+| Caja y signos | Conciliación/reapertura, proyección discrepante bloqueada, insuficiencia de fondos y extremos rechazados; pérdidas y patrimonio negativo representados sin salida de caja obligatoria. |
+| Corte y autoridades | Apertura exacta/única, cero y ausencia de economía; variación antigua informativa sin duplicación; continuidad entre fechas de ejercicios sin nueva apertura. |
+| Persistencia | FK e integridad, extensiones ausentes/parciales y v1 válido o inválido. Carrera, Staff y Mercado conservan sus datos en la regresión específica. |
+
+### Límites de la garantía
+
+Los consumidores deben conservar el ID de operación y el del asiento para identificar el mismo hecho. Dos hechos con identidades completamente nuevas no pueden deduplicarse comparando solo texto o importe; ambos pueden ser operaciones legítimas. Las futuras integraciones deben enlazar sus identidades de negocio al contrato/pedido y utilizar la unidad de trabajo compartida.
+
+La comprobación de objetos detecta componentes ausentes; no pretende certificar un archivo manipulado deliberadamente sustituyendo definiciones SQL por otras del mismo nombre. La escritura SQLite directa de pruebas se utiliza para verificar restricciones, no es una ruta de negocio del juego. Las partidas con historial inválido requieren revisión explícita, sin saneamiento o pérdida automática.
+
+La conciliación permanece limitada al ámbito de observación desde el corte. La integración del escritor antiguo es F1.4. Presupuestos y compromisos disponibles son F1.3. El calendario, devengos, pagos operativos, financiación e insolvencia siguen pendientes. La auditoría no los considera probados por anticipación.
+
+### Resultados de esta auditoría
+
+La compilación Debug posterior a las correcciones terminó con **cero errores y cero advertencias**. El pase específico posterior superó **38 pruebas, cero fallidas y cero omitidas**. La nueva suite completa superó **914 pruebas, cero fallidas y cero omitidas**, en 3 minutos y 40 segundos. Incluye las comprobaciones de integridad y claves foráneas SQLite, reapertura, migración y rollback sobre bases temporales aisladas.
+
+Comandos ejecutados:
+
+```powershell
+dotnet build Furvo.sln --no-restore -m:1 -p:UseSharedCompilation=false
+dotnet test Furvo.sln --no-build --no-restore -m:1 --filter "FullyQualifiedName~JournalTests|FullyQualifiedName~JournalOpeningPreserves"
+dotnet test Furvo.sln --no-build --no-restore -m:1
+```
+
+El recorrido `tools/GodotUiSmoke.gd -- --staff-hiring` en Godot 4.7.2 .NET headless terminó con código **0**, incluyendo `FURVO_STAFF_HIRING_OK` y `FURVO_UI_SMOKE_OK`. Esto comprueba el recorrido automatizado, no una inspección visual nueva. `git diff --check` no detectó errores de espacios. No se ejecutó Release en esta auditoría.
+
+**Veredicto: F1.2 apta para cierre dentro de su ámbito declarado, tras las cuatro correcciones anteriores.** No se amplía esa conclusión a la economía global del juego ni a sistemas futuros. Quedan cinco archivos nuevos o modificados sin confirmar; no se realizan commits ni push ni se modifican partidas personales. La comprobación de rangos recorre el historial; no se ha medido rendimiento de treinta temporadas.
