@@ -104,6 +104,7 @@ public sealed partial class JournalTests
     {
         Open();
         var entry = Charge();
+        Clock(Cutoff.AddDays(1));
         var reversal = entry.Reverse(Guid.NewGuid(), Guid.NewGuid(), Cutoff.AddDays(1), "Contraasiento auditado");
         Write((c, t) =>
         {

@@ -31,6 +31,7 @@ public sealed partial class JournalTests : IDisposable
         var source = SqliteEconomyStore.ReadResources(FilePath)[0];
         _club = source.ClubId;
         _season = source.SeasonId;
+        Clock(Cutoff);
         // Importe sintético pequeño para verificar céntimos y falta de fondos.
         Write((connection, transaction) => Sql(connection, transaction,
             "UPDATE club_economics SET cash_cents=10000 WHERE club_id=$club", ("$club", _club.ToString())));
@@ -267,6 +268,7 @@ public sealed partial class JournalTests : IDisposable
     {
         Open();
         var entry = Charge();
+        Clock(Cutoff.AddDays(1));
         var reversal = entry.Reverse(Guid.NewGuid(), Guid.NewGuid(), Cutoff.AddDays(1), "Corrección de prueba");
         Write((c, t) =>
         {
@@ -281,6 +283,7 @@ public sealed partial class JournalTests : IDisposable
     public void CashAndHistoryContinueAcrossFinancialYearsWithoutNewOpening()
     {
         Open();
+        Clock(new DateOnly(2027,7,1));
         Write((c, t) => SqliteJournal.Post(c, t, _career, Charge(123, new DateOnly(2027, 6, 30))));
         using var connection = Connect();
         using var transaction = connection.BeginTransaction();
@@ -373,6 +376,7 @@ public sealed partial class JournalTests : IDisposable
     [Fact]
     public void MissingDependencyIsRejectedAndBackdatingCannotRewriteCashHistory()
     {
+        Clock(Cutoff.AddDays(2));
         Open();
         Write((c, t) =>
         {

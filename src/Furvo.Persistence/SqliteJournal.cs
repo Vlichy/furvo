@@ -71,6 +71,7 @@ public static class SqliteJournal
         return SqliteFinancialOperations.Execute(connection, transaction, request, (c, t) =>
         {
             RequireCurrent(c, t);
+            ValidateEffectiveDate(c, t, cutoff);
             if (ReadScope(c, t, club) is not null) throw new InvalidOperationException("El club ya tiene un corte de apertura.");
             var source = SqliteEconomyStore.ReadResources(c, t).SingleOrDefault(row => row.ClubId == club && row.SeasonId == sourceSeason);
             if (source?.Cash is not { } cash || source.Currency != "EUR")
@@ -100,6 +101,7 @@ public static class SqliteJournal
         return SqliteFinancialOperations.Execute(connection, transaction, request, (c, t) =>
         {
             RequireCurrent(c, t);
+            ValidateEffectiveDate(c, t, frozen.Date);
             var scope = ReadScope(c, t, frozen.Club) ?? throw new InvalidOperationException("El club carece de apertura contable.");
             if (!Reconcile(c, t, career, frozen.Club)!.Balanced)
                 throw new InvalidDataException("La proyección de caja no concuerda con el diario.");
@@ -183,6 +185,24 @@ public static class SqliteJournal
     }
 
     private static string Date(DateOnly date) => date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+    // El diario registra hechos efectivos; las obligaciones futuras pertenecen a planificación.
+    private static void ValidateEffectiveDate(SqliteConnection c, SqliteTransaction t, DateOnly date)
+    {
+        using var schema = WorldDatabase.Command(c,t,"SELECT count(*) FROM sqlite_master WHERE type='table' AND name='career_state'");
+        if (Convert.ToInt32(schema.ExecuteScalar()) != 1)
+            throw new InvalidDataException("Falta la fecha efectiva de la carrera para contabilizar.");
+        // current_date es palabra reservada en SQLite: debe identificarse como columna.
+        schema.CommandText = "SELECT s.current_date FROM career_state s WHERE s.singleton=1";
+        if (schema.ExecuteScalar() is not string text || !DateOnly.TryParseExact(text,"yyyy-MM-dd",CultureInfo.InvariantCulture,DateTimeStyles.None,out var today) || date > today)
+            throw new InvalidDataException("El asiento o corte no puede superar la fecha efectiva de la carrera.");
+    }
+
+    internal static void RejectLegacyPayment(SqliteConnection c, SqliteTransaction t, ClubId club)
+    {
+        if (ReadScope(c,t,club) is not null)
+            throw new InvalidOperationException("Adquisición suspendida: el club tiene un diario abierto. La integración del pago está pendiente de F1.4.");
+    }
 
     private static void RequireCurrent(SqliteConnection connection, SqliteTransaction transaction)
     {

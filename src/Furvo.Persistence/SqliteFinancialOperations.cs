@@ -85,13 +85,21 @@ public static class SqliteFinancialOperations
             command.ExecuteNonQuery();
             return new FinancialOperationResult(result, false);
         }
-        catch
+        catch (Exception original)
         {
             // El fallo no deja efectos parciales aunque el llamador continúe utilizando la transacción.
-            command.CommandText = "ROLLBACK TO SAVEPOINT " + savepoint;
-            command.ExecuteNonQuery();
-            command.CommandText = "RELEASE SAVEPOINT " + savepoint;
-            command.ExecuteNonQuery();
+            try
+            {
+                command.CommandText = "ROLLBACK TO SAVEPOINT " + savepoint;
+                command.ExecuteNonQuery();
+                command.CommandText = "RELEASE SAVEPOINT " + savepoint;
+                command.ExecuteNonQuery();
+            }
+            catch (Exception cleanup)
+            {
+                // RAISE(ROLLBACK) puede haber deshecho ya la transacción entera.
+                original.Data["FinancialOperationRollbackFailure"] = cleanup;
+            }
             throw;
         }
     }
