@@ -28,6 +28,23 @@ Nueve pruebas nuevas: dos fechas extremas, rollback SQLite, composición/replay,
 
 Archivos de producción: SqliteJournal.cs, SqliteFinancialOperations.cs y SqliteSportsStore.cs. Pruebas nuevas: JournalIndependentTests.cs y LegacyJournalBoundaryTests.cs. Fixtures actualizados: JournalTests.cs y JournalAuditTests.cs. Sin cambios Core, Godot, migraciones, publicaciones ni partidas personales. Sin commit ni push. F1.3 permanece sin implementar.
 
-Compilación Debug final: cero errores y cero advertencias. Regresión económica dirigida: **56 superadas, cero fallidas y cero omitidas**. Log de evidencia local: artifacts/finance-independent-tests.log. Suite completa pendiente de finalización al redactar; actualizar antes de cerrar. Las pruebas de integridad/FK y migración del diario están dentro del grupo dirigido; compatibilidad de carreras y resto del juego se revisa en la suite.
+Compilación Debug final: cero errores y cero advertencias. Regresión económica dirigida: **56 superadas, cero fallidas y cero omitidas**. Log de evidencia local: artifacts/finance-independent-tests.log. La ejecución pendiente se recuperó al reanudar: 923 superadas, cero fallidas/omitidas (véase cierre posterior). Las pruebas de integridad/FK y migración del diario están dentro del grupo dirigido; compatibilidad de carreras y resto del juego se revisa en la suite.
 
 Comandos: `dotnet build Furvo.sln --no-restore -m:1 -p:UseSharedCompilation=false`; `dotnet test Furvo.sln --no-build --no-restore -m:1`; filtro dirigido `FullyQualifiedName~Furvo.Tests.JournalTests|FullyQualifiedName~IndependentAcquisition|FullyQualifiedName~FinancialOperationTests`. No se atribuye este grupo a pruebas de F1.3. No se ejecuta Godot headless: no hay cambios de presentación.
+
+## Reanudación y cierre — 22/11/2026
+
+Estado inicial recuperado: main, HEAD `c9acce17f1e9bf148f46c827dd02f171d1ea5afb`, árbol limpio. El commit ya existente contiene las correcciones y el documento F1.3 que estaba pendiente; esta intervención no crea ese commit ni modifica F1.3. Se recuperó el resultado de la ejecución interrumpida: **923 superadas, cero fallidas y cero omitidas**, 4 min 22 s. No se repiten correcciones ni se inicia otra auditoría.
+
+Se revisó el diff de las pruebas respecto a `25042cb`: únicamente se añadió Clock(Cutoff) a la preparación y avances explícitos para contraasiento al día siguiente, rechazo de retroactividad y continuidad de ejercicio. Ninguna aserción original fue eliminada o relajada. El reloj se limita a copias de prueba; no modifica calendario/Workspace.
+
+Las protecciones permanecen: rechazo de fechas superiores a carrera en Post/Open; asiento válido tras rechazar MaxValue; compra suspendida con diario abierto y sin modificar pedido/caja; conservación del error original en rollback; replay estable y cargos concurrentes sin sobregiro. AuthorizedAcquisitionIsAtomicAndDoesNotMakeOrderedFacilityUsable mantiene la prueba de compra autorizada sin diario abierto. La regresión no afirma que las compras estén integradas en el diario.
+
+Nueva compilación Debug en este HEAD: **0 errores y 0 advertencias**. Nuevo pase dirigido: **56 superadas, 0 fallidas, 0 omitidas**. Suite completa de reanudación: **923 superadas, 0 fallidas, 0 omitidas**, duración **3 min 45 s**, código 0. Las pruebas incluyen integridad SQLite/FK, migraciones v1/v2 y rollback de migración, reapertura, errores transaccionales, idempotencia y concurrencia. No se prueban partidas personales.
+
+Se conservan las mediciones anteriores (164/1664/3650 ms para 100/500/1000 asientos). El recorrido completo del historial por cada escritura implica riesgo significativo de rendimiento para partidas prolongadas; no hay garantía de treinta temporadas. Antes de conectar cargas elevadas en F1.4 se necesita medir volumen esperado por club y presupuestar tiempos. Si excede el límite acordado, optimizar consultas/agregaciones con equivalencia contable demostrada; no adoptar cachés sin validación. No es un fallo de integridad del alcance actual.
+
+Riesgos residuales: rendimiento (medio, potencialmente alto con gran volumen); evolución de serialización (medio, exige contrato versionado antes de cambiar huellas); identidad compuesta (medio si el futuro consumidor reutiliza tokens); mensaje SQLite de caja insuficiente (bajo para esta API sin pantalla). Historial ya contaminado por fechas futuras requiere revisión explícita, no reparación silenciosa. El diario sigue en observación; F1.3/F1.4 permanecen fuera del cierre.
+
+
+**Veredicto técnico: apta para cierre dentro del alcance F1.0–F1.2 auditado.** No se detectan regresiones en los pases finales. git diff --check sin incidencias. Único archivo modificado en esta reanudación: docs/ECONOMY_INDEPENDENT_FINDINGS.md. Estado final: main en c9acce1, documento pendiente; sin commit ni push. No se ha ejecutado Godot ni se requiere validación visual para estos cambios de persistencia ya confirmados.
