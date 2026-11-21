@@ -115,7 +115,7 @@ public partial class TransferOfferEditor : VBoxContainer
             });
         }
         var rights=Section("OfferOptions",false);_rights=new TransferRightsCards(theme,old,data.Date,policy,currency);rights.AddChild(_rights);_rights.Changed+=Changed;
-        var dates=Section("OfferDates",false);_incorporation=new TransferArrivalCards(theme,old,data.Date);dates.AddChild(_incorporation);_incorporation.Changed+=Changed;
+        var dates=Section("OfferDates",false);_incorporation=new TransferArrivalCards(theme,old,data.Date,seasonEnd);dates.AddChild(_incorporation);_incorporation.Changed+=Changed;
         var additional=ClubUi.Card(dates,"OfferAdditionalSummary");_additional=ClubUi.Text("OfferAdditionalSummaryText","",14);additional.AddChild(_additional);
         var final=Section("OfferSummary",true);_summary=ClubUi.Text("TransferPreview","",14);final.AddChild(_summary);
         _feedback=Error(this,"TransferFeedback");_feedback.Visible=false;var actions=new HFlowContainer();actions.AddThemeConstantOverride("h_separation",10);AddChild(actions);

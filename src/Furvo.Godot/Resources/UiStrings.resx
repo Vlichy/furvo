@@ -1923,4 +1923,7 @@ Jugadores incluidos: {4}; cláusulas de futura venta/plusvalía: {5}. Sus porcen
 <data name="StaffOfferClauses" xml:space="preserve"><value>Cláusulas opcionales</value></data>
 <data name="StaffCompensationEstimate" xml:space="preserve"><value>Compensación calculada a partir del salario pendiente y la relevancia del técnico.</value></data>
 <data name="StaffCustomBonus" xml:space="preserve"><value>Otro importe</value></data>
-</root>
+<data name="OfferStartNow" xml:space="preserve"><value>Ahora</value></data>
+<data name="OfferStartNextSeason" xml:space="preserve"><value>Próxima temporada</value></data>
+<data name="OfferStartPrevious" xml:space="preserve"><value>Fecha de la oferta anterior</value></data>
+<data name="StaffSeveranceHelp" xml:space="preserve"><value>Importe pactado que abonaría el club contratante al empleado al extinguir su contrato en las condiciones acordadas. Es distinto del salario, la prima de fichaje y la compensación al club de origen. Registrar esta cláusula no ejecuta pagos.</value></data></root>

@@ -44,6 +44,7 @@ public partial class TransferMoneyField : VBoxContainer
         };
         Input.FocusEntered+=()=>{if(_formatted&&_value is {} value){_updating=true;Input.Text=value.ToString("0.00",CultureInfo.GetCultureInfo("es-ES"));_updating=false;_formatted=false;}};
         Input.FocusExited+=()=>Format();
+        Format();
     }
     private void SetError(string message){_error.Text=message;_error.Visible=!string.IsNullOrEmpty(message);}
     public void ReportError(string message)=>SetError(message);

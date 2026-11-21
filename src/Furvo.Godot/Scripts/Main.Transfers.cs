@@ -73,10 +73,10 @@ public partial class Main
                 new(UiText.Get("TransferPlayerColumn"),1,28,HeaderAlignment:HorizontalAlignment.Left),
                 new(UiText.Get("Club"),1,27,HeaderAlignment:HorizontalAlignment.Left),
                 new(UiText.Get("TransferAmountColumn"),1,20,HeaderAlignment:HorizontalAlignment.Right,CellAlignment:HorizontalAlignment.Right),
-                new(UiText.Get("TransferState"),1,17,HeaderAlignment:HorizontalAlignment.Left),
-                new(UiText.Get("TransferRevision"),1,8,CellAlignment:HorizontalAlignment.Center)
+                new(UiText.Get("TransferState"),1,25,HeaderAlignment:HorizontalAlignment.Left),
+
             ],rowHeight:34,rowSpacing:4,constrainColumns:true,tabularNumbers:true,proportionalColumns:true){Name="TransferNegotiationsTable"};body.AddChild(table);
-            void Render(){var rows=all.Where(v=>(filter.Selected==0||v.State==Enum.GetValues<NegotiationState>()[filter.Selected-1])&&(page!=CareerPage.MarketNegotiations||v.State!=NegotiationState.Draft));table.SetRows(rows.Select(v=>new TableRow(v.Id.ToString("D"),new[]{data.Players.FirstOrDefault(p=>p.Details.Player.Id==v.Target)?.Details.Player.Name??v.Target.ToString(),data.Clubs.Single(c=>c.Id==v.Seller).Name,TransferMoney(v.Terms.FixedAmount,v.Terms.Currency),UiText.Get("TransferState_"+v.State),v.Revision.ToString()})));}
+            void Render(){var rows=all.Where(v=>(filter.Selected==0||v.State==Enum.GetValues<NegotiationState>()[filter.Selected-1])&&(page!=CareerPage.MarketNegotiations||v.State!=NegotiationState.Draft));table.SetRows(rows.Select(v=>new TableRow(v.Id.ToString("D"),new[]{data.Players.FirstOrDefault(p=>p.Details.Player.Id==v.Target)?.Details.Player.Name??v.Target.ToString(),data.Clubs.Single(c=>c.Id==v.Seller).Name,TransferMoney(v.Terms.FixedAmount,v.Terms.Currency),UiText.Get("TransferState_"+v.State)})));}
             filter.ItemSelected+=_=>Render();Render();table.RowActivated+=id=>ShowTransferDetail(Guid.Parse(id));var open=WindowUi.Button("TransferOpen",()=>{if(table.SelectedId is {} id)ShowTransferDetail(Guid.Parse(id));});open.Disabled=true;table.RowSelected+=_=>open.Disabled=false;body.AddChild(open);
             if(all.Count==0)body.AddChild(ClubUi.Text("TransferEmpty",UiText.Get("TransferEmpty"),15));
         }catch(Exception e){GD.PushWarning(e.ToString());body.AddChild(ClubUi.Text("TransferLoadError",UiText.Get("TransferLoadError"),15));}

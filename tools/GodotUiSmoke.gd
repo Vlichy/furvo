@@ -352,7 +352,7 @@ func check_staff_directory(screen: Node) -> bool:
     var preview = FileAccess.open(ProjectSettings.globalize_path("res://../../artifacts/staff-profile-restart.json"), FileAccess.WRITE)
     preview.store_string(JSON.stringify({"root": screen.get_meta("qa_storage_root"), "career": str(find_named(screen,"CareerShell").get_meta("career_id"))}))
     preview.close()
-    for page in ["MarketOffers", "MarketNegotiations"]:
+    for page in ["MarketOffers"]:
         find_named(screen,"NavPage_" + page).emit_signal("pressed")
         await process_frame
         if not require(find_named(screen,"TransferNegotiationsTable") != null and find_named(screen,"TransferTabPlayers").disabled, "Falta la vista de jugadores"):
@@ -422,6 +422,15 @@ func check_staff_hiring(screen: Node) -> bool:
         duration.emit_signal("item_selected",index)
         if not require(expiry_field.text == ["30/06/2027","30/06/2028","30/06/2029","30/06/2031"][index], "Último día contractual incorrecto"):
             return false
+    var start_choice = find_named(screen,"StaffStartChoice")
+    if not require(not start_field.editable and start_choice.item_count == 2 and start_choice.selected == 0 and find_named(screen,"StaffSendOffer") != null, "Inicio controlado o envío ausente"):
+        return false
+    start_choice.select(1)
+    start_choice.emit_signal("item_selected",1)
+    if not require(start_field.text == "01/07/2027", "Próxima temporada incorrecta"):
+        return false
+    start_choice.select(0)
+    start_choice.emit_signal("item_selected",0)
     var valid_start = "18/11/2026"
     start_field.text = "18/11/2026"
     start_field.emit_signal("text_changed",start_field.text)
@@ -461,7 +470,7 @@ func check_staff_hiring(screen: Node) -> bool:
     if not require(find_named(screen,"StaffFormalizationBlocked") != null, "El acuerdo personal debe quedar condicionado"):
         return false
     await capture_economy_screen("career-staff-hiring-conditional")
-    for page in ["MarketOffers","MarketNegotiations"]:
+    for page in ["MarketOffers"]:
         find_named(screen,"NavPage_" + page).emit_signal("pressed")
         await process_frame
         find_named(screen,"TransferTabStaff").emit_signal("pressed")

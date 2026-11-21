@@ -59,7 +59,17 @@ public partial class Main
         var prior = counter?.Terms;
         var today = _workspace!.Career.CurrentDate;
         var errors = new Dictionary<LineEdit,Label>();
-        var start = Field("StaffStartDate",FormatDate(prior?.Start ?? today));
+        var formattedAmounts = new Dictionary<LineEdit,decimal>();
+        var nextSeason = new SqliteWorldStore(SportsPath).Load().Seasons.Single(s => s.Id == _workspace.Career.SeasonId).EndDate.AddDays(1);
+        var startChoice = new OptionButton { Name = "StaffStartChoice", CustomMinimumSize = new Vector2(248,36) };
+        basic.AddChild(startChoice);
+        startChoice.AddItem(UiText.Get("OfferStartNow"));
+        startChoice.AddItem(UiText.Get("OfferStartNextSeason"));
+        // Una oferta histórica conserva sus fechas hasta una elección explícita.
+        if (prior is not null && prior.Start != today && prior.Start != nextSeason)
+            startChoice.AddItem(UiText.Get("OfferStartPrevious") + " · " + FormatDate(prior.Start));
+        startChoice.Select(prior is null || prior.Start == today ? 0 : prior.Start == nextSeason ? 1 : 2);
+        var start = Field("StaffStartDate",FormatDate(prior?.Start ?? today),readOnly:true);
         var years = new[] { 1, 2, 3, 5 };
         var duration = new OptionButton { Name = "StaffDuration", CustomMinimumSize = new Vector2(248,36) };
         var durationRow = new HBoxContainer();
@@ -97,6 +107,7 @@ public partial class Main
             end.Text = ReadStart() is { } date ? FormatDate(Expiry(date)) : "";
         }
         duration.ItemSelected += _ => RefreshExpiry();
+        startChoice.ItemSelected += index => { start.Text = FormatDate(index == 0 ? today : index == 1 ? nextSeason : prior!.Start); status.Text = ""; RefreshExpiry(); };
         start.TextChanged += _ => { status.Text = ""; RefreshExpiry(); };
         RefreshExpiry();
         var salary = Field("StaffGrossSalary",Amount(prior?.Salary));
@@ -113,11 +124,13 @@ public partial class Main
             previousRestoration is null ? 0 : previousRestoration.Percentage ?? 100," % de la reducción");
         var release = Field("StaffRelease",ClauseValue(StaffClauseKind.Release),clausesPanel);
         var severance = Field("StaffSeverance",ClauseValue(StaffClauseKind.Severance),clausesPanel);
+        severance.TooltipText = UiText.Get("StaffSeveranceHelp");
+        clausesPanel.AddChild(ClubUi.Text("StaffSeveranceHelp",UiText.Get("StaffSeveranceHelp"),12));
         var promotionBonus = Field("StaffPromotionBonus",ClauseValue(StaffClauseKind.ObjectiveBonus),clausesPanel);
         body.AddChild(status);
         var actions = new HFlowContainer();
         body.AddChild(actions);
-        var save = WindowUi.Button("StaffSaveOffer",() =>
+        void Submit(bool send)
         {
             status.Text = "";
             if (ReadStart() is not { } from) return;
@@ -137,6 +150,7 @@ public partial class Main
                     annual,"EUR",TransferRulesMoney(bonus),compensation,clauses);
                 var store = StaffOffers();
                 var draft = counter is null ? store.Draft(employee,terms) : store.Move(counter,"Revise",terms);
+                if (send) draft = store.Move(draft,"Send");
                 ShowStaffOfferDetail(draft.Id,CareerPage.MarketOffers);
                 void AddClause(LineEdit input, StaffClauseKind kind, bool percent = false, string? objective = null)
                 {
@@ -147,7 +161,11 @@ public partial class Main
                 }
             }
             catch (Exception error) { status.Text = error.Message; }
-        });
+        }
+        var save = WindowUi.Button("StaffSaveOffer",() => Submit(false));
+        var send = WindowUi.Button("StaffSendOffer",() => Submit(true));
+        send.Disabled = teams.Length == 0;
+        actions.AddChild(send);
         save.Disabled = teams.Length == 0;
         actions.AddChild(save);
         actions.AddChild(WindowUi.Button("Back",()=> { if(counter is null) ShowStaffDirectory(true); else ShowStaffOfferDetail(counter.Id,CareerPage.MarketOffers); }));
@@ -190,6 +208,7 @@ public partial class Main
             errors.Add(edit,error);
             edit.TextChanged += text =>
             {
+                formattedAmounts.Remove(edit);
                 error.Hide();
                 if (key is "StaffStartDate" or "StaffExpiry") return;
                 var optional = key is "StaffRelease" or "StaffSeverance" or "StaffPromotionBonus";
@@ -206,12 +225,23 @@ public partial class Main
                     error.Show();
                 }
             };
+            if (!readOnly && key is not ("StaffStartDate" or "StaffExpiry"))
+            {
+                void FormatAmount()
+                {
+                    try { var amount = TransferRulesMoney(edit); formattedAmounts[edit] = amount; edit.Text = amount.ToString("N2",CultureInfo.GetCultureInfo("es-ES")); }
+                    catch (InvalidDataException) { }
+                }
+                edit.FocusExited += FormatAmount;
+                edit.FocusEntered += () => { if (formattedAmounts.Remove(edit,out var amount)) edit.Text = Amount(amount); };
+                if (!string.IsNullOrWhiteSpace(value)) FormatAmount();
+            }
             return edit;
         }
         static string Amount(decimal? number) => number?.ToString("0.##",CultureInfo.GetCultureInfo("es-ES")) ?? "";
         decimal TransferRulesMoney(LineEdit edit)
         {
-            try { return Furvo.Core.Market.TransferRules.ParseMoney(edit.Text,StaffOfferRules.MoneyPolicy); }
+            try { return formattedAmounts.TryGetValue(edit,out var cached) ? cached : Furvo.Core.Market.TransferRules.ParseMoney(edit.Text,StaffOfferRules.MoneyPolicy); }
             catch (InvalidDataException e) { throw Invalid(edit,e.Message); }
         }
         InvalidDataException Invalid(LineEdit edit,string message)
