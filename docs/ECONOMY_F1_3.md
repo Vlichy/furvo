@@ -1,5 +1,7 @@
 # Economía F1.3 — Inspección previa a implementación
 
+**Estado actual (22/11/2026): núcleo F1.3 implementado; validación y revisión independiente según el apartado final.** Las inspecciones siguientes se conservan como historia y no describen ya el estado actual del código. La autorización de implementación es posterior a ellas.
+
 Fecha: 20/11/2026. Estado: **bloqueada por decisiones de diseño**, sin implementación iniciada. Se aplica la instrucción del apartado 2 del encargo de implementación controlada: documentar y detener la programación cuando la especificación conserve decisiones bloqueantes.
 
 ## Estado comprobado
@@ -91,3 +93,86 @@ git diff --check
 ```
 
 El filtro EconomicCareerTests no corresponde al nombre de clase (el archivo contiene CareerCreationTests); no se atribuye su cobertura al pase de 48. La suite completa sí las ejecuta. PRAGMA de integridad y FK, migraciones/reapertura y rollback/concurrencia existentes pasan dentro de esa suite. No hay pruebas fallidas ni correcciones funcionales. git diff --check sin incidencias; estado final: únicamente docs/ECONOMY_F1_3.md modificado. No se ha ejecutado una auditoría directa sobre partidas personales.
+
+## Implementación controlada — 22/11/2026
+
+F1.2 cerrada documentalmente en `a776f58` (único commit creado por esta intervención, sin push), sobre `c9acce1`. Se implementa el núcleo común solicitado después de revisar la especificación. Las cinco recomendaciones quedan concretadas en la actualización de SPEC; no se vuelven a auditar como sustituto de programarlas.
+
+### Arquitectura y operaciones disponibles
+
+Core/Finance/Budget.cs contiene BudgetDefinition (club, categoría, base, periodo, EUR y fuente), BudgetSource (procedencia/version/fecha/naturaleza/método), BudgetSnapshot, BudgetAllocation, BudgetChange, BudgetAction e IBudgetAuthorization. No depende de SQLite ni Godot. Los importes de entrada usan EuroAmount; los documentos contienen céntimos enteros, no un nuevo tipo monetario. Sumas y conversiones son comprobadas para detectar overflow.
+
+SqliteBudgetStore ofrece Migrate, Create, Read, List, History y Apply. Los comandos reciben conexión y transacción del consumidor y utilizan SqliteFinancialOperations. Apply puede modificar varios presupuestos/periodos atómicamente, con una modificación por partida en cada solicitud. El consumidor debe abrir una transacción de escritura, confirmar y reintentar conservando IDs/términos; un bloqueo SQLite obliga a reintentar toda la unidad. Ninguna API confirma una transacción por su cuenta.
+
+| Acción | Efecto real |
+|---|---|
+| Create | Registra definición, fuente y autorización inicial; no modifica caja |
+| Authorize | Nueva cifra autorizada absoluta, con permiso y revisión esperada; puede revelar déficit |
+| Reserve | Retiene capacidad; ID y origen únicos dentro de la partida |
+| Commit | Compromiso directo; no se utiliza para confirmar una reserva existente |
+| Confirm | Cambia reserva a compromiso conservando ID, origen y neto; disponibilidad idéntica |
+| Amend | Revisa el neto de asignación, preservando liberaciones y lo ejecutado; ampliación exige capacidad |
+| Release | Libera importe no ejecutado; cancelación total queda registrada sin borrar la asignación |
+| Execute | Registra ejecución presupuestaria de compromiso; no es pago ni devengo contable automático |
+
+Las operaciones sobre asignación cancelada se rechazan. Repetir el mismo comando recupera recibo; otro comando sobre el mismo estado debe presentar su revisión esperada vigente. Un segundo token para el mismo origen de comando se rechaza. El consumidor debe distinguir identidad de comando (origin de Apply), asignación (Allocation/Origin) y contrato/operación del futuro adaptador. No se deduplica una operación por parecerse en importe a otra legítima.
+
+Disponible = autorizado − reservas netas − compromisos netos. Ejecutado permanece incluido en comprometido. Un presupuesto reducido puede mostrar disponible negativo sin borrar contratos. No se admiten nuevas ampliaciones de consumo que empeoren déficit; una revisión autorizada puede restablecer margen. Cancelar capacidad no cancela deuda, pagos ni contratos. Las obligaciones financieras y la caja siguen fuera de esta API.
+
+### Autorizaciones y fuentes
+
+Actor, autoridad y motivo son obligatorios en cada revisión; IBudgetAuthorization debe autorizar acción/carrera/club. El núcleo no confía solo en texto o interfaz. Las pruebas usan un autorizador explícito de fixture; no se instala uno que autorice todo en el juego. Los adaptadores a directiva/delegaciones llegarán con sus flujos autorizados. Las futuras revisiones pueden referenciar la resolución material en authority/reason.
+
+Un presupuesto requiere procedencia y versión. Derivado/estimado requiere método; verificado no se transforma en una afirmación auditada por el software. No existe importación automática de datos financieros externos ni comprobación de veracidad documental. La ausencia de presupuesto devuelve null/lista vacía; no se convierte en disponibilidad cero ni se deduce de reputación, caja o division. Cada club puede utilizar partidas distintas.
+
+### Persistencia y compatibilidad
+
+Budgets001_Initial.sql instala budget_schema v1, budgets y budget_revisions, con FK a clubes y recibos de operaciones (diferida hasta commit), unicidad de revisión/operación por partida, prohibición de solapamiento y triggers contra UPDATE/DELETE. El historial JSON y sus totales tipados se comprueban al leer. No hay saldo editable ni segunda contabilidad: son autorizaciones administrativas. Los permisos de negocio se validan en la API, no contra escritura SQL externa deliberada.
+
+Migración explícita/aditiva/reversible dentro de la transacción. Puede instalar F1.1 si falta; no instala F1.2 ni modifica mundos o carreras personales. Un esquema incompleto/desconocido falla sin reparación silenciosa. Las consultas sin extensión devuelven ausencia sin escribir. No se convierten transfer_remaining_cents o manager_cost_cents en compromisos generales: faltarían referencias de origen. La historia antigua permanece en su modelo.
+
+Las solicitudes utilizan tipos budget-create-v1 y budget-change-v1 con representación explícita de campos primitivos en orden fijo para la huella. La serialización del dominio no define esa huella. Debe conservarse el orden de la lista de cambios al reintentar. La representación almacenada se versiona mediante budget_schema; cualquier evolución requiere migración/lector compatible. Los recibos confirmados se recuperan sin volver a aplicar autorización o efectos.
+
+Los periodos son intervalos financieros, no relojes ni temporadas automáticas. Fecha del comando = fecha persistida de carrera; pueden autorizarse periodos futuros con esa fecha efectiva. No se retrocede el historial. El mismo Allocation ID puede vincular asignaciones del mismo contrato en partidas/periodos diferentes, cada una con su consumo propio. La distribución de importes la entrega el adaptador explícitamente; no se infieren nóminas o amortizaciones.
+
+### Pruebas y criterios
+
+24 pruebas nuevas en BudgetTests, sobre copias temporales con importes sintéticos. El primer pase reveló un bloqueo de la preparación de pruebas (segunda lectura con BEGIN inmediato); corregido usando transacción diferida de lectura, sin cambiar reglas de producción.
+
+| Criterio | Evidencia |
+|---|---|
+| Creación exacta/procedencia/caja intacta | CreationPreservesCashAndDoesNotInstallOrWriteJournal, SourceAndCurrencyAreRequiredWithoutGuessingClubFinances |
+| Reserva/confirmación/ejecución/liberación sin doble consumo | ReserveConfirmExecuteAndReleaseNeverDoubleConsume |
+| Cancelación única e identidad | CancelledReservationCannotBeReleasedOrRecreatedAgain |
+| Autorización, déficit y modificaciones | AuthorizationReductionExposesDeficitWithoutErasingCommitment, AmendmentRetainsExecutedPartAndRequiresCapacity, AuthorityCannotBeInventedByAnActorLabel |
+| Replay, conflictos y concurrencia | ReplayAfterReopeningAndConflictingTermsAreSafe, ConcurrentOperationsCannotSpendTheSameCapacity |
+| Atomicidad y errores SQLite | MultiPeriodFailureRollsBackEarlierRevisionAndReceipt, OuterRollbackRestoresBudget, SqlFailureCannotLeavePartialMultiBudgetOperation |
+| Migración, compatibilidad e integridad | MissingExtensionReadIsNonMutatingAndMigrationRollbackPreservesFile, SqliteHistoryIsImmutableAndReferencesRemainValid, InstalledExtensionWithoutDataPreservesOldSaveAndRejectsUnknownVersion |
+| Periodos, separación por club y ausencia de arrastre | PeriodsDoNotOverlapOrAutomaticallyCarryCapacity, ExplicitMultiPeriodCommitmentPreservesIdentityWithoutCarryingCash, SeparateClubsHaveSeparateCapacity |
+| Límites, signos, moneda y reloj | MoneyUsesExactCentsAndTechnicalLimits, DomainRejectsInvalidConfirmationAndNegativeSignedMoney, FutureOperationDateAndForeignCareerAreRejected |
+| Diario y caja legacy intactos | ExistingJournalAndLegacyResourcesRemainUnchanged |
+
+Compilación Debug: cero errores y cero advertencias. Pase específico: **24 superadas, cero fallidas y cero omitidas**. Suite completa: **947 superadas, cero fallidas y cero omitidas**, duración **3 min 43 s**, código 0. No se implementaron pantallas; Godot headless no valida funciones presupuestarias sin consumidor y no se ejecuta en esta entrega.
+
+### Límites y preparación de auditoría independiente
+
+Código disponible en el árbol local, sin commit/push de F1.3. Revisar Budget.cs, SqliteBudgetStore.cs, Budgets001_Initial.sql y BudgetTests.cs contra esta especificación. La revisión independiente no se considera realizada por estas pruebas ni por este documento. No se ha enviado código a terceros automáticamente.
+
+Especial atención para Claude: base de consumo y déficit; autorización de revisiones; identidad de asignaciones repartidas en periodos; atomicidad del recibo; conservación de cancelados; compatibilidad del formato v1; discrepancias entre JSON/totales; coste de lecturas del historial. Read actualmente carga las revisiones de una partida, sin caché; medir antes de grandes cargas.
+
+Quedan fuera: política automática de salarios/prorrateos, obligaciones exigibles y pagos, reservas automáticas durante negociación, financiación, fiscalidad, insolvencia, importación de fotografías de clubes, avance temporal, IA, pantallas, adaptadores Staff/Mercado y CommitAcquisition F1.4. No se declara economía completa ni integración operativa del juego por pasar la suite. La regla de cada club con su situación individual queda preservada mediante fuentes y autorizaciones explícitas; no se generan cifras reales ni genéricas.
+
+### Resultado de entrega
+
+Núcleo F1.3 implementado y validado en su alcance técnico, listo para auditoría independiente; no se presenta esa auditoría como realizada. Debug sin errores/advertencias, 24 pruebas específicas y 947 de suite completa superadas. Integridad/FK, migración/rollback, reapertura, idempotencia y concurrencia cubiertas por los casos anteriores; regresión F1.0–F1.2 incluida en la suite. Sin defectos pendientes detectados en estos pases. La validación no demuestra simulación económica integral ni treinta temporadas.
+
+Archivos F1.3: src/Furvo.Core/Finance/Budget.cs; src/Furvo.Persistence/SqliteBudgetStore.cs; src/Furvo.Persistence/Migrations/Budgets001_Initial.sql; tests/Furvo.Tests/BudgetTests.cs; docs/ECONOMY_F1_3_SPEC.md; docs/ECONOMY_F1_3.md. Permanecen sin confirmar para revisión. Único commit creado: a776f58, cierre documental F1.2. No push. git diff --check y comprobación de archivos nuevos sin incidencias. No partidas personales modificadas.
+
+Comandos reproducibles desde la raíz:
+
+```powershell
+dotnet build Furvo.sln --no-restore -m:1 -p:UseSharedCompilation=false
+dotnet test Furvo.sln --no-build --no-restore -m:1 --filter "FullyQualifiedName~BudgetTests"
+dotnet test Furvo.sln --no-build --no-restore -m:1
+git diff --check
+```

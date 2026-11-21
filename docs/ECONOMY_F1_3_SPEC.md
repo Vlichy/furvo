@@ -1,5 +1,19 @@
 # Economía F1.3 — Presupuestos y compromisos
 
+## Actualización de alcance para implementación — 22/11/2026
+
+Tras el cierre aprobado de F1.2, el encargo «cerramos F1.2 y pasamos a F1.3» autoriza implementar presupuestos y compromisos. Se concretan las recomendaciones pendientes con el alcance siguiente, sin activar productores de Staff/Mercado:
+
+- Reservas explícitas de API, confirmación y liberación; ninguna reserva automática durante negociación (Staff P5 conservado).
+- Capacidad = autorizado − reservas activas − compromiso firme neto. Ejecutado es parte del compromiso y no se resta otra vez.
+- Revisión de autorizado como único mecanismo de ampliación de límite; exige permiso del puerto IBudgetAuthorization, actor, referencia de autoridad y motivo. No hay bypass de exceso.
+- Liberación únicamente de importe no ejecutado; se conserva el historial y no se extinguen obligaciones por cancelar capacidad.
+- Periodos inclusivos explícitos, sin solapamiento por club/categoría/base y sin arrastre automático. Asignaciones plurianuales explícitas; sin prorrateo salarial automático ni variables condicionadas.
+- Precio fijo íntegro del fichaje como base recomendada para su futuro adaptador; F1.3 recibe importes explícitos por partida, no ejecuta fichajes ni interpreta contratos.
+- Procedencia versionada por presupuesto, EUR exacto; datos reales y adaptadores de autorizaciones del juego siguen pendientes de sus integraciones. No se inventan presupuestos con reputación o caja.
+
+Esta sección sustituye el bloqueo previo y las instrucciones de «no implementar» de la especificación histórica que sigue debajo. La implementación y pruebas se describen en ECONOMY_F1_3.md. Las obligaciones/pagos, automatismos, carga de fotografías financieras y F1.4 mantienen sus exclusiones. Las decisiones de importe y autoridad concretas de cada club no quedan aprobadas por crear la infraestructura.
+
 Estado: especificación para revisión, sin implementación ni aprobación implícita de políticas nuevas. Fecha: 20/11/2026. Base inspeccionada: main, `53f74792fde07249884a63ee55ea5f150eb69ecb`.
 
 ## 1. Cierre y base existente
